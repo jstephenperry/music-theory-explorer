@@ -1,8 +1,11 @@
 /**
- * Web Audio synthesis engine. No samples are downloaded: every instrument is synthesised,
- * so the app works offline and loads quickly.
+ * Web Audio engine. The piano, electric piano, organ, strings and harp play recorded samples
+ * (see samples.ts), loaded in the background the first time an instrument is used. Until an
+ * instrument's recordings have arrived, and if they cannot be fetched, a synthesized
+ * approximation plays instead. The pure tone, clicks and percussion are always synthesized.
  */
 import { midiToFreq } from '../theory/notes';
+import { SAMPLED, SampleBank, type BankStatus, type Zone } from './samples';
 
 export type InstrumentId = 'piano' | 'epiano' | 'organ' | 'strings' | 'harp' | 'sine';
 
@@ -34,6 +37,7 @@ class AudioEngine {
   private percBus!: GainNode;
   private held = new Map<number, Voice>();
   private listeners = new Set<Listener>();
+  private bank = new SampleBank(() => this.emit());
   instrument: InstrumentId = 'piano';
   volume = 0.8;
   reverb = 0.25;
@@ -55,7 +59,7 @@ class AudioEngine {
       this.dry.gain.value = 1;
       this.wet.gain.value = this.reverb;
       const convolver = this.ctx.createConvolver();
-      convolver.buffer = this.makeImpulse(2.6, 2.8);
+      convolver.buffer = this.makeImpulse(2.4);
       this.master.connect(this.dry);
       this.master.connect(convolver);
       convolver.connect(this.wet);
@@ -86,6 +90,18 @@ class AudioEngine {
   setInstrument(id: InstrumentId) {
     this.instrument = id;
     this.emit();
+    // Switching instruments after the user has started making sound: fetch the new recordings now.
+    if (this.ctx) void this.bank.load(id);
+  }
+
+  /** Loading state of the current instrument's recordings ('ready' for synthesized instruments). */
+  get instrumentStatus(): BankStatus {
+    return this.bank.statusOf(this.instrument);
+  }
+
+  /** Start downloading the current instrument's recordings without waiting for a note to be played. */
+  preload() {
+    void this.bank.load(this.instrument);
   }
 
   setVolume(v: number) {
@@ -108,27 +124,88 @@ class AudioEngine {
     this.emit();
   }
 
-  /** A synthetic concert-hall impulse response: decaying stereo noise. */
-  private makeImpulse(seconds: number, decay: number): AudioBuffer {
+  /**
+   * A synthetic concert-hall impulse response: a short pre-delay, a few early reflections, then a
+   * decorrelated stereo noise tail that decays exponentially and darkens over time, as high
+   * frequencies are absorbed faster than low ones in a real hall.
+   */
+  private makeImpulse(seconds: number): AudioBuffer {
     const ctx = this.ctx!;
-    const len = Math.floor(ctx.sampleRate * seconds);
-    const buf = ctx.createBuffer(2, len, ctx.sampleRate);
+    const sr = ctx.sampleRate;
+    const len = Math.floor(sr * seconds);
+    const buf = ctx.createBuffer(2, len, sr);
+    const preDelay = Math.floor(sr * 0.018);
+    const rt60 = seconds * 0.85;
     for (let ch = 0; ch < 2; ch++) {
       const data = buf.getChannelData(ch);
-      for (let i = 0; i < len; i++) {
-        const t = i / len;
-        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - t, decay) * (i < ctx.sampleRate * 0.01 ? i / (ctx.sampleRate * 0.01) : 1);
+      let lp = 0;
+      for (let i = preDelay; i < len; i++) {
+        const t = (i - preDelay) / sr;
+        // One-pole low-pass whose cutoff falls from about 9 kHz to 1.5 kHz over the tail.
+        const cutoff = 9000 * Math.pow(1500 / 9000, Math.min(1, t / rt60));
+        const a = Math.exp((-2 * Math.PI * cutoff) / sr);
+        lp = (1 - a) * (Math.random() * 2 - 1) + a * lp;
+        const env = Math.pow(10, (-3 * t) / rt60) * Math.min(1, t / 0.012);
+        data[i] = lp * env * (1 + 1.8 * (1 - Math.min(1, t / rt60)));
+      }
+      // Early reflections, slightly different in each ear.
+      for (const [ms, g] of [[11, 0.5], [19, 0.36], [27, 0.3], [37, 0.22], [52, 0.15]] as const) {
+        const at = preDelay + Math.floor((sr * (ms + (ch ? 3.1 : 0))) / 1000);
+        if (at < len) data[at] += g * (ch ? -1 : 1);
       }
     }
     return buf;
+  }
+
+  /** Play a recorded note: the nearest recording, resampled to the requested frequency. */
+  private sampledVoice(zone: Zone, freq: number, when: number, velocity: number, gainScale: number, instrument: InstrumentId): { nodes: AudioScheduledSourceNode[]; out: GainNode; release: number } {
+    const ctx = this.context();
+    const spec = SAMPLED[instrument]!;
+    const v = Math.max(0.05, Math.min(1, velocity));
+    const out = ctx.createGain();
+    out.connect(this.master);
+    const src = ctx.createBufferSource();
+    src.buffer = zone.buffer;
+    src.playbackRate.value = freq / zone.freq;
+    if (zone.loopStart !== undefined && zone.loopEnd !== undefined) {
+      src.loop = true;
+      src.loopStart = zone.loopStart;
+      src.loopEnd = zone.loopEnd;
+    }
+    let head: AudioNode = out;
+    if (spec.velocityFilter && v < 0.8) {
+      // Soft notes are darker as well as quieter; the recordings were made at a medium-loud touch.
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.Q.value = 0.5;
+      filter.frequency.value = Math.min(20000, 20000 * Math.pow(2, (v - 0.8) * 7) + freq * 2);
+      filter.connect(out);
+      head = filter;
+    }
+    src.connect(head);
+    const peak = spec.gain * Math.pow(v, 1.4) * gainScale;
+    out.gain.setValueAtTime(0, when);
+    out.gain.linearRampToValueAtTime(peak, when + 0.002);
+    src.start(when, zone.offset);
+    const midi = 69 + 12 * Math.log2(freq / 440);
+    const release = spec.undampedFrom !== undefined && midi >= spec.undampedFrom ? 3 : spec.release;
+    return { nodes: [src], out, release };
   }
 
   /**
    * Start a note. Returns a handle that stops the note.
    * `duration` (seconds) schedules the release automatically when given.
    */
-  private voice(freq: number, when: number, velocity: number, duration: number | null, instrument: InstrumentId): Voice {
+  private voice(freq: number, when: number, velocity: number, duration: number | null, instrument: InstrumentId, gainScale = 1): Voice {
     const ctx = this.context();
+    if (SAMPLED[instrument]) {
+      void this.bank.load(instrument);
+      const zone = this.bank.zoneFor(instrument, 69 + 12 * Math.log2(freq / 440));
+      if (zone) {
+        const { nodes, out, release } = this.sampledVoice(zone, freq, when, velocity, gainScale, instrument);
+        return this.finishVoice(ctx, nodes, out, release, when, duration);
+      }
+    }
     const out = ctx.createGain();
     out.gain.value = 0;
     out.connect(this.master);
@@ -137,7 +214,7 @@ class AudioEngine {
     let release = 0.25;
     // Gentle loudness compensation so low and high notes sit evenly.
     const comp = Math.min(1.4, Math.max(0.55, Math.pow(261.6 / freq, 0.25)));
-    const peak = 0.22 * v * comp;
+    const peak = 0.22 * v * comp * gainScale;
 
     const osc = (type: OscillatorType, mult: number, gain: number, detune = 0, dest: AudioNode = out) => {
       const o = ctx.createOscillator();
@@ -274,6 +351,11 @@ class AudioEngine {
       }
     }
 
+    return this.finishVoice(ctx, nodes, out, release, when, duration);
+  }
+
+  /** Wrap a sounding note in a handle whose `stop` applies the instrument's release. */
+  private finishVoice(ctx: AudioContext, nodes: AudioScheduledSourceNode[], out: GainNode, release: number, when: number, duration: number | null): Voice {
     let stopped = false;
     const voice: Voice = {
       endTime: Infinity,
@@ -315,8 +397,9 @@ class AudioEngine {
   playChord(midiNotes: number[], duration = 1.5, when?: number, velocity = 0.7, strum = 0) {
     const t = when ?? this.now;
     const sorted = [...midiNotes].sort((a, b) => a - b);
-    const vel = velocity / Math.max(1, Math.sqrt(sorted.length) * 0.8);
-    sorted.forEach((m, i) => this.voice(midiToFreq(m, this.a4), t + i * strum, vel, duration, this.instrument));
+    // Keep chords about as loud as single notes without changing the touch (and so the tone) of each note.
+    const scale = 1 / Math.max(1, Math.sqrt(sorted.length) * 0.8);
+    sorted.forEach((m, i) => this.voice(midiToFreq(m, this.a4), t + i * strum, velocity, duration, this.instrument, scale));
   }
 
   /** Play notes one after another. */

@@ -7,6 +7,9 @@
 /* ---------- Controls ---------- */
 .controls {
   padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 .controlRow {
   display: flex;
@@ -14,14 +17,27 @@
   gap: 1rem 1.75rem;
   align-items: flex-end;
 }
-.scalePick {
+.current {
   display: flex;
-  align-items: flex-end;
-  gap: 0.25rem;
+  flex-direction: column;
+  gap: 0.1rem;
   min-width: 0;
+  flex: 1 1 220px;
 }
-.scalePick select {
-  max-width: min(320px, 70vw);
+.currentPath {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink-faint);
+  overflow-wrap: anywhere;
+}
+.currentName {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
 }
 .stepButtons {
   display: flex;
@@ -110,6 +126,115 @@
   font-size: 1.2rem;
   font-weight: 600;
 }
+.factSmall .factValue {
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  font-weight: 600;
+  max-width: 28ch;
+}
+
+/* Scales with the same notes in other traditions */
+.equivalents {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.9rem;
+}
+.equivalentList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  align-items: center;
+}
+.equivalent {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  border-radius: var(--radius);
+  padding: 0.2rem 0.55rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+.equivalent:hover {
+  border-color: var(--rule-strong);
+}
+.equivalentTrad {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* Ascending and descending forms */
+.forms {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.25rem;
+}
+.formRow {
+  display: flex;
+  gap: 0.4rem;
+  align-items: flex-start;
+}
+.formBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+.formNotes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.3rem;
+}
+.formNote {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 1.9rem;
+  padding: 0.1rem 0.2rem;
+  border-radius: var(--radius-sm);
+}
+.formNoteActive {
+  background: var(--accent-soft);
+  outline: 1px solid var(--accent);
+}
+.formDegree {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1.1;
+}
+.formName {
+  font-size: 0.72rem;
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+.octLow::after,
+.octHigh::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.octLow::after {
+  bottom: -3px;
+}
+.octHigh::after {
+  top: -3px;
+}
 .linkButton {
   border: 0;
   background: none;
@@ -176,6 +301,11 @@
   font-size: 0.78rem;
   color: var(--ink-muted);
   font-weight: 600;
+}
+.degreeCents {
+  font-size: 0.68rem;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
 }
 
 /* Proportional step bar */
@@ -249,6 +379,10 @@
   height: 0.8rem;
   border-radius: 50%;
   border: 2px solid;
+}
+.swatchRing {
+  background: transparent;
+  border-color: var(--hl-tone);
 }
 .legendHint {
   font-style: italic;

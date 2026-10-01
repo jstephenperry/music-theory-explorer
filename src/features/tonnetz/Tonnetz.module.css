@@ -154,6 +154,37 @@
   display: flex;
   gap: 0.35rem;
 }
+/* Phones: the lattice is too small to carry floating overlays, so the legend and the Center button
+   become a footer strip under it instead of covering notes. */
+@media (max-width: 560px) {
+  .latticeWrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.75rem;
+  }
+  .latticeSvg {
+    flex: 0 0 100%;
+  }
+  .axes {
+    position: static;
+    order: 1;
+    flex: 1 1 auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.1rem 0.75rem;
+    margin: 0 0 0.5rem 0.6rem;
+    font-size: 0.78rem;
+    background: none;
+    border: 0;
+    padding: 0;
+  }
+  .mapButtons {
+    position: static;
+    order: 2;
+    margin: 0 0.5rem 0.5rem auto;
+  }
+}
 .hint {
   font-size: 0.82rem;
   color: var(--ink-muted);

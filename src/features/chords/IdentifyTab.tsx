@@ -9,7 +9,7 @@ import { useComputerKeyboard } from '../../hooks/useComputerKeyboard';
 import { usePersistentState } from '../../hooks/usePersistentState';
 import { identifyMidi, spellMidis, toneRole, type Candidate } from './chordLogic';
 import { CandidateList } from './CandidateList';
-import { useMediaQuery } from './useMediaQuery';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import s from './Chords.module.css';
 
 const EXAMPLES: Array<{ label: string; notes: number[]; hint: string }> = [

@@ -29,6 +29,7 @@ import {
   noteName,
   pc,
   scalesContaining,
+  TRADITION_BY_ID,
   type Interval,
   type Key,
   type Note,
@@ -403,7 +404,8 @@ export function chordScales(root: Note, chordId: string): ChordScale[] {
   const cps = new Set(chordPcs(rootPc, chordId));
   const familyIndex = (s: ScaleDef) => SCALE_FAMILIES.indexOf(s.family);
   return scalesContaining([...cps])
-    .filter((r) => r.rootPc === rootPc && r.scale.intervals.length >= 5)
+    // Chord-scale theory belongs to the Western and jazz traditions; ragas and maqamat with the same notes are not listed.
+    .filter((r) => r.rootPc === rootPc && r.scale.intervals.length >= 5 && TRADITION_BY_ID[r.scale.tradition].harmonic)
     .map(({ scale }) => {
       const notes = buildScale(root, scale.id);
       const roles = notes.map((n) => {

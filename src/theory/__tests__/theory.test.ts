@@ -76,7 +76,8 @@ describe('scales', () => {
     for (const s of SCALES) for (const r of ['C', 'C#', 'Db', 'F#', 'Gb', 'Bb', 'B']) expect(buildScale(note(r), s.id).length).toBe(s.intervals.length);
   });
   it('heptatonic scales use each letter once', () => {
-    for (const s of SCALES.filter((x) => x.intervals.length === 7)) {
+    // The Greek enharmonic genus divides a half step into two quarter tones, so two degrees share a letter.
+    for (const s of SCALES.filter((x) => x.intervals.length === 7 && x.id !== 'greek-dorian-enharmonic')) {
       const letters = new Set(buildScale(note('Eb'), s.id).map((n) => n.letter));
       expect(letters.size, s.id).toBe(7);
     }

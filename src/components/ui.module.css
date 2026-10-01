@@ -194,6 +194,12 @@
   margin-bottom: 0.1rem;
 }
 
+@media (max-width: 480px) {
+  .panel {
+    padding: 1rem 0.9rem;
+  }
+}
+
 /* ---------- Page header ---------- */
 .pageHeader {
   margin: 0 0 1.75rem;

@@ -1,13 +1,13 @@
 import type { SeqEvent } from '../../audio/sequencer';
 import type { SelectGroup } from '../../components/ui';
-import { SCALES, SCALE_FAMILIES } from '../../theory/scales';
+import { SCALES, TRADITIONS, familiesOf, scalesInFamily } from '../../theory/scales';
 
 export type LabelMode = 'names' | 'degrees' | 'intervals' | 'none';
 export type View = 'modes' | 'harmony' | 'compare' | 'finder';
 
 /** Payload attached to every sequenced event so the piano and staves can follow playback. */
 export interface PlayData {
-  kind: 'scale' | 'cmp' | 'chord' | 'ladder' | 'preview';
+  kind: 'scale' | 'cmp' | 'chord' | 'ladder' | 'preview' | 'form';
   /** Index into the relevant staff, chord list or ladder rung. */
   index: number;
   /** Secondary index (note within a ladder rung or preview). */
@@ -17,12 +17,17 @@ export interface PlayData {
   midi: number[];
 }
 
-export const SCALE_GROUPS: SelectGroup[] = SCALE_FAMILIES.map((f) => ({
-  label: f,
-  options: SCALES.filter((x) => x.family === f).map((x) => ({ value: x.id, label: x.name })),
-}));
+/** Every scale, grouped by tradition and family, for drop-down lists. */
+export const SCALE_GROUPS: SelectGroup[] = TRADITIONS.flatMap((t) =>
+  familiesOf(t.id).map((f) => ({
+    label: `${t.short}: ${f}`,
+    options: scalesInFamily(t.id, f).map((x) => ({ value: x.id, label: x.name })),
+  })),
+);
 
-/** Sequence events for a list of MIDI notes, one per `beats`, tagged for highlighting. */
+export const SCALE_COUNT = SCALES.length;
+
+/** Sequence events for a list of MIDI notes (fractional for microtonal pitches), one per `beats`, tagged for highlighting. */
 export function melody(
   notes: Array<{ midi: number; index: number; sub?: number }>,
   kind: PlayData['kind'],

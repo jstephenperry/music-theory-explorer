@@ -12,7 +12,7 @@ enabled; see [Deploying](#deploying)).
 | Room | What you can do |
 | --- | --- |
 | Intervals | Pick two keys or an interval name. See quality, inversion, consonance, enharmonic spellings, and the just ratio against equal temperament. |
-| Scales & Modes | 59 scales and modes in nine families. Compare relative and parallel modes, walk the brightness ladder from Lydian to Locrian, play over a drone, see the chords each scale produces, and find scales that contain a set of notes. |
+| Scales & Modes | 324 scales, modes, maqamat and ragas from 14 traditions, picked by tradition, then family, then scale, or by search: Western modes, jazz and blues, Messiaen's modes, Arabic maqam, Turkish makam, Persian dastgāh, Byzantine echoi, Jewish prayer modes and cantillation, Hindustani ragas by thaat, all 72 Carnatic melakartas plus janya ragas, Chinese, Japanese and Korean scales, gamelan and Thai tunings, Ethiopian qenet and ancient Greek harmoniai. Microtonal scales play at their true intonation and are notated with half-flat, koron or comma accidentals. Ragas show aroha and avaroha; maqamat show their ajnas and alternative descents. Compare scales by cents, walk the brightness ladder, play over a drone, see the chords each 12-tone scale produces, and find scales that contain a set of notes. |
 | Circle of Fifths | Key signatures, relative and closely related keys, diatonic chords, mode overlays, and a cycle of dominant sevenths played around the circle. |
 | Chords | Build any chord from triads to altered dominants, augmented sixths and quartal voicings. Change inversion and voicing (close, open, drop 2, drop 3, shell, rootless). Play notes to have the chord named. |
 | Progression Lab | Write progressions in roman numerals or chord symbols. Add borrowed chords, secondary dominants, tritone substitutes, Neapolitan and augmented sixth chords, and chromatic mediants. Includes four-part voice leading, seven accompaniment styles, a library of 52 named progressions, next-chord suggestions, and reharmonization tools. |
@@ -57,7 +57,11 @@ npm run preview    # serve dist/ locally
   the scale and chord catalogs, keys, roman numeral parsing and analysis, and voice leading.
   Spelling is always derived from interval arithmetic, so C♯ Lydian contains F𝄪, not G.
 - Notation is engraved with [VexFlow](https://www.vexflow.com/). It is loaded on demand.
-- All sound is synthesized with the Web Audio API. No samples are downloaded.
+- Instruments are sampled: the grand piano is the Salamander Grand Piano (CC BY 3.0), and the
+  electric piano, organ, strings and harp come from the Musyng Kite soundfont (CC BY-SA 3.0). The
+  recordings (4.6 MB) are in `public/samples` and load in the background for the chosen
+  instrument only; a synthesized stand-in plays until they arrive or if they cannot be fetched.
+  See [public/samples/CREDITS.md](public/samples/CREDITS.md). Clicks and percussion are synthesized.
 - Each room lives in `src/features/<room>` with its own components, styles and tested logic.
 
 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) documents the modules and the shared components.
@@ -98,4 +102,6 @@ domains. No rewrite rules are needed.
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+The source code is MIT licensed; see [LICENSE](LICENSE). The instrument recordings in
+`public/samples` keep their own Creative Commons licenses; see
+[public/samples/CREDITS.md](public/samples/CREDITS.md).

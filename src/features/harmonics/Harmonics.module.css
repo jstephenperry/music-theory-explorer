@@ -215,6 +215,20 @@
   color: var(--ink-faint);
   font-variant-numeric: tabular-nums;
 }
+/* Phones: sixteen columns are about 11px wide, too narrow for two-digit numbers side by side.
+   Label the odd partials only (the even ones stay readable by position). */
+@media (max-width: 480px) {
+  .editor,
+  .slotNums {
+    gap: 2px;
+  }
+  .slotNums {
+    font-size: 0.75rem;
+  }
+  .slotNums span:nth-child(even) {
+    visibility: hidden;
+  }
+}
 .wave {
   width: 100%;
   height: 200px;

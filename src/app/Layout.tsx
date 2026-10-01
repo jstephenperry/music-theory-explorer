@@ -51,6 +51,22 @@ export function Layout() {
     audio.setVolume(volume);
   }, [volume]);
 
+  // Fetch the chosen instrument's recordings once the page itself has finished loading.
+  useEffect(() => {
+    const start = () => window.setTimeout(() => audio.preload(), 600);
+    if (document.readyState === 'complete') {
+      const id = start();
+      return () => window.clearTimeout(id);
+    }
+    let id: number | undefined;
+    const onLoad = () => (id = start());
+    window.addEventListener('load', onLoad, { once: true });
+    return () => {
+      window.removeEventListener('load', onLoad);
+      window.clearTimeout(id);
+    };
+  }, []);
+
   // Leaving a page stops anything that is playing and closes the mobile menu.
   useEffect(() => {
     stopAllPlayback();
@@ -93,6 +109,11 @@ export function Layout() {
           <a href="https://github.com/jstephenperry/music-theory-explorer" target="_blank" rel="noreferrer">
             Source on GitHub
           </a>
+          <br />
+          <a href="samples/CREDITS.md" target="_blank" rel="noreferrer">
+            Instrument recordings
+          </a>{' '}
+          (Salamander Grand Piano, Musyng Kite)
         </div>
       </aside>
       {navOpen && <div className={s.scrim} onClick={() => setNavOpen(false)} aria-hidden="true" />}
@@ -103,9 +124,11 @@ export function Layout() {
             <Icon name="menu" size={20} />
           </button>
           <div className={s.topbarSpacer} />
-          <label className={s.control} title="Instrument">
+          <label className={s.control} title={settings.status === 'loading' ? 'Instrument (loading recordings)' : 'Instrument'}>
             <span className="sr-only">Instrument</span>
-            <Icon name="sound" size={16} />
+            <span className={`${s.instIcon} ${settings.status === 'loading' ? s.instLoading : ''}`} aria-hidden="true">
+              <Icon name="sound" size={16} />
+            </span>
             <select value={settings.instrument} onChange={(e) => setInstrument(e.target.value as InstrumentId)} className={s.topSelect}>
               {INSTRUMENTS.map((i) => (
                 <option key={i.id} value={i.id}>
@@ -113,6 +136,9 @@ export function Layout() {
                 </option>
               ))}
             </select>
+            <span className="sr-only" aria-live="polite">
+              {settings.status === 'loading' ? 'Loading instrument recordings' : ''}
+            </span>
           </label>
           <label className={s.control} title="Volume">
             <span className="sr-only">Volume</span>
