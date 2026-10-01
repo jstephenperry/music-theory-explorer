@@ -240,6 +240,9 @@ function render(VF: VexModule, el: HTMLDivElement, props: StaffProps, width: num
     let x = leftMargin;
     let firstTreble: InstanceType<typeof Stave> | null = null;
     let firstBass: InstanceType<typeof Stave> | null = null;
+    // Notes drawn on the upper and lower staff of this system, used to keep labels clear of stems and ledger lines.
+    const upperNotes: Array<InstanceType<typeof StaveNote>> = [];
+    const lowerNotes: Array<InstanceType<typeof StaveNote>> = [];
     const systemTexts: Array<{ note: InstanceType<typeof StaveNote>; text: string; where: 'top' | 'bottom'; color?: string; topStave: InstanceType<typeof Stave>; bottomStave: InstanceType<typeof Stave> }> = [];
 
     sys.forEach((mIdx, posInSys) => {
@@ -291,16 +294,15 @@ function render(VF: VexModule, el: HTMLDivElement, props: StaffProps, width: num
             ]
           : [ev.keyColors ?? []];
 
+        const eventNotes: Array<InstanceType<typeof StaveNote>> = [];
         keyGroups.forEach((group, partIdx) => {
           const part = parts[partIdx];
-          const isTopPart = partIdx === 0;
-          const isBottomPart = partIdx === keyGroups.length - 1;
           if (ev.rest || group.length === 0) {
             if (ev.rest || !grand) {
               const restNote = new StaveNote({ keys: [part.clef === 'bass' ? 'd/3' : 'b/4'], duration: base + 'r', clef: part.clef, dots: dotted ? 1 : 0 });
               if (dotted) Dot.buildAndAttach([restNote], { all: true });
               if (color) restNote.setStyle({ fillStyle: color, strokeStyle: color });
-              addText(restNote, ev, isTopPart, isBottomPart);
+              eventNotes.push(restNote);
               part.notes.push(restNote);
             } else {
               const ghost = new GhostNote({ duration: base, dots: dotted ? 1 : 0 });
@@ -322,16 +324,19 @@ function render(VF: VexModule, el: HTMLDivElement, props: StaffProps, width: num
           });
           if (dotted) Dot.buildAndAttach([note], { all: true });
           if (color) note.setStyle({ fillStyle: color, strokeStyle: color });
-          addText(note, ev, isTopPart, isBottomPart);
+          eventNotes.push(note);
           part.notes.push(note);
           if (partIdx === 0 || !clickable.some((c) => c.index === globalIndex)) clickable.push({ note, index: globalIndex });
         });
+        // Labels are placed on the system's shared baselines, so any real note of the event can carry them
+        // (on a grand staff one of the two staves may hold only a spacer).
+        const anchor = eventNotes[0];
+        if (anchor) {
+          const textColor = anchor.getStyle()?.fillStyle as string | undefined;
+          if (ev.top) texts.push({ note: anchor, text: ev.top, where: 'top', color: textColor });
+          if (ev.bottom) texts.push({ note: anchor, text: ev.bottom, where: 'bottom', color: textColor });
+        }
       });
-
-      function addText(n: InstanceType<typeof StaveNote>, ev: StaffEvent, isTop: boolean, isBottom: boolean) {
-        if (ev.top && isTop) texts.push({ note: n, text: ev.top, where: 'top', color: n.getStyle()?.fillStyle as string | undefined });
-        if (ev.bottom && isBottom) texts.push({ note: n, text: ev.bottom, where: 'bottom', color: n.getStyle()?.fillStyle as string | undefined });
-      }
 
       const voices = parts.map((p) => {
         const v = new Voice({ numBeats: 4, beatValue: 4 }).setMode(Voice.Mode.SOFT);
@@ -354,6 +359,9 @@ function render(VF: VexModule, el: HTMLDivElement, props: StaffProps, width: num
       voices.forEach((v, k) => v.draw(ctx, staves[k]));
       beams.forEach((b) => b.setContext(ctx).draw());
       systemTexts.push(...texts.map((t) => ({ ...t, topStave: top, bottomStave: bottom ?? top })));
+      const isReal = (n: unknown): n is InstanceType<typeof StaveNote> => n instanceof StaveNote;
+      upperNotes.push(...parts[0].notes.filter(isReal));
+      lowerNotes.push(...parts[parts.length - 1].notes.filter(isReal));
 
       clickable.forEach(({ note, index }) => {
         const elNote = note.getSVGElement();
@@ -369,13 +377,13 @@ function render(VF: VexModule, el: HTMLDivElement, props: StaffProps, width: num
     if (systemTexts.length) {
       const extent = (where: 'top' | 'bottom') => {
         let y = where === 'top' ? Infinity : -Infinity;
-        for (const t of systemTexts) {
-          const st = where === 'top' ? t.topStave : t.bottomStave;
-          const ys = [where === 'top' ? st.getYForLine(0) : st.getYForLine(4)];
-          const bb = t.note.getBoundingBox();
+        const st = where === 'top' ? systemTexts[0].topStave : systemTexts[0].bottomStave;
+        const ys = [where === 'top' ? st.getYForLine(0) : st.getYForLine(4)];
+        for (const n of where === 'top' ? upperNotes : lowerNotes) {
+          const bb = n.getBoundingBox();
           if (bb) ys.push(where === 'top' ? bb.getY() : bb.getY() + bb.getH());
-          for (const v of ys) y = where === 'top' ? Math.min(y, v) : Math.max(y, v);
         }
+        for (const v of ys) y = where === 'top' ? Math.min(y, v) : Math.max(y, v);
         return y;
       };
       const topY = extent('top') - 10;

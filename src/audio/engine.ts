@@ -30,6 +30,8 @@ class AudioEngine {
   private dry!: GainNode;
   private wet!: GainNode;
   private compressor!: DynamicsCompressorNode;
+  /** Dry bus for clicks and percussion: follows the volume setting but skips the reverb. */
+  private percBus!: GainNode;
   private held = new Map<number, Voice>();
   private listeners = new Set<Listener>();
   instrument: InstrumentId = 'piano';
@@ -60,6 +62,9 @@ class AudioEngine {
       this.dry.connect(this.compressor);
       this.wet.connect(this.compressor);
       this.compressor.connect(this.ctx.destination);
+      this.percBus = this.ctx.createGain();
+      this.percBus.gain.value = this.volume;
+      this.percBus.connect(this.compressor);
     }
     if (this.ctx.state === 'suspended') void this.ctx.resume();
     return this.ctx;
@@ -85,7 +90,10 @@ class AudioEngine {
 
   setVolume(v: number) {
     this.volume = v;
-    if (this.ctx) this.master.gain.setTargetAtTime(v, this.ctx.currentTime, 0.02);
+    if (this.ctx) {
+      this.master.gain.setTargetAtTime(v, this.ctx.currentTime, 0.02);
+      this.percBus.gain.setTargetAtTime(v, this.ctx.currentTime, 0.02);
+    }
     this.emit();
   }
 
@@ -349,7 +357,7 @@ class AudioEngine {
     g.gain.linearRampToValueAtTime(amp, t + 0.001);
     g.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
     o.connect(g);
-    g.connect(this.compressor);
+    g.connect(this.percBus);
     o.start(t);
     o.stop(t + 0.08);
   }
@@ -372,7 +380,7 @@ class AudioEngine {
     g.gain.exponentialRampToValueAtTime(0.0001, t + decay);
     o.connect(f);
     f.connect(g);
-    g.connect(this.compressor);
+    g.connect(this.percBus);
     o.start(t);
     o.stop(t + decay + 0.02);
   }

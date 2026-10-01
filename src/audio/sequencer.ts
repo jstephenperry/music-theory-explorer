@@ -74,6 +74,7 @@ export class Sequence {
   /** Position within the sequence, 0..length. */
   position(): number {
     const b = this.currentBeat();
+    if (b < 0) return 0;
     if (!this.length) return b;
     return this.opts.loop ? ((b % this.length) + this.length) % this.length : Math.min(b, this.length);
   }

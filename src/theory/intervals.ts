@@ -209,9 +209,9 @@ export function degreeLabel(i: Interval, unicode = true): string {
 
 /** Common consonance classification used for teaching. */
 export function consonance(i: Interval): 'perfect consonance' | 'imperfect consonance' | 'dissonance' {
-  const s = mod(i.semis, 12);
+  const q = quality(i);
   const sn = simpleNum(i.num);
-  if ((s === 0 || s === 7) && (sn === 1 || sn === 5)) return 'perfect consonance';
-  if (s === 3 || s === 4 || s === 8 || s === 9) return 'imperfect consonance';
+  if (q === 'P' && (sn === 1 || sn === 5)) return 'perfect consonance';
+  if ((q === 'M' || q === 'm') && (sn === 3 || sn === 6)) return 'imperfect consonance';
   return 'dissonance';
 }

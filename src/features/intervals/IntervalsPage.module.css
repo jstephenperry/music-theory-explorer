@@ -1,0 +1,385 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.subhead {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink-muted);
+  margin-bottom: 0.45rem;
+}
+
+.linkButton {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  text-underline-offset: 3px;
+  text-align: left;
+}
+.linkButton:hover {
+  text-decoration-color: var(--accent);
+}
+
+/* ---------- Chooser ---------- */
+.chooser {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.chooserTop {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem 2rem;
+}
+.toggles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.gridGroup {
+  min-width: 0;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(62px, 1fr));
+  gap: 0.35rem;
+}
+.ivButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.35rem 0.2rem 0.3rem;
+  border: 1px solid var(--rule);
+  border-bottom-width: 3px;
+  border-radius: var(--radius);
+  background: var(--bg);
+  cursor: pointer;
+  transition: border-color 120ms ease, background 120ms ease;
+}
+.ivButton:hover {
+  background: var(--bg-elev);
+  border-color: var(--rule-strong);
+}
+.cls-verdigris {
+  border-bottom-color: color-mix(in srgb, var(--verdigris) 70%, transparent);
+}
+.cls-royal {
+  border-bottom-color: color-mix(in srgb, var(--royal) 70%, transparent);
+}
+.cls-plum {
+  border-bottom-color: color-mix(in srgb, var(--plum) 70%, transparent);
+}
+.ivButtonActive,
+.ivButtonActive:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.ivName {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.1;
+}
+.ivButtonActive .ivName {
+  color: var(--accent);
+}
+.ivNote {
+  font-size: 0.76rem;
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+
+/* ---------- Main panel ---------- */
+.titleLong {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.05rem;
+  color: var(--ink-muted);
+  margin-left: 0.35rem;
+}
+.playRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+.pianoHint {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--ink-muted);
+  font-size: 0.92rem;
+}
+.mainGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+.staffCaption {
+  display: grid;
+  grid-template-columns: 2fr 1.15fr;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink-faint);
+  text-align: center;
+  margin-top: -0.5rem;
+}
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem 1.25rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+.fact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+.factLabel {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink-faint);
+}
+.factValue {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.factNote {
+  grid-column: 1 / -1;
+  margin: -0.35rem 0 0;
+  font-size: 0.86rem;
+  color: var(--ink-muted);
+}
+
+/* ---------- Tuning ---------- */
+.tuning {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+  gap: 1rem 2rem;
+  align-items: center;
+}
+.tuningFacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.75rem;
+}
+.ratio {
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+.gauge {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+}
+.gaugeText {
+  font-family: var(--font-ui);
+  font-size: 9px;
+}
+.tuningText {
+  margin: 0;
+  font-size: 0.95rem;
+  font-family: var(--font-serif);
+  color: var(--ink-muted);
+}
+
+/* ---------- Staircase ---------- */
+.stairScroll {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding-bottom: 0.25rem;
+}
+.stairs {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 260px;
+}
+.stair {
+  cursor: pointer;
+  outline: none;
+}
+.stair:hover rect:nth-child(2) {
+  opacity: 0.5;
+}
+.stair:focus-visible rect:first-child {
+  stroke: var(--focus);
+  stroke-width: 1.5;
+}
+.stairLabel {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+}
+.stairNote {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 10px;
+}
+.stairSemis {
+  font-family: var(--font-ui);
+  font-size: 9px;
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  margin-top: 0.6rem;
+  align-items: center;
+}
+.legend i {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 2px;
+  margin-right: 0.35rem;
+  vertical-align: -1px;
+}
+.legendHint {
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+/* ---------- Enharmonics and references ---------- */
+.twoCol {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+.lead {
+  margin: 0;
+  font-family: var(--font-serif);
+  color: var(--ink-muted);
+}
+.spellings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  gap: 0.75rem;
+}
+.spelling {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--bg);
+  padding: 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+.spellingActive {
+  border-color: var(--accent);
+  box-shadow: inset 0 3px 0 var(--accent);
+}
+.spellingHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+.spellingName {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+.spellingLong {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+}
+.context {
+  margin: 0;
+  font-size: 0.88rem;
+  font-family: var(--font-serif);
+}
+.refHead {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.2rem;
+}
+.refHead .subhead {
+  margin: 0;
+}
+.refList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.refList li {
+  display: flex;
+  flex-direction: column;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.refTitle {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+.refWhere {
+  font-size: 0.84rem;
+  color: var(--ink-muted);
+}
+.refNone,
+.refNote {
+  margin: 0;
+  font-size: 0.86rem;
+  color: var(--ink-faint);
+  font-style: italic;
+  font-family: var(--font-serif);
+}
+
+@media (max-width: 1000px) {
+  .mainGrid,
+  .twoCol {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .tuning {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .facts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+  }
+}
+
+/* Workaround: the shared RootPicker's black-key background overrides its active state (see report). */
+.rootFix :global(button[role='radio'][aria-checked='true']) {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}

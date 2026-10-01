@@ -351,7 +351,10 @@
 .rootButtonActive:hover {
   color: var(--accent-ink);
 }
-.rootButtonBlack {
+.rootButtonActive.rootButtonBlack {
+  background: var(--accent);
+}
+.rootButtonBlack:not(.rootButtonActive) {
   background: var(--bg-sunk);
 }
 

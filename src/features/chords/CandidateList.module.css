@@ -1,0 +1,150 @@
+.wrap {
+  --c-ink: var(--ink);
+  --c-muted: var(--ink-muted);
+  --c-faint: var(--ink-faint);
+  --c-rule: var(--rule);
+  --c-roman: var(--accent);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  color: var(--c-ink);
+}
+
+.wood {
+  --c-ink: var(--wood-ink);
+  --c-muted: var(--wood-muted);
+  --c-faint: var(--wood-muted);
+  --c-rule: color-mix(in srgb, var(--brass) 35%, transparent);
+  --c-roman: var(--brass-bright);
+}
+
+.top {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem 1.25rem;
+  flex-wrap: wrap;
+}
+
+.topMain {
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+
+.symbol {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.1rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  overflow-wrap: anywhere;
+}
+
+.name {
+  font-family: var(--font-serif);
+  font-size: 1.02rem;
+  color: var(--c-muted);
+  margin-top: 0.35rem;
+}
+
+.inv {
+  font-size: 0.86rem;
+  color: var(--c-faint);
+}
+
+.roman {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--c-roman);
+  line-height: 1;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--c-rule);
+  border-radius: var(--radius);
+}
+
+.actions {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.altBlock {
+  border-top: 1px solid var(--c-rule);
+  padding-top: 0.6rem;
+}
+
+.altHead {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-faint);
+  margin-bottom: 0.3rem;
+}
+
+.alts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.alt {
+  display: grid;
+  grid-template-columns: minmax(5.5rem, auto) 1fr auto;
+  gap: 0.2rem 0.8rem;
+  align-items: center;
+  padding: 0.35rem 0;
+  border-bottom: 1px dotted var(--c-rule);
+}
+.alt:last-child {
+  border-bottom: 0;
+}
+
+.altSymbol {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.altRoman {
+  font-size: 0.95rem;
+  color: var(--c-roman);
+}
+
+.altText {
+  font-size: 0.88rem;
+  color: var(--c-muted);
+  min-width: 0;
+}
+
+.altActions {
+  display: flex;
+  gap: 0.1rem;
+}
+
+.wood .altActions button,
+.wood .actions button {
+  color: var(--wood-ink);
+}
+.wood .actions button {
+  background: transparent;
+  border-color: color-mix(in srgb, var(--brass) 45%, transparent);
+}
+.wood .actions button:hover,
+.wood .altActions button:hover {
+  background: color-mix(in srgb, var(--brass) 28%, transparent);
+  color: var(--wood-ink);
+}
+
+@media (max-width: 520px) {
+  .alt {
+    grid-template-columns: 1fr auto;
+  }
+  .altText {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}

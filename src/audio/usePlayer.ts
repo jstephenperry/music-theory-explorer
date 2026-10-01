@@ -1,13 +1,25 @@
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { audio } from './engine';
 import { Sequence, type SeqEvent, type SequenceOptions } from './sequencer';
 
 /** Only one sequence plays at a time across the whole app. */
 let current: Sequence | null = null;
 
+const stoppers = new Set<() => void>();
+
+/**
+ * Register a stop function for a custom sound source (e.g. a hand-built Web Audio graph) so that it
+ * is silenced when other playback starts or the user navigates away. Returns an unregister function.
+ */
+export function registerStopper(fn: () => void): () => void {
+  stoppers.add(fn);
+  return () => stoppers.delete(fn);
+}
+
 export function stopAllPlayback() {
   current?.stop();
   current = null;
+  stoppers.forEach((fn) => fn());
 }
 
 export interface Player {
@@ -67,7 +79,10 @@ export function usePlayer(): Player {
 
   useEffect(() => () => seqRef.current?.stop(), []);
 
-  return { play, stop, setBpm, playing, activeIndex, activeData, position };
+  return useMemo(
+    () => ({ play, stop, setBpm, playing, activeIndex, activeData, position }),
+    [play, stop, setBpm, playing, activeIndex, activeData, position],
+  );
 }
 
 /** Subscribe to global audio settings (instrument, volume, reverb, A4). */

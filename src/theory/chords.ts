@@ -114,9 +114,9 @@ export const CHORDS: ChordDef[] = [
   { id: 'tristan', name: 'Tristan chord', symbol: ' (Tristan)', aliases: ['tristan'], intervals: ['P1', 'A4', 'A6', 'A9'], category: 'Quartal & named', noIdentify: true, description: 'F B D♯ G♯, the opening of Wagner\'s Tristan und Isolde. Enharmonically a half-diminished seventh, but spelled and resolved differently.' },
 
   // Augmented sixths (root = bass note on lowered 6th degree)
-  { id: 'it6', name: 'Italian augmented sixth', symbol: 'It+6', aliases: ['It+6', 'It6'], intervals: ['P1', 'M3', 'A6'], category: 'Augmented sixths', noIdentify: true, description: '♭6, 1, ♯4 of the key. The augmented sixth expands outward to the octave on the dominant.' },
-  { id: 'fr6', name: 'French augmented sixth', symbol: 'Fr+6', aliases: ['Fr+6', 'Fr6', 'Fr43'], intervals: ['P1', 'M3', 'A4', 'A6'], category: 'Augmented sixths', noIdentify: true, description: '♭6, 1, 2, ♯4 of the key. Whole-tone flavored.' },
-  { id: 'ger6', name: 'German augmented sixth', symbol: 'Ger+6', aliases: ['Ger+6', 'Ger6', 'Ger65'], intervals: ['P1', 'M3', 'P5', 'A6'], category: 'Augmented sixths', noIdentify: true, description: '♭6, 1, ♭3, ♯4 of the key. Sounds identical to a dominant seventh, which makes it an enharmonic pivot.' },
+  { id: 'it6', name: 'Italian augmented sixth', symbol: ' It⁺⁶', aliases: ['It+6', 'It6'], intervals: ['P1', 'M3', 'A6'], category: 'Augmented sixths', noIdentify: true, description: '♭6, 1, ♯4 of the key. The augmented sixth expands outward to the octave on the dominant.' },
+  { id: 'fr6', name: 'French augmented sixth', symbol: ' Fr⁺⁶', aliases: ['Fr+6', 'Fr6', 'Fr43'], intervals: ['P1', 'M3', 'A4', 'A6'], category: 'Augmented sixths', noIdentify: true, description: '♭6, 1, 2, ♯4 of the key. Whole-tone flavored.' },
+  { id: 'ger6', name: 'German augmented sixth', symbol: ' Ger⁺⁶', aliases: ['Ger+6', 'Ger6', 'Ger65'], intervals: ['P1', 'M3', 'P5', 'A6'], category: 'Augmented sixths', noIdentify: true, description: '♭6, 1, ♭3, ♯4 of the key. Sounds identical to a dominant seventh, which makes it an enharmonic pivot.' },
 ];
 
 export const CHORD_BY_ID: Record<string, ChordDef> = Object.fromEntries(CHORDS.map((c) => [c.id, c]));

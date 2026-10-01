@@ -63,7 +63,13 @@ const SEVENTH_FOR_BASE: Record<Base, string> = { major: '7', minor: 'm7', dim: '
 const ROMAN_RE = /^([b#♭♯♮]*)(VII|VI|V|IV|III|II|I|vii|vi|v|iv|iii|ii|i)([°oø+]?)([^/]*)$/;
 
 function normalize(s: string): string {
-  return s.trim().replace(/♭/g, 'b').replace(/♯/g, '#').replace(/\s+/g, '');
+  return s
+    .trim()
+    .replace(/♭/g, 'b')
+    .replace(/♯/g, '#')
+    .replace(/\s+/g, '')
+    .replace(/(^|\/)n(?=[b#]*[IViv])/g, '$1♮')
+    .replace(/(?<=[IViv])h(?=7?$|7?\/)/g, 'ø');
 }
 
 function degreeRoot(k: Key, degree: number, accidental: string, base: Base): Note {

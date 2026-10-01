@@ -23,7 +23,12 @@ export function useComputerKeyboard(
     if (!enabled) return;
     const isTyping = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement | null;
-      return !!t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable);
+      if (!t) return false;
+      if (t.tagName === 'INPUT') {
+        const type = (t as HTMLInputElement).type;
+        return !['checkbox', 'radio', 'range', 'button', 'submit', 'reset', 'color'].includes(type);
+      }
+      return t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable;
     };
     const onDown = (e: KeyboardEvent) => {
       if (e.repeat || e.metaKey || e.ctrlKey || e.altKey || isTyping(e)) return;
