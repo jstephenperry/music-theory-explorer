@@ -25,7 +25,7 @@ export const ROUTES: RouteDef[] = [
   },
   {
     path: '/scales', title: 'Scales & Modes', section: 'Pitch',
-    blurb: 'Over sixty scales and modes: compare brightness, characteristic notes and harmony.',
+    blurb: 'Fifty-nine scales and modes: compare brightness, characteristic notes and harmony.',
     component: lazy(() => import('../features/scales/ScalesPage')),
   },
   {

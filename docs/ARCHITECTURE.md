@@ -27,7 +27,7 @@ Import from `src/theory` (barrel) or from individual modules.
 - `intervals.ts`: `Interval` = `{ num, semis }`. `interval('m3')`, `intervalName`, `intervalLongName`,
   `transpose(note, interval)` (always correctly spelled), `transposeDown`, `transposePitch`,
   `intervalBetween(a, b)`, `pitchInterval(a, b)`, `invert`, `degreeLabel` (♭3, ♯11), `consonance`.
-- `scales.ts`: `SCALES` catalog (60+ scales with families, descriptions, mode parents, brightness),
+- `scales.ts`: `SCALES` catalog (59 scales with families, descriptions, mode parents, brightness),
   `buildScale(root, id)`, `scalePcs`, `scaleFormula`, `stepPattern`, `stepNames`, `modesOf(parent)`,
   `distinctTranspositions`, `findScalesByPcs`, `scalesContaining`.
 - `chords.ts`: `CHORDS` catalog (triads to altered dominants, quartal, augmented sixths),
@@ -56,7 +56,7 @@ Import from `src/theory` (barrel) or from individual modules.
   Helpers `chordEvents` and `melodyEvents`.
 - `usePlayer()` (`usePlayer.ts`): `play(events, { bpm, loop, length, onEvent })`, `stop`, `setBpm`, `playing`,
   `activeIndex`, `activeData`, `position()`. Only one sequence plays at a time app-wide, and playback
-  stops on navigation.
+  stops on navigation. Custom Web Audio graphs call `registerStopper(fn)` so they are silenced too.
 
 ## Components
 
@@ -67,6 +67,8 @@ Import from `src/theory` (barrel) or from individual modules.
   ('treble' | 'bass' | 'grand' | 'auto'), `keySig`, `timeSig`, `activeIndex`, `onEventClick`, `beam`.
   Events: `{ keys: Pitch[], duration, rest, top, bottom, color, keyColors }`. Accidentals are computed
   automatically against the key signature. `loadVexFlow()` exposes VexFlow for custom engraving.
+- Hooks: `useUrlState(key, default)` and `useUrlParams(defaults)` keep shareable state in the URL;
+  `usePersistentState` keeps preferences in localStorage; `useMidiInput`; `useComputerKeyboard`.
 - `ui.tsx`: `Button`, `PlayButton`, `Segmented`, `Select`, `TextInput`, `Slider`, `Toggle`, `Panel`,
   `PageHeader`, `Tag`, `Callout`, `Tabs`, `RootPicker`, `Stat`, `Empty`.
 - `theme.ts`: `cssVar`, `resolveColor`, `useThemeVersion` for canvas/SVG drawings that need theme colors.
