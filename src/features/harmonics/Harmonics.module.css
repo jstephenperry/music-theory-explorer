@@ -1,0 +1,392 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.refBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1rem;
+  margin-top: 1rem;
+}
+.refLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.refNote {
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem 1.5rem;
+}
+
+.prose {
+  font-family: var(--font-serif);
+  color: var(--ink-muted);
+  font-size: 0.98rem;
+  max-width: 70ch;
+  margin: 0;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+@media (max-width: 980px) {
+  .grid2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.chart {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+  touch-action: manipulation;
+}
+.chartWrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.bar {
+  cursor: pointer;
+  transition: opacity 120ms ease;
+}
+.bar:hover {
+  opacity: 0.85;
+}
+.bar:focus-visible {
+  outline: none;
+}
+.bar:focus-visible .barBody {
+  stroke: var(--focus);
+  stroke-width: 2;
+}
+
+.axisText {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  fill: var(--ink-faint);
+}
+.labelText {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--ink);
+}
+.smallText {
+  font-family: var(--font-ui);
+  font-size: 10.5px;
+  fill: var(--ink-muted);
+}
+
+/* ---------- Partial chips ---------- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.chip {
+  min-width: 2.2em;
+  padding: 0.22em 0.4em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--rule);
+  background: var(--bg-elev);
+  color: var(--ink-muted);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+.chip:hover {
+  border-color: var(--rule-strong);
+  color: var(--ink);
+}
+.chipOn {
+  background: var(--brass-soft);
+  border-color: var(--brass);
+  color: var(--ink);
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.detailHead {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.bigNote {
+  font-family: var(--font-display);
+  font-size: 2.3rem;
+  font-weight: 600;
+  line-height: 1;
+}
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+}
+
+.sharp {
+  color: var(--accent);
+}
+.flat {
+  color: var(--royal);
+}
+.pure {
+  color: var(--verdigris);
+}
+
+/* ---------- Additive synthesis ---------- */
+.editor {
+  display: grid;
+  grid-template-columns: repeat(16, minmax(0, 1fr));
+  gap: 4px;
+  height: 190px;
+  padding: 8px 6px 0;
+  background: var(--bg-sunk);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  touch-action: none;
+  user-select: none;
+}
+.slot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: stretch;
+  cursor: ns-resize;
+  border-radius: 3px 3px 0 0;
+  outline: none;
+}
+.slot:focus-visible {
+  box-shadow: 0 0 0 2px var(--focus);
+}
+.slotTrack {
+  position: absolute;
+  inset: 0;
+  border-left: 1px dashed color-mix(in srgb, var(--rule) 80%, transparent);
+  left: 50%;
+  width: 0;
+}
+.slotFill {
+  position: relative;
+  background: linear-gradient(180deg, var(--brass-bright), var(--brass));
+  border-radius: 3px 3px 0 0;
+  min-height: 1px;
+}
+.slotFillOdd {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 75%, var(--brass-bright)), var(--accent));
+}
+.slotNums {
+  display: grid;
+  grid-template-columns: repeat(16, minmax(0, 1fr));
+  gap: 4px;
+  padding: 4px 6px 0;
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+.wave {
+  width: 100%;
+  height: 200px;
+  display: block;
+  background: var(--bg-sunk);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+/* ---------- Tables ---------- */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+.table th {
+  text-align: left;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 700;
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid var(--rule-strong);
+  white-space: nowrap;
+}
+.table td {
+  padding: 0.38rem 0.5rem;
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+.table tbody tr {
+  cursor: pointer;
+}
+.table tbody tr:hover td {
+  background: color-mix(in srgb, var(--brass-soft) 40%, transparent);
+}
+.rowActive td {
+  background: color-mix(in srgb, var(--brass-soft) 75%, transparent);
+}
+.rowActive td:first-child {
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+.num {
+  text-align: right;
+}
+.tableWrap {
+  overflow-x: auto;
+  margin: 0 -0.25rem;
+}
+.hideNarrow {
+}
+@media (max-width: 560px) {
+  .hideNarrow {
+    display: none;
+  }
+}
+
+.beatDot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+  vertical-align: middle;
+}
+.beatDotPulse {
+  animation: beat linear infinite;
+}
+@keyframes beat {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.15;
+    transform: scale(0.6);
+  }
+}
+
+/* ---------- Triad grid ---------- */
+.triads {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 6px;
+}
+@media (max-width: 640px) {
+  .triads {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.triad {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  padding: 0.45rem 0.55rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--rule);
+  cursor: pointer;
+  text-align: left;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  min-width: 0;
+}
+.triad:hover {
+  border-color: var(--rule-strong);
+}
+.triadActive {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.triadName {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.2rem;
+  line-height: 1.1;
+}
+.triadLine {
+  font-size: 0.74rem;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  align-items: center;
+}
+.swatch {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  margin-right: 0.35rem;
+  vertical-align: -1px;
+}
+
+.demoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 1.25rem;
+}
+.demo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.figure {
+  display: flex;
+  justify-content: center;
+}
+.figure svg {
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+}
+.numbers {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.15rem 0.9rem;
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+}
+.numbers dt {
+  color: var(--ink-muted);
+}
+.numbers dd {
+  margin: 0;
+  font-weight: 600;
+}

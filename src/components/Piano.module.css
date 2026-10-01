@@ -1,0 +1,68 @@
+.wrap {
+  width: 100%;
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, var(--wood) 0%, var(--wood-2) 100%);
+  padding: 8px 8px 10px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), var(--shadow-md);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 220px;
+  overflow: visible;
+}
+
+.key {
+  cursor: pointer;
+  outline: none;
+}
+
+.key:focus-visible .keyBody {
+  stroke: var(--focus);
+  stroke-width: 2;
+}
+
+.white .keyBody {
+  stroke: var(--key-white-edge);
+  stroke-width: 0.7;
+}
+
+.black .keyBody {
+  stroke: #000;
+  stroke-width: 0.5;
+}
+
+.white:hover .keyBody {
+  filter: brightness(0.97);
+}
+
+.black:hover .keyBody {
+  filter: brightness(1.35);
+}
+
+.marker {
+  transition: r 120ms ease;
+}
+
+.pressed .marker {
+  filter: brightness(1.15);
+}
+
+.markLabel {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  pointer-events: none;
+  letter-spacing: -0.02em;
+}
+
+.keyName {
+  font-family: var(--font-ui);
+  font-size: 7px;
+  fill: #8a7a63;
+  pointer-events: none;
+}

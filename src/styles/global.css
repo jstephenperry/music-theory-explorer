@@ -1,0 +1,329 @@
+/*
+ * Design language: "elegant functionalism" in a concert hall.
+ * Ivory score paper, walnut and ebony wood, burgundy velvet, aged brass rules.
+ * Two themes: Matinee (light) and Evening (dark).
+ */
+
+:root {
+  color-scheme: light;
+  --font-display: 'Cormorant Garamond', 'Cormorant', 'EB Garamond', Garamond, 'Times New Roman', serif;
+  --font-ui: 'Source Sans 3', 'Source Sans Pro', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+
+  /* Matinee */
+  --bg: #f3ecdf;
+  --bg-elev: #fbf8f1;
+  --bg-sunk: #ebe2d1;
+  --ink: #231c15;
+  --ink-muted: #6a5c4c;
+  --ink-faint: #9a8b76;
+  --rule: #dccfb8;
+  --rule-strong: #b8975e;
+  --accent: #7b2231;
+  --accent-hover: #671b28;
+  --accent-ink: #fbf7ef;
+  --accent-soft: #f2e0dd;
+  --brass: #9c7a3f;
+  --brass-bright: #c39a52;
+  --brass-soft: #f0e3c4;
+  --verdigris: #3d7568;
+  --verdigris-soft: #d9e9e3;
+  --royal: #3b4f7d;
+  --royal-soft: #dde3f0;
+  --plum: #6c3b5d;
+  --plum-soft: #ecdde8;
+  --wood: #3f281b;
+  --wood-2: #2f1d13;
+  --wood-ink: #f1e6d2;
+  --wood-muted: #c4ad8c;
+  --focus: #b8975e;
+  --shadow-sm: 0 1px 2px rgba(48, 31, 18, 0.08);
+  --shadow-md: 0 2px 6px rgba(48, 31, 18, 0.08), 0 8px 24px rgba(48, 31, 18, 0.06);
+
+  /* Piano */
+  --key-white-top: #fffcf4;
+  --key-white-bottom: #efe6d3;
+  --key-white-edge: #b9aa91;
+  --key-black-top: #2a221d;
+  --key-black-bottom: #0f0b09;
+  --key-pressed: #e3d3b2;
+
+  /* Highlight roles used by the piano, staff and charts */
+  --hl-root: var(--accent);
+  --hl-tone: var(--brass);
+  --hl-alt: var(--verdigris);
+  --hl-extra: var(--royal);
+  --hl-other: var(--plum);
+
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 14px;
+  --sidebar-w: 264px;
+  --content-max: 1180px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --bg: #15100c;
+    --bg-elev: #1e1712;
+    --bg-sunk: #110c09;
+    --ink: #eee3cf;
+    --ink-muted: #b6a48a;
+    --ink-faint: #7f6f5b;
+    --rule: #382a20;
+    --rule-strong: #8d6f3f;
+    --accent: #c0566a;
+    --accent-hover: #d06a7d;
+    --accent-ink: #1a0f0c;
+    --accent-soft: #3a1c22;
+    --brass: #cfa865;
+    --brass-bright: #e2be7c;
+    --brass-soft: #3a2e1b;
+    --verdigris: #74b5a5;
+    --verdigris-soft: #1b302b;
+    --royal: #93a7d6;
+    --royal-soft: #1e2638;
+    --plum: #c08cb1;
+    --plum-soft: #33202e;
+    --wood: #1a120d;
+    --wood-2: #120c08;
+    --wood-ink: #eee3cf;
+    --wood-muted: #9d8a70;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.35), 0 10px 28px rgba(0, 0, 0, 0.3);
+    --key-white-top: #f3ead8;
+    --key-white-bottom: #d9ccb3;
+    --key-white-edge: #6d5e4a;
+    --key-black-top: #2b221c;
+    --key-black-bottom: #080605;
+    --key-pressed: #c9b48c;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #15100c;
+  --bg-elev: #1e1712;
+  --bg-sunk: #110c09;
+  --ink: #eee3cf;
+  --ink-muted: #b6a48a;
+  --ink-faint: #7f6f5b;
+  --rule: #382a20;
+  --rule-strong: #8d6f3f;
+  --accent: #c0566a;
+  --accent-hover: #d06a7d;
+  --accent-ink: #1a0f0c;
+  --accent-soft: #3a1c22;
+  --brass: #cfa865;
+  --brass-bright: #e2be7c;
+  --brass-soft: #3a2e1b;
+  --verdigris: #74b5a5;
+  --verdigris-soft: #1b302b;
+  --royal: #93a7d6;
+  --royal-soft: #1e2638;
+  --plum: #c08cb1;
+  --plum-soft: #33202e;
+  --wood: #1a120d;
+  --wood-2: #120c08;
+  --wood-ink: #eee3cf;
+  --wood-muted: #9d8a70;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.35), 0 10px 28px rgba(0, 0, 0, 0.3);
+  --key-white-top: #f3ead8;
+  --key-white-bottom: #d9ccb3;
+  --key-white-edge: #6d5e4a;
+  --key-black-top: #2b221c;
+  --key-black-bottom: #080605;
+  --key-pressed: #c9b48c;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0 0 0.4em;
+  letter-spacing: 0.005em;
+}
+
+h1 {
+  font-size: clamp(2rem, 3.6vw, 2.9rem);
+}
+h2 {
+  font-size: 1.75rem;
+}
+h3 {
+  font-size: 1.35rem;
+}
+h4 {
+  font-size: 1.1rem;
+}
+
+p {
+  margin: 0 0 0.9em;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  text-underline-offset: 2px;
+}
+a:hover {
+  text-decoration-color: var(--accent);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--brass-soft);
+}
+
+code,
+kbd {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.88em;
+}
+
+kbd {
+  display: inline-block;
+  padding: 0 0.4em;
+  border: 1px solid var(--rule);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-elev);
+  line-height: 1.5;
+}
+
+/* ---------- Utility classes shared across features ---------- */
+
+.small-caps {
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+}
+
+.eyebrow {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+
+.muted {
+  color: var(--ink-muted);
+}
+
+.faint {
+  color: var(--ink-faint);
+}
+
+.serif {
+  font-family: var(--font-serif);
+}
+
+.display {
+  font-family: var(--font-display);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 1.25rem;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 1rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Ornamental double rule, like a concert program. */
+.rule-double {
+  border: 0;
+  height: 5px;
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule-strong);
+  opacity: 0.7;
+  margin: 1.25rem 0;
+}
+
+.rule {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: 1.25rem 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

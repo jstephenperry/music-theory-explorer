@@ -1,0 +1,651 @@
+/* Progression Lab. Colors come only from the global theme tokens. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Harmonic function color sets */
+.fn-tonic {
+  --fn: var(--verdigris);
+  --fn-soft: var(--verdigris-soft);
+}
+.fn-predominant {
+  --fn: var(--royal);
+  --fn-soft: var(--royal-soft);
+}
+.fn-dominant {
+  --fn: var(--accent);
+  --fn-soft: var(--accent-soft);
+}
+.fn-chromatic {
+  --fn: var(--plum);
+  --fn-soft: var(--plum-soft);
+}
+
+/* ---------- Controls ---------- */
+.controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 1.25rem 2rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.controlGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem 1.1rem;
+  align-items: flex-end;
+}
+.keyTitle {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1;
+  margin-right: 0.25rem;
+}
+.transport {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+/* ---------- Progression strip ---------- */
+.strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: stretch;
+  padding: 0.35rem 0.1rem 0.2rem;
+}
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  min-width: 78px;
+  padding: 0.7rem 0.75rem 0.55rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--bg-elev);
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  overflow: hidden;
+  transition: border-color 120ms ease, background 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: var(--fn);
+}
+.card:hover {
+  border-color: var(--rule-strong);
+}
+.cardSelected {
+  border-color: var(--brass);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--brass) 45%, transparent);
+}
+.cardPlaying {
+  background: var(--fn-soft);
+  transform: translateY(-2px);
+}
+.cardNumeral {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 600;
+  line-height: 1.05;
+  color: var(--fn);
+  white-space: nowrap;
+}
+.cardSymbol {
+  font-weight: 600;
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+.cardRole {
+  font-size: 0.72rem;
+  color: var(--ink-muted);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.beats {
+  display: flex;
+  gap: 3px;
+  margin-top: 0.3rem;
+  min-height: 4px;
+}
+.beat {
+  width: 8px;
+  height: 4px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--fn) 45%, var(--rule));
+}
+.addCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 78px;
+  border: 1px dashed var(--rule-strong);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.6rem;
+}
+.addCard:hover {
+  color: var(--ink);
+  background: var(--bg-sunk);
+}
+
+.stripFooter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  margin-top: 0.9rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--rule);
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+}
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: help;
+}
+.swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: var(--fn);
+}
+.cadence {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.92rem;
+}
+.cadenceLabel {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.15rem;
+}
+
+/* ---------- Two-column work area ---------- */
+.workGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+@media (max-width: 980px) {
+  .workGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+/* ---------- Editor ---------- */
+.editorHead {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+.editorNumeral {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--fn);
+}
+.editorSymbol {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+.editorNotes {
+  color: var(--ink-muted);
+  font-size: 0.92rem;
+}
+.editorRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: flex-end;
+  margin: 0.75rem 0;
+}
+.numeralInput {
+  width: 9.5rem;
+}
+.inputError {
+  color: var(--accent);
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+}
+.detail {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  margin: 0.4rem 0 0;
+}
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* ---------- Chips (palette, suggestions) ---------- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.05rem;
+  padding: 0.35rem 0.6rem 0.4rem;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--fn);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elev);
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  min-width: 3.6rem;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+.chip:hover {
+  background: var(--fn-soft);
+  border-color: color-mix(in srgb, var(--fn) 45%, var(--rule));
+  border-left-color: var(--fn);
+}
+.chipNumeral {
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--fn);
+  white-space: nowrap;
+}
+.chipSymbol {
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.chipNote {
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+.section {
+  margin-top: 0.85rem;
+}
+.sectionTitle {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin: 0 0 0.4rem;
+}
+.groupIntro {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  margin-top: 0.75rem;
+  font-family: var(--font-serif);
+  font-size: 0.92rem;
+  color: var(--ink-muted);
+}
+.groupIntro svg {
+  margin-top: 0.2rem;
+  color: var(--brass);
+}
+.tabsWrap {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+/* Suggestions */
+.suggestGroup {
+  padding: 0.65rem 0;
+  border-top: 1px solid var(--rule);
+}
+.suggestGroup:first-of-type {
+  border-top: 0;
+  padding-top: 0.2rem;
+}
+.suggestHead {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.4rem;
+}
+.suggestTitle {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.suggestBlurb {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+}
+.reason {
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+  max-width: 13rem;
+  white-space: normal;
+  line-height: 1.25;
+}
+
+/* Reharmonize */
+.tool {
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--rule);
+}
+.tool:first-of-type {
+  border-top: 0;
+  padding-top: 0.1rem;
+}
+.toolHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.toolTitle {
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+.toolDesc {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  margin: 0.1rem 0 0.45rem;
+}
+.toolOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.unavailable {
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+/* ---------- Text entry ---------- */
+.entryRow {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  margin-top: 0.75rem;
+}
+.entryInput {
+  flex: 1;
+  min-width: 0;
+  resize: vertical;
+  line-height: 1.45;
+  font-family: var(--font-ui);
+}
+.tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.6rem;
+}
+.token {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  background: var(--bg-sunk);
+  font-size: 0.82rem;
+}
+.tokenNumeral {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--fn);
+}
+.errorList {
+  margin: 0.6rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+  color: var(--accent);
+}
+.warnList {
+  margin: 0.4rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+  color: var(--brass);
+}
+.hint {
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  margin: 0.6rem 0 0;
+}
+
+/* ---------- Notation ---------- */
+.notation {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.pianoWrap {
+  overflow-x: auto;
+}
+.pianoInner {
+  min-width: 620px;
+}
+
+/* ---------- Voice-leading view ---------- */
+.vl {
+  border-top: 1px solid var(--rule);
+  padding-top: 0.9rem;
+}
+.vlChartWrap {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.vlChart {
+  display: block;
+  max-width: none;
+}
+.vlLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  margin: 0.4rem 0 0.6rem;
+}
+.vlLegendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.vlLine {
+  width: 18px;
+  height: 3px;
+  border-radius: 2px;
+}
+.transitions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+}
+.transition {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 0.55rem 0.7rem;
+  background: var(--bg-elev);
+  font-size: 0.85rem;
+}
+.transitionWarn {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--rule));
+}
+.transitionHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+.transitionHead span:first-child {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+}
+.moves {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.1rem 0.6rem;
+  font-variant-numeric: tabular-nums;
+}
+.moveName {
+  color: var(--ink-muted);
+}
+.moveHeld {
+  color: var(--verdigris);
+  font-weight: 600;
+}
+.warn {
+  color: var(--accent);
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+}
+
+/* ---------- Library ---------- */
+.libraryControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+}
+.libraryGroup + .libraryGroup {
+  margin-top: 1.4rem;
+}
+.libraryGroupTitle {
+  font-size: 1.25rem;
+  margin: 0 0 0.6rem;
+}
+.libraryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: 0.75rem;
+}
+.entry {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 0.8rem 0.9rem;
+  background: var(--bg-elev);
+}
+.entryName {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0;
+}
+.entryMeta {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+.entryDesc {
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  margin: 0;
+  color: var(--ink-muted);
+}
+.entryNumerals {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.02rem;
+  line-height: 1.35;
+}
+.entryActions {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: auto;
+  padding-top: 0.3rem;
+}
+
+/* ---------- Glossary ---------- */
+.glossary {
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+.glossary summary {
+  cursor: pointer;
+  color: var(--ink-muted);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.glossary dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25rem 0.9rem;
+  margin: 0.6rem 0 0;
+}
+.glossary dt {
+  font-weight: 700;
+}
+.glossary dd {
+  margin: 0;
+  font-family: var(--font-serif);
+  color: var(--ink-muted);
+}
+@media (max-width: 560px) {
+  .glossary dl {
+    grid-template-columns: 1fr;
+  }
+  .glossary dd {
+    margin-bottom: 0.4rem;
+  }
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}

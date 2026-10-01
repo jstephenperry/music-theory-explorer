@@ -1,0 +1,281 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+.opGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+}
+.opButton {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 3.1rem;
+  padding: 0.3rem 0.5rem 0.25rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--bg-elev);
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  line-height: 1.1;
+  transition: border-color 120ms ease, background 120ms ease;
+}
+.opButton:hover {
+  border-color: var(--rule-strong);
+  background: color-mix(in srgb, var(--bg-elev) 80%, var(--brass-soft));
+}
+.opButtonLast {
+  border-color: var(--accent);
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+.opLetter {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+.opSub {
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.opDivider {
+  width: 1px;
+  align-self: stretch;
+  background: var(--rule);
+  margin: 0 0.25rem;
+}
+.current {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+.currentName {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 600;
+  line-height: 1;
+}
+.currentNotes {
+  color: var(--ink-muted);
+  font-size: 0.95rem;
+}
+
+.latticeWrap {
+  position: relative;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-sunk);
+  touch-action: none;
+  user-select: none;
+}
+.latticeSvg {
+  display: block;
+  width: 100%;
+  cursor: grab;
+}
+.latticeSvg:active {
+  cursor: grabbing;
+}
+.tri {
+  cursor: pointer;
+  transition: fill 120ms ease;
+}
+.tri:hover {
+  fill: var(--accent-soft);
+}
+.triLabel {
+  pointer-events: none;
+  font-family: var(--font-ui);
+  font-size: 10.5px;
+  font-weight: 600;
+  fill: var(--ink-faint);
+}
+.node {
+  cursor: pointer;
+}
+.node circle {
+  fill: var(--bg-elev);
+  stroke: var(--rule-strong);
+  stroke-width: 1;
+  transition: stroke 100ms ease, fill 100ms ease;
+}
+.node:hover circle {
+  stroke: var(--accent);
+  stroke-width: 2.2;
+  fill: var(--accent-soft);
+}
+.node text {
+  pointer-events: none;
+  font-family: var(--font-display);
+  font-weight: 700;
+  fill: var(--ink);
+}
+.nodeActive circle {
+  fill: var(--accent);
+  stroke: var(--accent);
+}
+.nodeActive text {
+  fill: var(--accent-ink);
+}
+.axes {
+  position: absolute;
+  left: 0.6rem;
+  bottom: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.72rem;
+  color: var(--ink-muted);
+  background: color-mix(in srgb, var(--bg-elev) 88%, transparent);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  pointer-events: none;
+}
+.mapButtons {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  display: flex;
+  gap: 0.35rem;
+}
+.hint {
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  margin: 0.5rem 0 0;
+}
+
+.below {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .below {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.moveText {
+  font-family: var(--font-serif);
+  margin: 0.25rem 0 0.75rem;
+}
+.moveChip {
+  display: inline-block;
+  padding: 0 0.45em;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.moved {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.held {
+  background: var(--brass-soft);
+}
+.presets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.preset {
+  text-align: left;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--bg-elev);
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+}
+.preset:hover {
+  border-color: var(--rule-strong);
+}
+.presetActive {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent-soft) 55%, var(--bg-elev));
+}
+.presetName {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  font-weight: 600;
+}
+.presetDesc {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  line-height: 1.35;
+}
+.sequence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0.5rem 0 0.75rem;
+}
+.seqChip {
+  padding: 0.05em 0.5em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--rule);
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+.seqChipActive {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.seqOp {
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+  align-self: center;
+}
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.explain {
+  font-family: var(--font-serif);
+}
+.explain ul {
+  padding-left: 1.2rem;
+  margin: 0.25rem 0 0.75rem;
+}
+.explain li {
+  margin-bottom: 0.3rem;
+}
+.opTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.opTable td {
+  padding: 0.3rem 0.4rem;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+.opTable td:first-child {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  width: 2rem;
+}
