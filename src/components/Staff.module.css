@@ -12,6 +12,10 @@
 .canvas {
   width: 100%;
   min-height: 60px;
+  /* Notation is never squeezed below its natural width; on narrow screens it scrolls here instead. */
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
 }
 
 .canvas svg {

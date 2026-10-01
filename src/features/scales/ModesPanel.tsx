@@ -1,10 +1,11 @@
 import type { Player } from '../../audio/usePlayer';
 import { Button, Callout, Empty, PlayButton, Segmented } from '../../components/ui';
 import { usePersistentState } from '../../hooks/usePersistentState';
-import { scaleFormula, type ScaleDef } from '../../theory/scales';
+import type { ScaleDef } from '../../theory/scales';
 import { noteName, sameNote, type Note } from '../../theory/notes';
 import { brightnessLadder, differenceSummary, parallelModes, relativeModes, scaleTones } from './scaleLogic';
 import { melody, shortName, type PlayData } from './shared';
+import { formulaText } from './browse';
 import s from './ScalesPage.module.css';
 
 const ORDINALS = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth'];
@@ -37,7 +38,7 @@ export function ModesPanel({
       return;
     }
     const tones = scaleTones(r, id);
-    player.play(melody(tones.map((t, i) => ({ midi: t.midi, index: i })), 'preview', 0, 0.5, tag), { bpm });
+    player.play(melody(tones.map((t, i) => ({ midi: t.play, index: i })), 'preview', 0, 0.5, tag), { bpm });
   };
   const isPreviewing = (r: Note, id: string) => data?.kind === 'preview' && data.tag === `${noteName(r, false)}:${id}`;
 
@@ -56,7 +57,9 @@ export function ModesPanel({
         <span className={s.barHint}>
           {mode === 'relative'
             ? 'Same notes, a different home note. Each mode starts on another degree of the parent scale.'
-            : 'Same home note, different notes. Hear how each mode recolors the same tonic.'}
+            : scale.modeOf
+              ? 'Same home note, different notes. Hear how each mode recolors the same tonic.'
+              : `The other members of the ${scale.family} on the same tonic.`}
         </span>
       </div>
 
@@ -85,7 +88,7 @@ export function ModesPanel({
                     <span className={s.modeName}>
                       {noteName(m.root)} {m.scale ? shortName(m.scale.name) : 'rotation'}
                     </span>
-                    <span className={s.modeFormula}>{m.scale ? scaleFormula(m.scale.id).join(' ') : 'not in the catalog'}</span>
+                    <span className={s.modeFormula}>{m.scale ? formulaText(m.scale) : 'not in the catalog'}</span>
                   </button>
                   {m.scale && (
                     <Button
@@ -117,11 +120,11 @@ export function ModesPanel({
             return (
               <div key={m.id} className={`${s.modeCard} ${current ? s.modeCardActive : ''}`}>
                 <button className={s.modeCardMain} onClick={() => onSelect(root, m.id)} aria-label={`Load ${noteName(root)} ${m.name}`}>
-                  <span className={s.modeDegree}>{ORDINALS[m.modeOf!.degree - 1]} mode</span>
+                  <span className={s.modeDegree}>{m.modeOf && scale.modeOf ? `${ORDINALS[m.modeOf.degree - 1]} mode` : m.family}</span>
                   <span className={s.modeName}>
                     {noteName(root)} {shortName(m.name)}
                   </span>
-                  <span className={s.modeFormula}>{scaleFormula(m.id).join(' ')}</span>
+                  <span className={s.modeFormula}>{formulaText(m)}</span>
                   <span className={s.modeDiff}>{current ? 'current scale' : diff.onlyB.length ? `${diff.onlyB.join(' ')} instead of ${diff.onlyA.join(' ')}` : 'same notes'}</span>
                 </button>
                 <Button
@@ -150,7 +153,7 @@ function Ladder({ root, scale, player, bpm, onSelect }: { root: Note; scale: Sca
     const events = order.flatMap((ri, k) => {
       const tones = scaleTones(root, rungs[ri].scale.id);
       return melody(
-        tones.map((t, j) => ({ midi: t.midi, index: ri, sub: j })),
+        tones.map((t, j) => ({ midi: t.play, index: ri, sub: j })),
         'ladder',
         k * 5.5,
         0.5,
@@ -200,7 +203,7 @@ function Ladder({ root, scale, player, bpm, onSelect }: { root: Note; scale: Sca
                 aria-label={`Play ${noteName(root)} ${r.scale.name}`}
                 onClick={() => {
                   const ts = scaleTones(root, r.scale.id);
-                  player.play(melody(ts.map((t, j) => ({ midi: t.midi, index: i, sub: j })), 'ladder', 0, 0.5), { bpm });
+                  player.play(melody(ts.map((t, j) => ({ midi: t.play, index: i, sub: j })), 'ladder', 0, 0.5), { bpm });
                 }}
               />
             </li>

@@ -25,7 +25,7 @@ import { useComputerKeyboard } from '../../hooks/useComputerKeyboard';
 import { usePersistentState } from '../../hooks/usePersistentState';
 import { identifyMidi, romanFor, spellMidis, toneRole } from '../chords/chordLogic';
 import { CandidateList } from '../chords/CandidateList';
-import { useMediaQuery } from '../chords/useMediaQuery';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { useQuery } from '../chords/useQuery';
 import {
   COMPUTER_KEYS,

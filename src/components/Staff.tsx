@@ -44,6 +44,11 @@ export interface StaffEvent {
   color?: string;
   /** Per-key colors (same order as keys). */
   keyColors?: Array<string | undefined>;
+  /**
+   * Per-key accidental overrides for microtonal pitches (same order as keys): a VexFlow accidental
+   * code ('d' half-flat, 'k' koron ...) or a SMuFL glyph. Always drawn, whatever the key signature.
+   */
+  micro?: Array<string | null | undefined>;
 }
 
 export interface StaffMeasure {
@@ -160,7 +165,7 @@ function fitSvgHeight(el: HTMLDivElement) {
 }
 
 function render(VF: VexModule, el: HTMLDivElement, props: StaffProps, width: number, onClick: (i: number) => void) {
-  const { Renderer, Stave, StaveNote, Voice, Formatter, Accidental, StaveConnector, GhostNote, Dot, Beam, Barline } = VF;
+  const { Renderer, Stave, StaveNote, Voice, Formatter, Accidental, StaveConnector, GhostNote, Dot, Beam, Barline, Clef } = VF;
   el.innerHTML = '';
   const measures: StaffMeasure[] = props.measures ?? [{ events: props.events ?? [] }];
   const allKeys = measures.flatMap((m) => m.events.flatMap((e) => (e.rest ? [] : e.keys)));
@@ -183,11 +188,21 @@ function render(VF: VexModule, el: HTMLDivElement, props: StaffProps, width: num
   const minEvent = props.eventWidth ?? 40;
   const eventW = (e: StaffEvent) => {
     const accs = e.keys.length;
-    const textW = Math.max((e.top?.length ?? 0) * 7.5, (e.bottom?.length ?? 0) * 7.5);
+    // The per-character estimate under-measures wide labels (♭VImaj7, Fm7/A♭); never reserve less than the real width.
+    const textW = Math.max((e.top?.length ?? 0) * 7.5, (e.bottom?.length ?? 0) * 7.5, labelWidth(e.top, TOP_FONT), labelWidth(e.bottom, BOTTOM_FONT));
     const durExtra = e.duration?.startsWith('w') || !e.duration ? 8 : 0;
     return Math.max(minEvent + Math.min(accs, 3) * 3 + durExtra, textW + 10);
   };
+  const labelW = (e: StaffEvent) => Math.max(labelWidth(e.top, TOP_FONT), labelWidth(e.bottom, BOTTOM_FONT));
   const natural = measures.map((m) => 24 + m.events.reduce((a, e) => a + eventW(e), 0));
+  // The narrowest a measure can be squeezed before notes crowd or neighboring labels collide. VexFlow spaces notes
+  // of equal value evenly, so two adjacent wide labels set the minimum pitch for the whole measure.
+  const tight = measures.map((m) => {
+    const sum = m.events.reduce((a, e) => a + Math.max(28 + Math.min(e.keys.length, 3) * 3, labelW(e) + 10), 0);
+    let pair = 0;
+    for (let i = 1; i < m.events.length; i++) pair = Math.max(pair, (labelW(m.events[i - 1]) + labelW(m.events[i])) / 2 + 10);
+    return 24 + Math.max(sum, pair * m.events.length);
+  });
   const headerW = (first: boolean) => 44 + (keySpec ? Math.abs(fifths) * 11 + 6 : 0) + (first && props.timeSig ? 30 : 0);
   const leftMargin = grand ? 24 : 6;
   const usable = width - 8 - leftMargin;
@@ -213,8 +228,25 @@ function render(VF: VexModule, el: HTMLDivElement, props: StaffProps, width: num
   const systemH = topPad + staffH + (grand ? grandGap + staffH : 0) + bottomPad;
   const height = systemH * systems.length + 4;
 
+  // Lines are stretched to fill the width, and squeezed only down to their tight width: a measure that
+  // still does not fit (narrow phones) widens the SVG and the host scrolls instead of crowding the labels.
+  const systemScale = systems.map((sys, sIdx) => {
+    const totalNatural = sys.reduce((a, i) => a + natural[i], 0) + headerW(sIdx === 0);
+    const isLast = sIdx === systems.length - 1;
+    let scale = usable / totalNatural;
+    if (isLast && systems.length > 1) scale = Math.min(scale, 1.25);
+    if (systems.length === 1) scale = Math.min(scale, 1.9);
+    // Squeeze a line that is too long for the width only down to its tight width; past that it scrolls instead.
+    const minScale = (sys.reduce((a, i) => a + tight[i], 0) + headerW(sIdx === 0)) / totalNatural;
+    return Math.max(scale, minScale, 0.5);
+  });
+  const drawnWidth = Math.max(
+    width,
+    ...systems.map((sys, sIdx) => Math.ceil(leftMargin + (sys.reduce((a, i) => a + natural[i], 0) + headerW(sIdx === 0)) * systemScale[sIdx] + 8)),
+  );
+
   const renderer = new Renderer(el, Renderer.Backends.SVG);
-  renderer.resize(width, height);
+  renderer.resize(drawnWidth, height);
   const ctx = renderer.getContext();
   ctx.setFillStyle(ink);
   ctx.setStrokeStyle(ink);
@@ -226,17 +258,16 @@ function render(VF: VexModule, el: HTMLDivElement, props: StaffProps, width: num
     flatIndex += m.events.length;
   });
 
+  // Bottom of the previous system's drawing, used to push a system down when its labels or ledger lines would collide.
+  let prevBottom = -Infinity;
+  let shiftSoFar = 0;
   systems.forEach((sys, sIdx) => {
     const y0 = sIdx * systemH + topPad - 20;
     const first = sIdx === 0;
     const header = headerW(first);
-    const totalNatural = sys.reduce((a, i) => a + natural[i], 0) + header;
     // Stretch to fill the line, but avoid over-stretching very short content.
-    const isLast = sIdx === systems.length - 1;
-    let scale = usable / totalNatural;
-    if (isLast && systems.length > 1) scale = Math.min(scale, 1.25);
-    if (systems.length === 1) scale = Math.min(scale, 1.9);
-    scale = Math.max(scale, 0.5);
+    const scale = systemScale[sIdx];
+    const group = ctx.openGroup('system') as SVGGElement;
     let x = leftMargin;
     let firstTreble: InstanceType<typeof Stave> | null = null;
     let firstBass: InstanceType<typeof Stave> | null = null;
@@ -293,6 +324,9 @@ function render(VF: VexModule, el: HTMLDivElement, props: StaffProps, width: num
               ev.keys.map((p, i) => (toMidi(p) < split ? ev.keyColors?.[i] : null)).filter((c) => c !== null) as Array<string | undefined>,
             ]
           : [ev.keyColors ?? []];
+        const microGroups: Array<Array<string | null | undefined>> = grand
+          ? [ev.keys.flatMap((p, i) => (toMidi(p) >= split ? [ev.micro?.[i]] : [])), ev.keys.flatMap((p, i) => (toMidi(p) < split ? [ev.micro?.[i]] : []))]
+          : [ev.micro ?? []];
 
         const eventNotes: Array<InstanceType<typeof StaveNote>> = [];
         keyGroups.forEach((group, partIdx) => {
@@ -310,12 +344,16 @@ function render(VF: VexModule, el: HTMLDivElement, props: StaffProps, width: num
             }
             return;
           }
-          const order = group.map((p, i) => ({ p, c: colorGroups[partIdx]?.[i] })).sort((a, b) => staffLine(a.p) - staffLine(b.p));
+          const order = group.map((p, i) => ({ p, c: colorGroups[partIdx]?.[i], m: microGroups[partIdx]?.[i] })).sort((a, b) => staffLine(a.p) - staffLine(b.p));
           const note = new StaveNote({ keys: order.map((o) => vexKeyString(o.p)), duration: base, clef: part.clef, dots: dotted ? 1 : 0, autoStem: true });
           order.forEach((o, i) => {
             const slot = `${o.p.letter}${o.p.octave}`;
             const current = accState[partIdx][slot] ?? sigMap[o.p.letter];
-            if (o.p.acc !== current) {
+            if (o.m) {
+              note.addModifier(new Accidental(o.m), i);
+              // A microtonal accidental never matches a later plain note on the same line.
+              accState[partIdx][slot] = Number.NaN;
+            } else if (o.p.acc !== current) {
               note.addModifier(new Accidental(ACC_SYMBOL[o.p.acc] ?? (o.p.acc > 0 ? '##' : 'bb')), i);
               accState[partIdx][slot] = o.p.acc;
             }
@@ -373,29 +411,39 @@ function render(VF: VexModule, el: HTMLDivElement, props: StaffProps, width: num
       x += w;
     });
 
+    // Vertical extent of the notes on this system (stems and ledger lines included), never inside the staff lines.
+    const sysTop = firstTreble as InstanceType<typeof Stave> | null;
+    const sysBottom = (firstBass ?? firstTreble) as InstanceType<typeof Stave> | null;
+    const extent = (where: 'top' | 'bottom') => {
+      let y = where === 'top' ? Infinity : -Infinity;
+      const ys = sysTop && sysBottom ? [where === 'top' ? sysTop.getYForLine(0) : sysBottom.getYForLine(4)] : [];
+      for (const n of where === 'top' ? upperNotes : lowerNotes) {
+        const bb = n.getBoundingBox();
+        if (bb) ys.push(where === 'top' ? bb.getY() : bb.getY() + bb.getH());
+      }
+      for (const v of ys) y = where === 'top' ? Math.min(y, v) : Math.max(y, v);
+      return y;
+    };
+    const topY = extent('top') - 10;
+    const bottomY = extent('bottom') + 22;
+    // Approximate ink box of the system: notes, the clef (which rises and falls past the staff) and the labels.
+    let inkTop = Math.min(extent('top'), sysTop ? sysTop.getYForLine(0) - 14 : Infinity);
+    let inkBottom = Math.max(extent('bottom'), sysBottom ? sysBottom.getYForLine(4) + 14 : -Infinity);
+    if (systemTexts.some((t) => t.where === 'top')) inkTop = Math.min(inkTop, topY - 14);
+    if (systemTexts.some((t) => t.where === 'bottom')) inkBottom = Math.max(inkBottom, bottomY + 5);
+
     // Chord symbols and analysis share a common baseline per system, like a lead sheet.
     if (systemTexts.length) {
-      const extent = (where: 'top' | 'bottom') => {
-        let y = where === 'top' ? Infinity : -Infinity;
-        const st = where === 'top' ? systemTexts[0].topStave : systemTexts[0].bottomStave;
-        const ys = [where === 'top' ? st.getYForLine(0) : st.getYForLine(4)];
-        for (const n of where === 'top' ? upperNotes : lowerNotes) {
-          const bb = n.getBoundingBox();
-          if (bb) ys.push(where === 'top' ? bb.getY() : bb.getY() + bb.getH());
-        }
-        for (const v of ys) y = where === 'top' ? Math.min(y, v) : Math.max(y, v);
-        return y;
-      };
-      const topY = extent('top') - 10;
-      const bottomY = extent('bottom') + 22;
       for (const t of systemTexts) {
         const cx = (t.note.getNoteHeadBeginX() + t.note.getNoteHeadEndX()) / 2;
         ctx.save();
-        if (t.where === 'top') ctx.setFont('Source Sans 3, Segoe UI, sans-serif', 14, 'bold');
-        else ctx.setFont('Cormorant Garamond, Georgia, serif', 17, 'bold');
+        const font = t.where === 'top' ? TOP_FONT : BOTTOM_FONT;
+        ctx.setFont(font.family, font.size, font.weight);
         ctx.setFillStyle(t.color ?? ink);
         const w = ctx.measureText(t.text).width;
-        ctx.fillText(t.text, cx - w / 2, t.where === 'top' ? topY : bottomY);
+        // A chord symbol must not run back over the top of the treble clef, which rises above the staff.
+        const minX = t.where === 'top' ? clefRight(t.topStave, Clef) + 3 : -Infinity;
+        ctx.fillText(t.text, Math.max(cx - w / 2, minX), t.where === 'top' ? topY : bottomY);
         ctx.restore();
       }
     }
@@ -404,5 +452,38 @@ function render(VF: VexModule, el: HTMLDivElement, props: StaffProps, width: num
       new StaveConnector(firstTreble, firstBass).setType('brace').setContext(ctx).draw();
       new StaveConnector(firstTreble, firstBass).setType('singleLeft').setContext(ctx).draw();
     }
+    ctx.closeGroup();
+
+    // Systems are laid out on a fixed pitch; if this one reaches up into the previous one (high ledger lines
+    // under a low system above), push it and the rest down.
+    const gap = 4;
+    if (inkTop + shiftSoFar < prevBottom + gap) shiftSoFar = prevBottom + gap - inkTop;
+    if (shiftSoFar) group.setAttribute('transform', `translate(0 ${shiftSoFar})`);
+    prevBottom = inkBottom + shiftSoFar;
   });
+}
+
+/** Right edge of the clef drawn at the start of a stave, or -Infinity when the stave has none. */
+function clefRight(stave: { getModifiers: (position?: number, category?: string) => Array<{ getX: () => number; getWidth: () => number }> }, ClefClass: { CATEGORY: string }): number {
+  const clef = stave.getModifiers(undefined, ClefClass.CATEGORY)[0];
+  return clef ? clef.getX() + clef.getWidth() : -Infinity;
+}
+
+const TOP_FONT = { family: 'Source Sans 3, Segoe UI, sans-serif', size: 14, weight: 'bold' };
+const BOTTOM_FONT = { family: 'Cormorant Garamond, Georgia, serif', size: 17, weight: 'bold' };
+let measureCtx: CanvasRenderingContext2D | null = null;
+
+/** Rendered width of a chord symbol or analysis label, so measures reserve enough room for it. */
+function labelWidth(text: string | undefined, font: { family: string; size: number; weight: string }): number {
+  if (!text) return 0;
+  measureCtx ??= document.createElement('canvas').getContext('2d');
+  if (!measureCtx) return 0;
+  // Quote each family: an unquoted name such as Source Sans 3 makes the whole shorthand invalid.
+  const families = font.family
+    .split(',')
+    .map((f) => f.trim())
+    .map((f) => (f === 'serif' || f === 'sans-serif' ? f : `"${f}"`))
+    .join(', ');
+  measureCtx.font = `${font.weight} ${font.size}px ${families}`;
+  return measureCtx.measureText(text).width;
 }

@@ -69,7 +69,10 @@ describe('modes', () => {
   });
   it('lists parallel modes', () => {
     expect(parallelModes('dorian').map((s) => s.id)).toEqual(['ionian', 'dorian', 'phrygian', 'lydian', 'mixolydian', 'aeolian', 'locrian']);
-    expect(parallelModes('blues')).toEqual([]);
+    // Scales that are not modes of a parent list the rest of their catalog family instead.
+    expect(parallelModes('blues').map((s) => s.id)).toEqual(['blues', 'major-blues']);
+    expect(parallelModes('bayati').map((s) => s.id)).toEqual(['bayati', 'bayati-shuri', 'husayni']);
+    expect(parallelModes('slendro').map((s) => s.id)).toContain('pelog');
   });
 });
 
@@ -148,5 +151,13 @@ describe('finder', () => {
     expect(r.find((x) => x.scale.id === 'major-pentatonic' && noteName(x.root) === 'C')?.exact).toBe(true);
     expect(r.find((x) => x.scale.id === 'ionian' && noteName(x.root) === 'C')?.exact).toBe(false);
     expect(findScales([])).toEqual([]);
+  });
+});
+
+describe('microtonal rotations', () => {
+  it('finds Sikah on the third degree of Rast, matching by intonation', () => {
+    const rows = relativeModes(note('C'), 'rast');
+    expect(rows[2].scale?.id).toBe('sikah');
+    expect(rows.every((r) => r.scale?.id !== 'phrygian')).toBe(true);
   });
 });

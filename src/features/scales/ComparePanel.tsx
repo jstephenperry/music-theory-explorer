@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import type { Player } from '../../audio/usePlayer';
 import { Staff } from '../../components/Staff';
 import { Button, PlayButton, Select } from '../../components/ui';
-import { SCALES, getScale, type ScaleDef } from '../../theory/scales';
+import { SCALES, getScale, hasMicrotones, type ScaleDef } from '../../theory/scales';
 import { noteName, type Note } from '../../theory/notes';
 import { compareScales, differenceSummary, scaleTones } from './scaleLogic';
 import { SCALE_GROUPS, melody, shortName, type PlayData } from './shared';
@@ -32,20 +32,22 @@ export function ComparePanel({
   const rows = compareScales(root, scale.id, other.id);
   const diff = differenceSummary(root, scale.id, other.id);
   const rootName = noteName(root);
+  const micro = hasMicrotones(scale) || hasMicrotones(other);
 
   // Scales with the same number of notes that differ from the current one by a single note.
   const neighbors = useMemo(
     () =>
-      SCALES.filter((x) => x.id !== scale.id && x.intervals.length === scale.intervals.length).filter((x) => {
+      // Within the same tradition, so a Western mode is not swamped by thaats and melakartas with the same notes.
+      SCALES.filter((x) => x.id !== scale.id && x.tradition === scale.tradition && x.intervals.length === scale.intervals.length).filter((x) => {
         const d = differenceSummary(root, scale.id, x.id);
         return d.onlyA.length === 1 && d.onlyB.length === 1;
       }),
-    [root, scale.id, scale.intervals.length],
+    [root, scale.id, scale.tradition, scale.intervals.length],
   );
 
   const playBoth = () => {
-    const evA = melody(a.map((t, i) => ({ midi: t.midi, index: i })), 'cmp', 0, 0.5);
-    const evB = melody(b.map((t, i) => ({ midi: t.midi, index: a.length + i })), 'cmp', a.length * 0.5 + 1.5, 0.5);
+    const evA = melody(a.map((t, i) => ({ midi: t.play, index: i })), 'cmp', 0, 0.5);
+    const evB = melody(b.map((t, i) => ({ midi: t.play, index: a.length + i })), 'cmp', a.length * 0.5 + 1.5, 0.5);
     player.play([...evA, ...evB], { bpm });
   };
 
@@ -75,10 +77,10 @@ export function ComparePanel({
 
       <div className={s.compareLayout}>
         <table className={s.compareTable}>
-          <caption className="sr-only">Formula comparison by semitones above the root</caption>
+          <caption className="sr-only">Formula comparison by {micro ? 'cents' : 'semitones'} above the root</caption>
           <thead>
             <tr>
-              <th scope="col">Semitones</th>
+              <th scope="col">{micro ? 'Cents' : 'Semitones'}</th>
               <th scope="col">{shortName(scale.name)}</th>
               <th scope="col">{shortName(other.name)}</th>
             </tr>
@@ -87,10 +89,10 @@ export function ComparePanel({
             {rows.map((r) => {
               const status = r.a && r.b ? 'shared' : r.a ? 'onlyA' : 'onlyB';
               return (
-                <tr key={r.semis} className={status === 'shared' ? '' : status === 'onlyA' ? s.rowOnlyA : s.rowOnlyB}>
-                  <td className="tabular">{r.semis}</td>
-                  <td>{r.a ? <Cell degree={r.a.degree} note={r.a.note} /> : <span className={s.absent}>none</span>}</td>
-                  <td>{r.b ? <Cell degree={r.b.degree} note={r.b.note} /> : <span className={s.absent}>none</span>}</td>
+                <tr key={r.cents} className={status === 'shared' ? '' : status === 'onlyA' ? s.rowOnlyA : s.rowOnlyB}>
+                  <td className="tabular">{micro ? Math.round(r.cents) : r.semis}</td>
+                  <td>{r.a ? <Cell degree={r.a.degree} name={r.a.name} /> : <span className={s.absent}>none</span>}</td>
+                  <td>{r.b ? <Cell degree={r.b.degree} name={r.b.name} /> : <span className={s.absent}>none</span>}</td>
                 </tr>
               );
             })}
@@ -103,13 +105,14 @@ export function ComparePanel({
           <Staff
             clef="treble"
             measures={[
-              { events: a.map((t) => ({ keys: [t.pitch], duration: 'q', bottom: t.degree })) },
+              { events: a.map((t) => ({ keys: [t.pitch], micro: [t.vex], duration: 'q', bottom: t.degree })) },
               {
                 events: b.map((t) => ({
                   keys: [t.pitch],
+                  micro: [t.vex],
                   duration: 'q',
                   bottom: t.degree,
-                  color: a.some((x) => x.midi === t.midi) ? undefined : 'extra',
+                  color: a.some((x) => Math.abs(x.rel - t.rel) < 10) ? undefined : 'extra',
                 })),
               },
             ]}
@@ -140,11 +143,11 @@ export function ComparePanel({
   );
 }
 
-function Cell({ degree, note }: { degree: string; note: Note }) {
+function Cell({ degree, name }: { degree: string; name: string }) {
   return (
     <span className={s.cell}>
       <span className={s.cellDegree}>{degree}</span>
-      <span className={s.cellNote}>{noteName(note)}</span>
+      <span className={s.cellNote}>{name}</span>
     </span>
   );
 }

@@ -10,7 +10,7 @@ src/
   theory/      Pure music-theory engine (no React, no DOM). Fully unit tested.
   audio/       Web Audio synthesis engine, lookahead sequencer, playback hooks.
   components/  Shared UI: Piano, Staff (VexFlow), ui.tsx primitives, Icon, theme helpers.
-  hooks/       usePersistentState, useUrlState, useMidiInput, useComputerKeyboard.
+  hooks/       usePersistentState, useUrlState, useMediaQuery, useMidiInput, useComputerKeyboard.
   app/         App shell, routing (HashRouter), route registry, layout.
   features/    One folder per page ("room"). Each owns its components, styles and logic.
   styles/      global.css: design tokens and a few utility classes.
@@ -27,13 +27,22 @@ Import from `src/theory` (barrel) or from individual modules.
 - `intervals.ts`: `Interval` = `{ num, semis }`. `interval('m3')`, `intervalName`, `intervalLongName`,
   `transpose(note, interval)` (always correctly spelled), `transposeDown`, `transposePitch`,
   `intervalBetween(a, b)`, `pitchInterval(a, b)`, `invert`, `degreeLabel` (♭3, ♯11), `consonance`.
-- `scales.ts`: `SCALES` catalog (59 scales with families, descriptions, mode parents, brightness),
-  `buildScale(root, id)`, `scalePcs`, `scaleFormula`, `stepPattern`, `stepNames`, `modesOf(parent)`,
-  `distinctTranspositions`, `findScalesByPcs`, `scalesContaining`.
-- `chords.ts`: `CHORDS` catalog (triads to altered dominants, quartal, augmented sixths),
-  `buildChord(root, id)`, `chordPcs`, `chordToneLabels`, `chordSymbol(root, id, bass)`,
-  `parseChordSymbol('F#m7b5')`, `identifyChord(pcs, { bassPc, spelled })`, `chordQualityClass`,
-  `figuredBass`, `inversionName`.
+- `scales.ts`: `SCALES` catalog assembled from `catalog/*.ts` (one file per tradition), `TRADITIONS`
+  (name, family label, microtonal notation style, whether chord-scale theory applies), `familiesOf`,
+  `scalesInFamily`, `buildScale(root, id)`, `scalePcs`, `scaleFormula`, `stepPattern`, `stepNames`,
+  `modesOf(parent)`, `distinctTranspositions`, `findScalesByPcs`, `scalesContaining`, and for
+  intonation `scaleDeviations`, `scaleCents` (cents above the tonic) and `hasMicrotones`.
+- `catalog/define.ts`: the `ScaleDef` type and helpers for writing scales. A degree is a spelled
+  interval plus an optional deviation in cents ("M3-50" is a half-flat third). `fromAbsolute` builds
+  degrees from note names and pitches in cents (used for maqamat), `fromSteps` from step sizes in
+  commas or moria (Turkish makam, Byzantine echoi). `forms` hold ascents, descents and ranges (aroha
+  and avaroha, maqam descents, Gregorian ambitus); a leading "-" puts a note an octave lower.
+  `tonic` is the customary tonic, `facts` are label and value pairs (vadi, ajnas, final),
+  `degreeNames` override the automatic degree labels. Microtonal scales are left out of
+  pitch-class matching, the scale finder and chord scales; `catalog.test.ts` checks the data.
+- `micro.ts`: names and notation for microtonal pitches: `microNoteName` ("E½♭", "F♯↓"),
+  `microNoteSpoken` for screen readers, and `vexMicroAccidental` (half-flat signs, Persian koron and
+  sori, Arel-Ezgi-Uzdilek comma accidentals, arrow accidentals).
 - `keys.ts`: `Key` = `{ tonic, mode: 'major' | 'minor' }`. `makeKey('Eb', 'minor')`, `keyName`,
   `keyNotes`, `keySignature`, `keySignatureFifths`, `vexKeySpec`, `relativeKey`, `parallelKey`,
   `dominantKey`, `closelyRelatedKeys`, `diatonicChords(key, sevenths, minorVariant)`,
@@ -51,7 +60,13 @@ Import from `src/theory` (barrel) or from individual modules.
 
 - `audio` singleton (`engine.ts`): `playNote(midi, dur, when?, vel)`, `playChord(midis, dur, when?, vel, strum)`,
   `playArpeggio`, `noteOn/noteOff`, `playFrequency(hz, ...)` for tuning work, `click(when, level)` and
-  `percussion(when, pitchHz, gain, decay)` for rhythm, `now` (AudioContext time). Instruments are synthesized.
+  `percussion(when, pitchHz, gain, decay)` for rhythm, `now` (AudioContext time). MIDI numbers may be
+  fractional for microtonal pitches. `preload()` fetches the chosen instrument's recordings and
+  `instrumentStatus` reports their loading state.
+- `SampleBank` (`samples.ts`): sampled instruments. Recordings (one every minor third) are fetched
+  from `public/samples`, decoded on an OfflineAudioContext, trimmed to the attack, looped with a
+  crossfade for sustained instruments, and resampled to the requested pitch. Until a recording near
+  the pitch is loaded the engine falls back to a synthesized voice.
 - `Sequence` (`sequencer.ts`): sample-accurate lookahead scheduling with UI callbacks; events are in beats.
   Helpers `chordEvents` and `melodyEvents`.
 - `usePlayer()` (`usePlayer.ts`): `play(events, { bpm, loop, length, onEvent })`, `stop`, `setBpm`, `playing`,
@@ -65,10 +80,11 @@ Import from `src/theory` (barrel) or from individual modules.
   Helpers `marksFromPcs`, `marksFromMidi`.
 - `Staff`: VexFlow notation. Props: `events` (single unmetered bar) or `measures`, `clef`
   ('treble' | 'bass' | 'grand' | 'auto'), `keySig`, `timeSig`, `activeIndex`, `onEventClick`, `beam`.
-  Events: `{ keys: Pitch[], duration, rest, top, bottom, color, keyColors }`. Accidentals are computed
+  Events: `{ keys: Pitch[], duration, rest, top, bottom, color, keyColors, micro }` (`micro` holds
+  per-key microtonal accidentals). Accidentals are computed
   automatically against the key signature. `loadVexFlow()` exposes VexFlow for custom engraving.
 - Hooks: `useUrlState(key, default)` and `useUrlParams(defaults)` keep shareable state in the URL;
-  `usePersistentState` keeps preferences in localStorage; `useMidiInput`; `useComputerKeyboard`.
+  `usePersistentState` keeps preferences in localStorage; `useMediaQuery`; `useMidiInput`; `useComputerKeyboard`.
 - `ui.tsx`: `Button`, `PlayButton`, `Segmented`, `Select`, `TextInput`, `Slider`, `Toggle`, `Panel`,
   `PageHeader`, `Tag`, `Callout`, `Tabs`, `RootPicker`, `Stat`, `Empty`.
 - `theme.ts`: `cssVar`, `resolveColor`, `useThemeVersion` for canvas/SVG drawings that need theme colors.

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Button, Callout, Empty, Tag } from '../../components/ui';
 import { noteName, sameNote, type Note } from '../../theory/notes';
+import { TRADITION_BY_ID } from '../../theory/scales';
 import { findScales, scalePcSet, type FinderResult } from './scaleLogic';
 import { shortName } from './shared';
 import s from './ScalesPage.module.css';
@@ -37,8 +38,13 @@ export function FinderPanel({
   const isCurrent = (r: FinderResult) => r.scale.id === current.scaleId && sameNote(r.root, current.root);
 
   const chip = (r: FinderResult, i: number) => (
-    <button key={`${r.scale.id}-${i}`} className={`${s.resultChip} ${isCurrent(r) ? s.resultChipActive : ''}`} onClick={() => onLoad(r.root, r.scale.id)}>
-      {noteName(r.root)} {shortName(r.scale.name)}
+    <button
+      key={`${r.scale.id}-${i}`}
+      className={`${s.resultChip} ${isCurrent(r) ? s.resultChipActive : ''}`}
+      onClick={() => onLoad(r.root, r.scale.id)}
+      title={`${TRADITION_BY_ID[r.scale.tradition].name}: ${r.scale.family}`}
+    >
+      {noteName(r.root)} {shortName(r.scale.name)} <span className={s.equivalentTrad}>{TRADITION_BY_ID[r.scale.tradition].short}</span>
     </button>
   );
 

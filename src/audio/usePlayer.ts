@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { audio } from './engine';
 import { Sequence, type SeqEvent, type SequenceOptions } from './sequencer';
+import type { BankStatus } from './samples';
 
 /** Only one sequence plays at a time across the whole app. */
 let current: Sequence | null = null;
@@ -89,8 +90,8 @@ export function usePlayer(): Player {
 export function useAudioSettings() {
   const snapshot = useSyncExternalStore(
     (fn) => audio.subscribe(fn),
-    () => `${audio.instrument}|${audio.volume}|${audio.reverb}|${audio.a4}`,
+    () => `${audio.instrument}|${audio.volume}|${audio.reverb}|${audio.a4}|${audio.instrumentStatus}`,
   );
-  const [instrument, volume, reverb, a4] = snapshot.split('|');
-  return { instrument, volume: Number(volume), reverb: Number(reverb), a4: Number(a4) };
+  const [instrument, volume, reverb, a4, status] = snapshot.split('|');
+  return { instrument, volume: Number(volume), reverb: Number(reverb), a4: Number(a4), status: status as BankStatus };
 }

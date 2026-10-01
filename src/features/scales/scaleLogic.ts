@@ -5,16 +5,23 @@
 import {
   SCALES,
   SCALE_BY_ID,
+  TRADITION_BY_ID,
   buildScale,
+  scaleDeviations,
   findScalesByPcs,
   getScale,
   modesOf,
   scaleIntervals,
   scalePcs,
   scalesContaining,
+  scalesInFamily,
+  hasMicrotones,
+  scaleCents,
   type ScaleDef,
+  type ScaleForm,
 } from '../../theory/scales';
-import { degreeLabel, interval, intervalName, referenceSemis, transpose, transposeDown, transposePitch, type Interval } from '../../theory/intervals';
+import { microNoteName, microNoteSpoken, microSuffix, vexMicroAccidental } from '../../theory/micro';
+import { degreeLabel, interval, intervalName, referenceSemis, simpleNum, simplifyInterval, transposeDown, transposePitch, type Interval } from '../../theory/intervals';
 import { midi, mod, noteFromPc, noteName, pc, pitchAtOrAbove, sameNote, tryNote, LETTERS, type Note, type Pitch } from '../../theory/notes';
 import { diatonicChordsOfScale } from '../../theory/keys';
 import { chordPcs, chordSymbol, identifyChord } from '../../theory/chords';
@@ -37,15 +44,79 @@ export function scaleFromParam(id: string): ScaleDef {
 export interface ScaleTone {
   note: Note;
   pitch: Pitch;
+  /** The nearest piano key (the equal-tempered pitch of the spelled note). */
   midi: number;
+  /** The exact pitch, as a fractional MIDI number, for playback. */
+  play: number;
+  /** Deviation in cents from the equal-tempered pitch of the spelled note. */
+  cents: number;
+  /** Size in cents above the tonic. */
+  rel: number;
   interval: Interval;
-  /** Degree label relative to major: 1, ♭3, ♯4 ... */
+  /** Degree label: relative to major (1, ♭3, ♯4 ...), or the tradition's own names (sargam, svaras, phthongoi). */
   degree: string;
   /** Interval above the root: P1, m3, A4 ... */
   intervalName: string;
+  /** Note name including any microtonal sign: "E½♭", "F♯↓". */
+  name: string;
+  /** Screen-reader form of the name. */
+  spoken: string;
+  /** VexFlow accidental for a microtonal pitch, or null. */
+  vex: string | null;
   /** Index into the scale (0-based). The upper tonic repeats index 0. */
   index: number;
   characteristic: boolean;
+}
+
+const SARGAM: Record<string, string> = {
+  P1: 'S', m2: 'r', M2: 'R', m3: 'g', M3: 'G', P4: 'm', A4: 'M', P5: 'P', m6: 'd', M6: 'D', m7: 'n', M7: 'N',
+};
+const SVARA: Record<string, string> = {
+  P1: 'S', m2: 'R1', M2: 'R2', A2: 'R3', d3: 'G1', m3: 'G2', M3: 'G3', P4: 'M1', A4: 'M2', P5: 'P',
+  m6: 'D1', M6: 'D2', A6: 'D3', d7: 'N1', m7: 'N2', M7: 'N3',
+};
+
+/** Degree label for a scale degree in the scale's own tradition. */
+export function degreeName(def: ScaleDef, index: number, iv: Interval, relDev: number): string {
+  if (def.degreeNames?.[index]) return def.degreeNames[index];
+  const name = intervalName(simplifyInterval(iv));
+  const key = name === 'P8' ? 'P1' : name;
+  if (def.tradition === 'hindustani' && SARGAM[key]) return SARGAM[key];
+  if (def.tradition === 'carnatic' && SVARA[key]) return SVARA[key];
+  // Notes in other octaves keep the label of their degree (the octave above the tonic is 1, not 8).
+  const k = Math.floor((iv.num - 1) / 7);
+  let simple: Interval = { num: iv.num - 7 * k, semis: iv.semis - 12 * k };
+  let dev = relDev;
+  // Neutral intervals read from the larger side, as is customary: a minor second plus a quarter tone is "2½♭", not "♭2½♯".
+  if (dev >= 35 && dev <= 65 && simple.semis < referenceSemis(simple.num)) {
+    simple = { num: simple.num, semis: simple.semis + 1 };
+    dev -= 100;
+  }
+  return degreeLabel(simple) + microSuffix(dev, TRADITION_BY_ID[def.tradition].notation);
+}
+
+function toneAt(def: ScaleDef, rootPitch: Pitch, iv: Interval, dev: number, dev0: number, index: number, octave = 0): ScaleTone {
+  const notation = TRADITION_BY_ID[def.tradition].notation;
+  let p = transposePitch(rootPitch, iv);
+  if (octave) p = { ...p, octave: p.octave + octave };
+  const n = { letter: p.letter, acc: p.acc };
+  const rel = iv.semis * 100 + 1200 * octave + dev - dev0;
+  return {
+    note: n,
+    pitch: p,
+    midi: midi(p),
+    play: midi(p) + dev / 100,
+    cents: dev,
+    rel,
+    interval: iv,
+    degree: degreeName(def, index, iv, dev - dev0),
+    intervalName: intervalName(iv),
+    name: microNoteName(n, dev, notation),
+    spoken: microNoteSpoken(n, dev),
+    vex: vexMicroAccidental(n, dev, notation, { letter: rootPitch.letter, acc: rootPitch.acc }, rel),
+    index,
+    characteristic: (def.characteristic ?? []).includes(index),
+  };
 }
 
 /** Scale tones ascending through one octave plus the upper tonic, correctly spelled. */
@@ -53,23 +124,34 @@ export function scaleTones(root: Note, scaleId: string, baseMidi = SCALE_BASE_MI
   const def = getScale(scaleId);
   const rootPitch = pitchAtOrAbove(root, baseMidi);
   const ivs = scaleIntervals(def);
-  const chars = new Set(def.characteristic ?? []);
-  const tones: ScaleTone[] = ivs.map((iv, i) => {
-    const p = transposePitch(rootPitch, iv);
+  const dev = scaleDeviations(def);
+  const tones = ivs.map((iv, i) => toneAt(def, rootPitch, iv, dev[i], dev[0], i));
+  const top = toneAt(def, rootPitch, interval('P8'), dev[0], dev[0], 0);
+  tones.push({ ...top, degree: tones[0].degree, characteristic: tones[0].characteristic });
+  return tones;
+}
+
+/** Tones of an ascending or descending form (aroha, avaroha, ambitus ...), matched to scale degrees. */
+export function formTones(root: Note, scaleId: string, form: ScaleForm, baseMidi = SCALE_BASE_MIDI): ScaleTone[] {
+  const def = getScale(scaleId);
+  const rootPitch = pitchAtOrAbove(root, baseMidi);
+  const ivs = scaleIntervals(def);
+  const dev = scaleDeviations(def);
+  return form.steps.map((st) => {
+    // The scale degree with the same pitch class, for labels and highlighting.
+    const pcCents = (((st.interval.semis * 100 + st.cents) % 1200) + 1200) % 1200;
+    let index = ivs.findIndex((iv, i) => Math.abs(((((iv.semis * 100 + dev[i]) % 1200) + 1200) % 1200) - pcCents) < 1);
+    const t = toneAt(def, rootPitch, st.interval, st.cents, dev[0], Math.max(0, index), st.octave);
+    if (index >= 0) return t;
+    // A note outside the scale (Rast descends with B♭): label it by its interval, and point at the degree with the same letter.
+    const sameLetter = ivs.findIndex((iv) => simpleNum(iv.num) === simpleNum(st.interval.num));
     return {
-      note: { letter: p.letter, acc: p.acc },
-      pitch: p,
-      midi: midi(p),
-      interval: iv,
-      degree: degreeLabel(iv),
-      intervalName: intervalName(iv),
-      index: i,
-      characteristic: chars.has(i),
+      ...t,
+      index: Math.max(0, sameLetter),
+      characteristic: false,
+      degree: degreeName(def, -1, st.interval, 0) + microSuffix(st.cents - dev[0], TRADITION_BY_ID[def.tradition].notation),
     };
   });
-  const top = transposePitch(rootPitch, interval('P8'));
-  tones.push({ ...tones[0], pitch: top, midi: midi(top), interval: interval('P8'), intervalName: 'P8', index: 0 });
-  return tones;
 }
 
 /** Spelled notes of the scale extended over two octaves (for stacking chords). */
@@ -91,6 +173,9 @@ export function parentRoot(root: Note, scaleId: string): { parent: ScaleDef; roo
   return { parent, root: transposeDown(root, iv) };
 }
 
+/** Largest difference in cents for two microtonal scales to count as the same rotation. */
+const ROTATION_TOLERANCE = 15;
+
 export interface ModeEntry {
   scale: ScaleDef;
   root: Note;
@@ -109,6 +194,20 @@ export function relativeModes(root: Note, scaleId: string): Array<ModeEntry | { 
     return modesOf(pr.parent.id).map((m) => ({ scale: m, root: parentNotes[m.modeOf!.degree - 1], degree: m.modeOf!.degree }));
   }
   const notes = buildScale(root, scaleId);
+  const def = getScale(scaleId);
+  if (hasMicrotones(def)) {
+    // Match rotations by their intonation, so Rast started on its third degree is found as Sikah.
+    const cents = scaleCents(def);
+    return notes.map((n, i) => {
+      const rot = cents.map((c) => (((c - cents[i]) % 1200) + 1200) % 1200).sort((a, b) => a - b);
+      const found = SCALES.find((x) => {
+        if (x.intervals.length !== rot.length) return false;
+        const xc = scaleCents(x);
+        return xc.every((c, k) => Math.abs(c - rot[k]) < ROTATION_TOLERANCE);
+      });
+      return found ? { scale: found, root: n, degree: i + 1 } : { scale: null, root: n, degree: i + 1 };
+    });
+  }
   const pcs = notes.map(pc);
   const matches = findScalesByPcs(pcs);
   return notes.map((n, i) => {
@@ -117,11 +216,15 @@ export function relativeModes(root: Note, scaleId: string): Array<ModeEntry | { 
   });
 }
 
-/** Parallel modes: every mode of the scale's family on the same root. */
+/**
+ * Parallel modes: every mode of the scale's mode family on the same root. Scales that are not
+ * modes of a parent (maqamat, ragas ...) get the other members of their catalog family instead.
+ */
 export function parallelModes(scaleId: string): ScaleDef[] {
   const def = getScale(scaleId);
-  if (!def.modeOf) return [];
-  return modesOf(def.modeOf.parent);
+  if (def.modeOf) return modesOf(def.modeOf.parent);
+  const fam = scalesInFamily(def.tradition, def.family);
+  return fam.length > 1 ? fam : [];
 }
 
 /** Diatonic modes from brightest (Lydian) to darkest (Locrian). */
@@ -235,26 +338,45 @@ export function scaleHarmony(root: Note, scaleId: string, sevenths: boolean, max
   });
 }
 
-export interface CompareRow {
-  semis: number;
-  a?: { degree: string; note: Note };
-  b?: { degree: string; note: Note };
+export interface CompareSide {
+  /** Degree relative to major, with any microtonal sign: "♭3", "3½♭". */
+  degree: string;
+  note: Note;
+  /** Display name including any microtonal sign. */
+  name: string;
+  /** Cents above the tonic. */
+  cents: number;
 }
 
-/** Align two scales on the same root by semitone above the root. */
+export interface CompareRow {
+  /** Size above the root in semitones (rounded), for 12-tone scales. */
+  semis: number;
+  /** Size above the root in cents (of the first scale that has the note). */
+  cents: number;
+  a?: CompareSide;
+  b?: CompareSide;
+}
+
+/** Pitches closer than this (in cents) count as the same note when comparing scales. */
+const SAME_PITCH = 10;
+
+/** Align two scales on the same root by pitch above the root (in cents, so microtonal scales line up too). */
 export function compareScales(root: Note, aId: string, bId: string): CompareRow[] {
-  const rows = new Map<number, CompareRow>();
+  const rows: CompareRow[] = [];
   const add = (id: string, side: 'a' | 'b') => {
-    for (const iv of scaleIntervals(getScale(id))) {
-      const s = mod(iv.semis, 12);
-      const row = rows.get(s) ?? { semis: s };
-      row[side] = { degree: degreeLabel(iv), note: transpose(root, iv) };
-      rows.set(s, row);
+    const def = getScale(id);
+    const notation = TRADITION_BY_ID[def.tradition].notation;
+    const dev0 = scaleDeviations(def)[0];
+    for (const t of scaleTones(root, id).slice(0, -1)) {
+      const sideData: CompareSide = { degree: degreeLabel(t.interval) + microSuffix(t.cents - dev0, notation), note: t.note, name: t.name, cents: t.rel };
+      const row = rows.find((r) => !r[side] && Math.abs(r.cents - t.rel) < SAME_PITCH);
+      if (row) row[side] = sideData;
+      else rows.push({ semis: Math.round(t.rel / 100), cents: t.rel, [side]: sideData });
     }
   };
   add(aId, 'a');
   add(bId, 'b');
-  return [...rows.values()].sort((x, y) => x.semis - y.semis);
+  return rows.sort((x, y) => x.cents - y.cents);
 }
 
 /** Spelling candidates for a pitch class with at most one accidental. */

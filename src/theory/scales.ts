@@ -1,422 +1,176 @@
 /**
- * Scale and mode catalog.
+ * Scale and mode catalog, organized by musical tradition and, within each tradition, by family
+ * (maqam family, thaat, chakra, mode family ...). The definitions live in ./catalog.
  *
- * Every scale is defined as a list of intervals above the root. Heptatonic scales use one letter
- * per degree, so spelling is always theoretically correct (C# Lydian contains F##, not G).
+ * Every scale is a list of spelled intervals above the root, so spelling is always theoretically
+ * correct (C# Lydian contains F##, not G). Scales from traditions that do not use 12-tone equal
+ * temperament also carry a deviation in cents for each degree.
  */
 import { interval, transpose, degreeLabel, type Interval } from './intervals';
 import { mod, type Note } from './notes';
+import type { ScaleDef, TraditionId } from './catalog/define';
+import { WESTERN } from './catalog/western';
+import { JAZZ } from './catalog/jazz';
+import { SYMMETRIC } from './catalog/symmetric';
+import { ARABIC } from './catalog/arabic';
+import { TURKISH } from './catalog/turkish';
+import { PERSIAN } from './catalog/persian';
+import { BYZANTINE } from './catalog/byzantine';
+import { JEWISH } from './catalog/jewish';
+import { HINDUSTANI } from './catalog/hindustani';
+import { CARNATIC } from './catalog/carnatic';
+import { EAST_ASIAN } from './catalog/eastAsian';
+import { SOUTHEAST_ASIAN } from './catalog/southeastAsian';
+import { ETHIOPIAN } from './catalog/ethiopian';
+import { GREEK } from './catalog/greek';
 
-export type ScaleFamily =
-  | 'Diatonic modes'
-  | 'Melodic minor modes'
-  | 'Harmonic minor modes'
-  | 'Harmonic major modes'
-  | 'Pentatonic'
-  | 'Blues'
-  | 'Bebop'
-  | 'Symmetric'
-  | 'Exotic & world';
+export type { ScaleDef, ScaleForm, FormStep, TraditionId } from './catalog/define';
+export type ScaleFamily = string;
 
-export interface ScaleDef {
-  id: string;
+/** How a tradition writes notes that fall between the keys of a piano. */
+export type MicroNotation = 'quarter' | 'arrows' | 'turkish' | 'persian';
+
+export interface Tradition {
+  id: TraditionId;
   name: string;
-  family: ScaleFamily;
-  intervals: string[];
-  aliases?: string[];
-  /** Short description of sound and usage. */
-  description: string;
-  /** Mood words, used as tags. */
-  mood?: string[];
-  /** Indices (0-based) of degrees that define the mode's color compared with its nearest major or minor scale. */
-  characteristic?: number[];
-  /** Parent scale id and 1-based degree, when the scale is a mode of another. */
-  modeOf?: { parent: string; degree: number };
-  /** For diatonic modes: 1 (darkest) to 7 (brightest). */
-  brightness?: number;
-  /** Typical chord to play the scale over, as a chord id from the chord catalog. */
-  chordId?: string;
+  /** Short label for chips and grouped lists. */
+  short: string;
+  /** One-line summary for the browser. */
+  blurb: string;
+  /** What a "scale" means in this tradition and how to read the entries. */
+  about: string;
+  /** What the family level groups. */
+  familyLabel: string;
+  notation: MicroNotation;
+  /** Tertian chords and chord-scale theory belong to this tradition. */
+  harmonic?: boolean;
 }
 
-export const SCALE_FAMILIES: ScaleFamily[] = [
-  'Diatonic modes',
-  'Melodic minor modes',
-  'Harmonic minor modes',
-  'Harmonic major modes',
-  'Pentatonic',
-  'Blues',
-  'Bebop',
-  'Symmetric',
-  'Exotic & world',
+export const TRADITIONS: Tradition[] = [
+  {
+    id: 'western', short: 'Western', name: 'Western classical and modal', familyLabel: 'Mode family', notation: 'arrows', harmonic: true,
+    blurb: 'Church modes, Gregorian modes and the modes of the minor and major scale variants.',
+    about: 'Scales of European art music. The diatonic modes and the modes of melodic minor, harmonic minor, harmonic major and double harmonic major are rotations of one parent scale each.',
+  },
+  {
+    id: 'jazz', short: 'Jazz', name: 'Jazz, blues and popular', familyLabel: 'Family', notation: 'arrows', harmonic: true,
+    blurb: 'Pentatonic, blues and bebop scales.',
+    about: 'Scales used for improvising over chord changes. Bebop scales add a passing tone so that chord tones fall on the beat.',
+  },
+  {
+    id: 'symmetric', short: 'Symmetric', name: 'Symmetric and synthetic', familyLabel: 'Family', notation: 'arrows', harmonic: true,
+    blurb: 'Messiaen\'s modes of limited transposition and other 20th-century scales.',
+    about: 'Scales built from a repeating interval pattern, which reproduce themselves when transposed by part of an octave, and scales invented by composers.',
+  },
+  {
+    id: 'arabic', short: 'Maqam', name: 'Arabic maqam', familyLabel: 'Maqam family', notation: 'quarter',
+    blurb: 'Maqamat grouped by the jins on their tonic, with half-flat notes.',
+    about: 'A maqam is a melodic mode built from ajnas (three- to five-note building blocks) with a characteristic path (sayr), focal notes and intonation. Half-flat notes lie roughly a quarter tone below the natural note; their exact size varies by region and performer. Pitches follow MaqamWorld. Picking a maqam loads it on its customary tonic.',
+  },
+  {
+    id: 'turkish', short: 'Makam', name: 'Turkish makam', familyLabel: 'Family', notation: 'turkish',
+    blurb: 'Makamlar in the 53-comma Arel-Ezgi-Uzdilek system.',
+    about: 'Turkish theory divides the whole tone into 9 commas (about 22.6 cents each) and builds makamlar from tetrachords and pentachords. Each makam has a tonic (durak), a dominant (güçlü) and a typical melodic progression (seyir). Picking a makam loads it on its customary tonic.',
+  },
+  {
+    id: 'persian', short: 'Dastgāh', name: 'Persian dastgāh', familyLabel: 'Group', notation: 'persian',
+    blurb: 'The seven dastgāh and their āvāz, with koron and sori notes.',
+    about: 'A dastgāh is a collection of melodic models (gushe) sharing a mode, learned through the radif. Koron (lowered) and sori (raised) notes are shown as quarter tones following Vaziri; performers\' intervals vary. Picking a dastgāh loads it on its customary finalis.',
+  },
+  {
+    id: 'byzantine', short: 'Byzantine', name: 'Byzantine echoi', familyLabel: 'Cycle', notation: 'arrows',
+    blurb: 'The eight modes of Orthodox chant in diatonic, chromatic and enharmonic genera.',
+    about: 'The Oktoechos organizes Byzantine chant into four authentic and four plagal echoi. Intervals follow the 72-moria division of the Patriarchal Music Committee (1881). Degree names are the phthongoi Ni Pa Vou Ga Di Ke Zo.',
+  },
+  {
+    id: 'jewish', short: 'Jewish', name: 'Jewish prayer modes and cantillation', familyLabel: 'Group', notation: 'quarter',
+    blurb: 'Ashkenazi shtayger and the modes of scriptural cantillation.',
+    about: 'Ashkenazi cantors improvise within prayer modes named after the prayers where they are used. Cantillation of scripture follows melodic motifs for each accent sign; Middle Eastern communities use the maqam system.',
+  },
+  {
+    id: 'hindustani', short: 'Hindustani', name: 'Hindustani raga', familyLabel: 'Thaat', notation: 'arrows',
+    blurb: 'The ten thaats and representative ragas, with aroha and avaroha.',
+    about: 'A raga is a melodic framework with its own ascent and descent, important notes (vadi and samvadi), characteristic phrases and time of day. Bhatkhande grouped ragas under ten parent scales (thaats). Sa is movable: choose any root. Degree labels use sargam: lowercase for komal (flat), M for tivra Ma.',
+  },
+  {
+    id: 'carnatic', short: 'Carnatic', name: 'Carnatic raga', familyLabel: 'Chakra', notation: 'arrows',
+    blurb: 'All 72 melakarta ragas by chakra, and common janya ragas.',
+    about: 'Every melakarta uses Sa, Pa, one Ma and one each of Ri, Ga, Dha and Ni, giving 72 parent scales grouped in twelve chakras. Janya ragas are derived from a melakarta by omitting notes or adding zigzag movement. Degree labels use the sixteen svara names (R1, G3, M2 ...).',
+  },
+  {
+    id: 'east-asian', short: 'East Asian', name: 'Chinese, Japanese and Korean', familyLabel: 'Group', notation: 'arrows',
+    blurb: 'Pentatonic modes, Japanese scales and Korean modes.',
+    about: 'Much East Asian music is built on pentatonic collections whose modes are chosen by the final note. Japanese scales are often described, after Koizumi Fumio, as pairs of fourths filled with one note each.',
+  },
+  {
+    id: 'southeast-asian', short: 'Gamelan & Thai', name: 'Gamelan and Thai', familyLabel: 'Group', notation: 'arrows',
+    blurb: 'Slendro, pelog and Thai seven-tone tuning.',
+    about: 'These tunings are not approximations of 12-tone temperament: their steps fall between the keys of a piano. The keyboard shows the nearest keys, and playback uses the exact pitches.',
+  },
+  {
+    id: 'ethiopian', short: 'Ethiopian', name: 'Ethiopian qenet', familyLabel: 'Group', notation: 'arrows',
+    blurb: 'Tizita, Bati, Ambassel and Anchihoye.',
+    about: 'The four qenet are the basic pentatonic modes of Ethiopian secular music, played on the krar and masenqo.',
+  },
+  {
+    id: 'greek', short: 'Greek', name: 'Ancient Greek', familyLabel: 'Group', notation: 'quarter',
+    blurb: 'The seven harmoniai and the three genera.',
+    about: 'Greek theory built scales from tetrachords spanning a perfect fourth, divided according to genus: diatonic, chromatic or enharmonic. The Greek mode names differ from the medieval church modes that borrowed them.',
+  },
 ];
+
+export const TRADITION_BY_ID: Record<TraditionId, Tradition> = Object.fromEntries(TRADITIONS.map((t) => [t.id, t])) as Record<TraditionId, Tradition>;
 
 export const SCALES: ScaleDef[] = [
-  // ---------- Diatonic (church) modes ----------
-  {
-    id: 'ionian', name: 'Ionian (Major)', family: 'Diatonic modes', aliases: ['major'],
-    intervals: ['P1', 'M2', 'M3', 'P4', 'P5', 'M6', 'M7'],
-    description: 'The major scale. Bright and stable, with a strong pull from the leading tone (7) to the tonic.',
-    mood: ['bright', 'stable', 'resolved'], characteristic: [3, 6], modeOf: { parent: 'ionian', degree: 1 }, brightness: 6, chordId: 'maj7',
-  },
-  {
-    id: 'dorian', name: 'Dorian', family: 'Diatonic modes',
-    intervals: ['P1', 'M2', 'm3', 'P4', 'P5', 'M6', 'm7'],
-    description: 'A minor mode with a raised 6th. Soulful and less dark than natural minor; common in jazz, funk, folk and rock (So What, Oye Como Va).',
-    mood: ['soulful', 'cool', 'minor but hopeful'], characteristic: [5], modeOf: { parent: 'ionian', degree: 2 }, brightness: 4, chordId: 'm7',
-  },
-  {
-    id: 'phrygian', name: 'Phrygian', family: 'Diatonic modes',
-    intervals: ['P1', 'm2', 'm3', 'P4', 'P5', 'm6', 'm7'],
-    description: 'A minor mode with a lowered 2nd. Dark and tense, with a Spanish or metal flavor from the half step above the tonic.',
-    mood: ['dark', 'exotic', 'tense'], characteristic: [1], modeOf: { parent: 'ionian', degree: 3 }, brightness: 2, chordId: 'm7',
-  },
-  {
-    id: 'lydian', name: 'Lydian', family: 'Diatonic modes',
-    intervals: ['P1', 'M2', 'M3', 'A4', 'P5', 'M6', 'M7'],
-    description: 'A major mode with a raised 4th. The brightest diatonic mode: dreamy, floating and cinematic (The Simpsons theme, film scores).',
-    mood: ['dreamy', 'bright', 'floating'], characteristic: [3], modeOf: { parent: 'ionian', degree: 4 }, brightness: 7, chordId: 'maj7#11',
-  },
-  {
-    id: 'mixolydian', name: 'Mixolydian', family: 'Diatonic modes',
-    intervals: ['P1', 'M2', 'M3', 'P4', 'P5', 'M6', 'm7'],
-    description: 'A major mode with a lowered 7th. Bluesy and rock-flavored; the natural scale of the dominant seventh chord.',
-    mood: ['bluesy', 'earthy', 'rock'], characteristic: [6], modeOf: { parent: 'ionian', degree: 5 }, brightness: 5, chordId: '7',
-  },
-  {
-    id: 'aeolian', name: 'Aeolian (Natural minor)', family: 'Diatonic modes', aliases: ['minor', 'natural minor'],
-    intervals: ['P1', 'M2', 'm3', 'P4', 'P5', 'm6', 'm7'],
-    description: 'The natural minor scale. Melancholic and introspective, without the leading tone of harmonic minor.',
-    mood: ['sad', 'melancholic', 'introspective'], characteristic: [5], modeOf: { parent: 'ionian', degree: 6 }, brightness: 3, chordId: 'm7',
-  },
-  {
-    id: 'locrian', name: 'Locrian', family: 'Diatonic modes',
-    intervals: ['P1', 'm2', 'm3', 'P4', 'd5', 'm6', 'm7'],
-    description: 'The darkest diatonic mode, with a diminished 5th above the tonic. Unstable because its tonic triad is diminished; heard over half-diminished chords.',
-    mood: ['unstable', 'dark', 'eerie'], characteristic: [1, 4], modeOf: { parent: 'ionian', degree: 7 }, brightness: 1, chordId: 'm7b5',
-  },
-
-  // ---------- Melodic minor modes ----------
-  {
-    id: 'melodic-minor', name: 'Melodic minor (Jazz minor)', family: 'Melodic minor modes', aliases: ['jazz minor'],
-    intervals: ['P1', 'M2', 'm3', 'P4', 'P5', 'M6', 'M7'],
-    description: 'Minor third with a major 6th and 7th. In classical practice used ascending only; in jazz used in both directions over minor-major seventh chords.',
-    mood: ['sophisticated', 'bittersweet'], characteristic: [5, 6], modeOf: { parent: 'melodic-minor', degree: 1 }, chordId: 'mMaj7',
-  },
-  {
-    id: 'dorian-b2', name: 'Dorian ♭2 (Phrygian ♮6)', family: 'Melodic minor modes', aliases: ['phrygian natural 6'],
-    intervals: ['P1', 'm2', 'm3', 'P4', 'P5', 'M6', 'm7'],
-    description: 'Second mode of melodic minor. Phrygian darkness with a brighter 6th; used over sus(b9) chords.',
-    mood: ['dark', 'modern'], characteristic: [1, 5], modeOf: { parent: 'melodic-minor', degree: 2 }, chordId: '7sus4',
-  },
-  {
-    id: 'lydian-augmented', name: 'Lydian augmented', family: 'Melodic minor modes',
-    intervals: ['P1', 'M2', 'M3', 'A4', 'A5', 'M6', 'M7'],
-    description: 'Third mode of melodic minor. Lydian with a raised 5th; an otherworldly sound over maj7(#5) chords.',
-    mood: ['otherworldly', 'shimmering'], characteristic: [3, 4], modeOf: { parent: 'melodic-minor', degree: 3 }, chordId: 'maj7#5',
-  },
-  {
-    id: 'lydian-dominant', name: 'Lydian dominant (Acoustic)', family: 'Melodic minor modes', aliases: ['acoustic scale', 'overtone scale', 'lydian b7'],
-    intervals: ['P1', 'M2', 'M3', 'A4', 'P5', 'M6', 'm7'],
-    description: 'Fourth mode of melodic minor. Mixolydian with a raised 4th; closely matches the lower overtone series. The sound of 7(#11) chords and tritone substitutions.',
-    mood: ['bright', 'jazzy', 'acoustic'], characteristic: [3, 6], modeOf: { parent: 'melodic-minor', degree: 4 }, chordId: '7#11',
-  },
-  {
-    id: 'mixolydian-b6', name: 'Mixolydian ♭6 (Aeolian dominant)', family: 'Melodic minor modes', aliases: ['hindu', 'aeolian dominant'],
-    intervals: ['P1', 'M2', 'M3', 'P4', 'P5', 'm6', 'm7'],
-    description: 'Fifth mode of melodic minor. A major third with a minor 6th: half major, half minor.',
-    mood: ['bittersweet', 'yearning'], characteristic: [2, 5], modeOf: { parent: 'melodic-minor', degree: 5 }, chordId: '7b13',
-  },
-  {
-    id: 'locrian-nat2', name: 'Locrian ♮2 (Half-diminished)', family: 'Melodic minor modes', aliases: ['half diminished', 'aeolian b5'],
-    intervals: ['P1', 'M2', 'm3', 'P4', 'd5', 'm6', 'm7'],
-    description: 'Sixth mode of melodic minor. Locrian with a natural 2nd; the preferred jazz scale over m7(b5) chords.',
-    mood: ['dark', 'smooth'], characteristic: [1, 4], modeOf: { parent: 'melodic-minor', degree: 6 }, chordId: 'm7b5',
-  },
-  {
-    id: 'altered', name: 'Altered (Super Locrian)', family: 'Melodic minor modes', aliases: ['super locrian', 'diminished whole tone'],
-    intervals: ['P1', 'm2', 'm3', 'd4', 'd5', 'm6', 'm7'],
-    description: 'Seventh mode of melodic minor. Contains every altered tension (b9, #9, #11, b13) over a dominant chord: maximum tension before resolution.',
-    mood: ['tense', 'outside', 'jazzy'], characteristic: [1, 2, 4, 5], modeOf: { parent: 'melodic-minor', degree: 7 }, chordId: '7alt',
-  },
-
-  // ---------- Harmonic minor modes ----------
-  {
-    id: 'harmonic-minor', name: 'Harmonic minor', family: 'Harmonic minor modes',
-    intervals: ['P1', 'M2', 'm3', 'P4', 'P5', 'm6', 'M7'],
-    description: 'Natural minor with a raised 7th, creating a leading tone and a major V chord. The augmented 2nd between 6 and 7 gives an exotic color.',
-    mood: ['dramatic', 'exotic', 'classical'], characteristic: [5, 6], modeOf: { parent: 'harmonic-minor', degree: 1 }, chordId: 'mMaj7',
-  },
-  {
-    id: 'locrian-nat6', name: 'Locrian ♮6', family: 'Harmonic minor modes',
-    intervals: ['P1', 'm2', 'm3', 'P4', 'd5', 'M6', 'm7'],
-    description: 'Second mode of harmonic minor. Locrian with a raised 6th.',
-    mood: ['dark', 'mysterious'], characteristic: [5], modeOf: { parent: 'harmonic-minor', degree: 2 }, chordId: 'm7b5',
-  },
-  {
-    id: 'ionian-sharp5', name: 'Ionian ♯5 (Ionian augmented)', family: 'Harmonic minor modes',
-    intervals: ['P1', 'M2', 'M3', 'P4', 'A5', 'M6', 'M7'],
-    description: 'Third mode of harmonic minor. Major with an augmented 5th.',
-    mood: ['suspenseful', 'bright'], characteristic: [4], modeOf: { parent: 'harmonic-minor', degree: 3 }, chordId: 'maj7#5',
-  },
-  {
-    id: 'dorian-sharp4', name: 'Dorian ♯4 (Ukrainian Dorian)', family: 'Harmonic minor modes', aliases: ['ukrainian dorian', 'romanian minor'],
-    intervals: ['P1', 'M2', 'm3', 'A4', 'P5', 'M6', 'm7'],
-    description: 'Fourth mode of harmonic minor. Common in Eastern European, Jewish (Misheberakh) and Romani music.',
-    mood: ['folk', 'exotic'], characteristic: [3], modeOf: { parent: 'harmonic-minor', degree: 4 }, chordId: 'm7',
-  },
-  {
-    id: 'phrygian-dominant', name: 'Phrygian dominant', family: 'Harmonic minor modes', aliases: ['spanish phrygian', 'freygish', 'hijaz'],
-    intervals: ['P1', 'm2', 'M3', 'P4', 'P5', 'm6', 'm7'],
-    description: 'Fifth mode of harmonic minor. A major third over a flat 2nd: the sound of flamenco, klezmer and Middle Eastern music, and of V7(b9) in minor keys.',
-    mood: ['spanish', 'exotic', 'fiery'], characteristic: [1, 2], modeOf: { parent: 'harmonic-minor', degree: 5 }, chordId: '7b9',
-  },
-  {
-    id: 'lydian-sharp2', name: 'Lydian ♯2', family: 'Harmonic minor modes',
-    intervals: ['P1', 'A2', 'M3', 'A4', 'P5', 'M6', 'M7'],
-    description: 'Sixth mode of harmonic minor. Very bright, with an augmented 2nd at the bottom.',
-    mood: ['bright', 'exotic'], characteristic: [1, 3], modeOf: { parent: 'harmonic-minor', degree: 6 }, chordId: 'maj7#11',
-  },
-  {
-    id: 'ultralocrian', name: 'Ultralocrian (Altered ♭♭7)', family: 'Harmonic minor modes', aliases: ['super locrian bb7'],
-    intervals: ['P1', 'm2', 'm3', 'd4', 'd5', 'm6', 'd7'],
-    description: 'Seventh mode of harmonic minor. Fits the diminished seventh chord.',
-    mood: ['dark', 'unstable'], characteristic: [3, 6], modeOf: { parent: 'harmonic-minor', degree: 7 }, chordId: 'dim7',
-  },
-
-  // ---------- Harmonic major modes ----------
-  {
-    id: 'harmonic-major', name: 'Harmonic major', family: 'Harmonic major modes',
-    intervals: ['P1', 'M2', 'M3', 'P4', 'P5', 'm6', 'M7'],
-    description: 'Major with a lowered 6th. Provides the minor iv chord and the fully diminished vii°7 inside a major key.',
-    mood: ['romantic', 'bittersweet'], characteristic: [5], modeOf: { parent: 'harmonic-major', degree: 1 }, chordId: 'maj7',
-  },
-  {
-    id: 'dorian-b5', name: 'Dorian ♭5', family: 'Harmonic major modes',
-    intervals: ['P1', 'M2', 'm3', 'P4', 'd5', 'M6', 'm7'],
-    description: 'Second mode of harmonic major.', characteristic: [4], modeOf: { parent: 'harmonic-major', degree: 2 }, chordId: 'm7b5',
-  },
-  {
-    id: 'phrygian-b4', name: 'Phrygian ♭4', family: 'Harmonic major modes',
-    intervals: ['P1', 'm2', 'm3', 'd4', 'P5', 'm6', 'm7'],
-    description: 'Third mode of harmonic major.', characteristic: [3], modeOf: { parent: 'harmonic-major', degree: 3 }, chordId: 'm7',
-  },
-  {
-    id: 'lydian-b3', name: 'Lydian ♭3 (Lydian diminished)', family: 'Harmonic major modes',
-    intervals: ['P1', 'M2', 'm3', 'A4', 'P5', 'M6', 'M7'],
-    description: 'Fourth mode of harmonic major.', characteristic: [2, 3], modeOf: { parent: 'harmonic-major', degree: 4 }, chordId: 'mMaj7',
-  },
-  {
-    id: 'mixolydian-b2', name: 'Mixolydian ♭2', family: 'Harmonic major modes',
-    intervals: ['P1', 'm2', 'M3', 'P4', 'P5', 'M6', 'm7'],
-    description: 'Fifth mode of harmonic major.', characteristic: [1], modeOf: { parent: 'harmonic-major', degree: 5 }, chordId: '7b9',
-  },
-  {
-    id: 'lydian-augmented-sharp2', name: 'Lydian augmented ♯2', family: 'Harmonic major modes',
-    intervals: ['P1', 'A2', 'M3', 'A4', 'A5', 'M6', 'M7'],
-    description: 'Sixth mode of harmonic major.', characteristic: [1, 4], modeOf: { parent: 'harmonic-major', degree: 6 }, chordId: 'maj7#5',
-  },
-  {
-    id: 'locrian-bb7', name: 'Locrian ♭♭7', family: 'Harmonic major modes',
-    intervals: ['P1', 'm2', 'm3', 'P4', 'd5', 'm6', 'd7'],
-    description: 'Seventh mode of harmonic major.', characteristic: [6], modeOf: { parent: 'harmonic-major', degree: 7 }, chordId: 'dim7',
-  },
-
-  // ---------- Pentatonic ----------
-  {
-    id: 'major-pentatonic', name: 'Major pentatonic', family: 'Pentatonic',
-    intervals: ['P1', 'M2', 'M3', 'P5', 'M6'],
-    description: 'Five notes with no half steps: impossible to play a harsh clash. Found in folk music worldwide, country, pop and rock.',
-    mood: ['open', 'happy', 'folk'], modeOf: { parent: 'major-pentatonic', degree: 1 }, chordId: '6',
-  },
-  {
-    id: 'suspended-pentatonic', name: 'Suspended pentatonic (Egyptian)', family: 'Pentatonic', aliases: ['egyptian'],
-    intervals: ['P1', 'M2', 'P4', 'P5', 'm7'],
-    description: 'Second mode of the major pentatonic. No third, so neither major nor minor.',
-    mood: ['open', 'ambiguous'], modeOf: { parent: 'major-pentatonic', degree: 2 }, chordId: '7sus4',
-  },
-  {
-    id: 'blues-minor-pentatonic', name: 'Man Gong (Blues minor pentatonic)', family: 'Pentatonic',
-    intervals: ['P1', 'm3', 'P4', 'm6', 'm7'],
-    description: 'Third mode of the major pentatonic.',
-    mood: ['dark', 'sparse'], modeOf: { parent: 'major-pentatonic', degree: 3 }, chordId: 'm7',
-  },
-  {
-    id: 'ritusen', name: 'Ritusen (Blues major pentatonic)', family: 'Pentatonic',
-    intervals: ['P1', 'M2', 'P4', 'P5', 'M6'],
-    description: 'Fourth mode of the major pentatonic, used in Japanese court music (gagaku).',
-    mood: ['open', 'gentle'], modeOf: { parent: 'major-pentatonic', degree: 4 }, chordId: 'sus2',
-  },
-  {
-    id: 'minor-pentatonic', name: 'Minor pentatonic', family: 'Pentatonic',
-    intervals: ['P1', 'm3', 'P4', 'P5', 'm7'],
-    description: 'Fifth mode of the major pentatonic. The backbone of blues and rock soloing.',
-    mood: ['bluesy', 'rock', 'gritty'], modeOf: { parent: 'major-pentatonic', degree: 5 }, chordId: 'm7',
-  },
-  {
-    id: 'hirajoshi', name: 'Hirajōshi', family: 'Pentatonic',
-    intervals: ['P1', 'M2', 'm3', 'P5', 'm6'],
-    description: 'A Japanese pentatonic scale used in koto music, containing half steps.',
-    mood: ['japanese', 'melancholic'],
-  },
-  {
-    id: 'in-sen', name: 'In sen', family: 'Pentatonic',
-    intervals: ['P1', 'm2', 'P4', 'P5', 'm7'],
-    description: 'A Japanese pentatonic scale associated with the shakuhachi.',
-    mood: ['japanese', 'stark'],
-  },
-  {
-    id: 'iwato', name: 'Iwato', family: 'Pentatonic',
-    intervals: ['P1', 'm2', 'P4', 'd5', 'm7'],
-    description: 'A Japanese pentatonic with a diminished fifth: very dark.',
-    mood: ['japanese', 'dark'],
-  },
-  {
-    id: 'kumoi', name: 'Kumoi', family: 'Pentatonic',
-    intervals: ['P1', 'M2', 'm3', 'P5', 'M6'],
-    description: 'A Japanese pentatonic resembling melodic minor with notes removed.',
-    mood: ['japanese', 'gentle'],
-  },
-
-  // ---------- Blues ----------
-  {
-    id: 'blues', name: 'Blues (minor blues)', family: 'Blues',
-    intervals: ['P1', 'm3', 'P4', 'd5', 'P5', 'm7'],
-    description: 'Minor pentatonic plus the flat 5th "blue note" that slides between the 4th and 5th.',
-    mood: ['bluesy', 'gritty'], characteristic: [3], chordId: '7',
-  },
-  {
-    id: 'major-blues', name: 'Major blues', family: 'Blues',
-    intervals: ['P1', 'M2', 'm3', 'M3', 'P5', 'M6'],
-    description: 'Major pentatonic plus the minor 3rd, used to slide into the major 3rd. Common in country and gospel.',
-    mood: ['sweet', 'country', 'gospel'], characteristic: [2], chordId: '6',
-  },
-
-  // ---------- Bebop ----------
-  {
-    id: 'bebop-dominant', name: 'Bebop dominant', family: 'Bebop',
-    intervals: ['P1', 'M2', 'M3', 'P4', 'P5', 'M6', 'm7', 'M7'],
-    description: 'Mixolydian with an added major 7th passing tone, so chord tones land on downbeats when playing eighth notes.',
-    mood: ['jazzy', 'swinging'], characteristic: [7], chordId: '7',
-  },
-  {
-    id: 'bebop-major', name: 'Bebop major', family: 'Bebop',
-    intervals: ['P1', 'M2', 'M3', 'P4', 'P5', 'm6', 'M6', 'M7'],
-    description: 'Major scale with an added minor 6th passing tone.',
-    mood: ['jazzy', 'swinging'], characteristic: [5], chordId: '6',
-  },
-  {
-    id: 'bebop-dorian', name: 'Bebop dorian', family: 'Bebop',
-    intervals: ['P1', 'M2', 'm3', 'M3', 'P4', 'P5', 'M6', 'm7'],
-    description: 'Dorian with an added major 3rd passing tone.',
-    mood: ['jazzy', 'swinging'], characteristic: [3], chordId: 'm7',
-  },
-  {
-    id: 'bebop-melodic-minor', name: 'Bebop melodic minor', family: 'Bebop',
-    intervals: ['P1', 'M2', 'm3', 'P4', 'P5', 'm6', 'M6', 'M7'],
-    description: 'Melodic minor with an added minor 6th passing tone.',
-    mood: ['jazzy', 'swinging'], characteristic: [5], chordId: 'm6',
-  },
-
-  // ---------- Symmetric ----------
-  {
-    id: 'whole-tone', name: 'Whole tone', family: 'Symmetric',
-    intervals: ['P1', 'M2', 'M3', 'A4', 'A5', 'A6'],
-    description: 'Six notes, all a whole step apart. No leading tone and no perfect fifths, so there is no sense of a home note: dreamlike and unresolved (Debussy). Only two distinct whole-tone scales exist (Messiaen mode 1).',
-    mood: ['dreamy', 'ambiguous', 'floating'], chordId: '7#5',
-  },
-  {
-    id: 'diminished-hw', name: 'Diminished (half-whole)', family: 'Symmetric', aliases: ['dominant diminished', 'octatonic'],
-    intervals: ['P1', 'm2', 'A2', 'M3', 'A4', 'P5', 'M6', 'm7'],
-    description: 'Alternating half and whole steps starting with a half step. Fits 7(b9) chords. Repeats every minor third, so only three distinct versions exist (Messiaen mode 2).',
-    mood: ['tense', 'symmetric', 'jazzy'], chordId: '13b9',
-  },
-  {
-    id: 'diminished-wh', name: 'Diminished (whole-half)', family: 'Symmetric', aliases: ['octatonic'],
-    intervals: ['P1', 'M2', 'm3', 'P4', 'd5', 'm6', 'M6', 'M7'],
-    description: 'Alternating whole and half steps. The natural scale of the diminished seventh chord.',
-    mood: ['tense', 'symmetric'], chordId: 'dim7',
-  },
-  {
-    id: 'augmented', name: 'Augmented (hexatonic)', family: 'Symmetric',
-    intervals: ['P1', 'A2', 'M3', 'P5', 'm6', 'M7'],
-    description: 'Alternating minor thirds and half steps; two augmented triads a half step apart. Repeats every major third (Coltrane, Liszt).',
-    mood: ['symmetric', 'modern'], chordId: 'maj7#5',
-  },
-  {
-    id: 'tritone', name: 'Tritone scale', family: 'Symmetric',
-    intervals: ['P1', 'm2', 'M3', 'd5', 'P5', 'm7'],
-    description: 'Two major triads a tritone apart (C and F#). Repeats every tritone; used in Stravinsky\'s Petrushka chord.',
-    mood: ['clashing', 'modern'], chordId: '7b9',
-  },
-  {
-    id: 'messiaen-3', name: 'Messiaen mode 3', family: 'Symmetric',
-    intervals: ['P1', 'M2', 'm3', 'M3', 'A4', 'P5', 'm6', 'm7', 'M7'],
-    description: 'Nine notes; the pattern whole-half-half repeats every major third.',
-    mood: ['symmetric', 'lush'],
-  },
-  {
-    id: 'chromatic', name: 'Chromatic', family: 'Symmetric',
-    intervals: ['P1', 'm2', 'M2', 'm3', 'M3', 'P4', 'A4', 'P5', 'm6', 'M6', 'm7', 'M7'],
-    description: 'All twelve pitch classes of equal temperament.',
-    mood: ['complete'],
-  },
-
-  // ---------- Exotic & world ----------
-  {
-    id: 'double-harmonic', name: 'Double harmonic major (Byzantine)', family: 'Exotic & world', aliases: ['byzantine', 'arabic', 'gypsy major'],
-    intervals: ['P1', 'm2', 'M3', 'P4', 'P5', 'm6', 'M7'],
-    description: 'Two augmented seconds create a strongly Middle Eastern sound (Misirlou). Equivalent to the Hijaz Kar maqam in 12-tone tuning.',
-    mood: ['exotic', 'dramatic'], characteristic: [1, 5], chordId: 'maj7',
-  },
-  {
-    id: 'hungarian-minor', name: 'Hungarian minor', family: 'Exotic & world', aliases: ['double harmonic minor', 'gypsy minor'],
-    intervals: ['P1', 'M2', 'm3', 'A4', 'P5', 'm6', 'M7'],
-    description: 'Harmonic minor with a raised 4th: two augmented seconds.',
-    mood: ['exotic', 'dramatic'], characteristic: [3, 6], chordId: 'mMaj7',
-  },
-  {
-    id: 'hungarian-major', name: 'Hungarian major', family: 'Exotic & world',
-    intervals: ['P1', 'A2', 'M3', 'A4', 'P5', 'M6', 'm7'],
-    description: 'A dominant scale with a raised 2nd and 4th.',
-    mood: ['exotic'], characteristic: [1, 3], chordId: '7',
-  },
-  {
-    id: 'neapolitan-major', name: 'Neapolitan major', family: 'Exotic & world',
-    intervals: ['P1', 'm2', 'm3', 'P4', 'P5', 'M6', 'M7'],
-    description: 'Melodic minor with a lowered 2nd.',
-    mood: ['dark', 'elegant'], characteristic: [1], chordId: 'mMaj7',
-  },
-  {
-    id: 'neapolitan-minor', name: 'Neapolitan minor', family: 'Exotic & world',
-    intervals: ['P1', 'm2', 'm3', 'P4', 'P5', 'm6', 'M7'],
-    description: 'Harmonic minor with a lowered 2nd.',
-    mood: ['dark', 'dramatic'], characteristic: [1], chordId: 'mMaj7',
-  },
-  {
-    id: 'persian', name: 'Persian', family: 'Exotic & world',
-    intervals: ['P1', 'm2', 'M3', 'P4', 'd5', 'm6', 'M7'],
-    description: 'Double harmonic with a diminished 5th: many half steps and a dense, mysterious color.',
-    mood: ['exotic', 'mysterious'], characteristic: [1, 4],
-  },
-  {
-    id: 'enigmatic', name: 'Enigmatic', family: 'Exotic & world',
-    intervals: ['P1', 'm2', 'M3', 'A4', 'A5', 'A6', 'M7'],
-    description: 'An unusual scale published by Verdi as a harmonization exercise (Ave Maria, 1889).',
-    mood: ['strange', 'chromatic'], characteristic: [1, 4, 5],
-  },
-  {
-    id: 'prometheus', name: 'Prometheus', family: 'Exotic & world', aliases: ['mystic'],
-    intervals: ['P1', 'M2', 'M3', 'A4', 'M6', 'm7'],
-    description: 'The six-note scale behind Scriabin\'s mystic chord, built largely from fourths.',
-    mood: ['mystic', 'shimmering'], chordId: 'mystic',
-  },
-  {
-    id: 'pelog', name: 'Pelog (12-TET approximation)', family: 'Exotic & world',
-    intervals: ['P1', 'm2', 'm3', 'P5', 'm6'],
-    description: 'An approximation of the Javanese gamelan pelog selisir scale. The real tuning does not fit 12-tone equal temperament.',
-    mood: ['gamelan', 'exotic'],
-  },
+  ...WESTERN,
+  ...JAZZ,
+  ...SYMMETRIC,
+  ...ARABIC,
+  ...TURKISH,
+  ...PERSIAN,
+  ...BYZANTINE,
+  ...JEWISH,
+  ...HINDUSTANI,
+  ...CARNATIC,
+  ...EAST_ASIAN,
+  ...SOUTHEAST_ASIAN,
+  ...ETHIOPIAN,
+  ...GREEK,
 ];
+
+/** Every family, in catalog order. */
+export const SCALE_FAMILIES: string[] = [...new Set(SCALES.map((s) => s.family))];
+
+/** Families of a tradition, in catalog order. */
+export function familiesOf(tradition: TraditionId): string[] {
+  return [...new Set(SCALES.filter((s) => s.tradition === tradition).map((s) => s.family))];
+}
+
+/** Scales of one family. */
+export function scalesInFamily(tradition: TraditionId, family: string): ScaleDef[] {
+  return SCALES.filter((s) => s.tradition === tradition && s.family === family);
+}
+
+/** Deviation in cents from 12-TET of each degree (0 when the scale is equal-tempered). */
+export function scaleDeviations(def: ScaleDef): number[] {
+  return def.cents ?? def.intervals.map(() => 0);
+}
+
+/** Size of each degree in cents above the tonic, using the scale's own intonation. */
+export function scaleCents(def: ScaleDef): number[] {
+  const dev = scaleDeviations(def);
+  return def.intervals.map((iv, i) => interval(iv).semis * 100 + dev[i] - dev[0]);
+}
+
+/**
+ * True when any degree differs audibly from 12-tone equal temperament (15 cents or more relative to
+ * the tonic). Such scales are left out of the 12-tone tools: chord building, the scale finder and
+ * pitch-class matching.
+ */
+export function hasMicrotones(def: ScaleDef): boolean {
+  const dev = scaleDeviations(def);
+  return dev.some((d) => Math.abs(d - dev[0]) >= 15);
+}
 
 export const SCALE_BY_ID: Record<string, ScaleDef> = Object.fromEntries(SCALES.map((s) => [s.id, s]));
 
@@ -482,6 +236,7 @@ export function findScalesByPcs(pcs: number[]): Array<{ rootPc: number; scale: S
   const target = [...new Set(pcs.map((p) => mod(p, 12)))].sort((a, b) => a - b).join(',');
   const results: Array<{ rootPc: number; scale: ScaleDef }> = [];
   for (const scale of SCALES) {
+    if (hasMicrotones(scale)) continue;
     for (const rootPc of new Set(pcs.map((p) => mod(p, 12)))) {
       const key = [...new Set(scalePcs(rootPc, scale.id))].sort((a, b) => a - b).join(',');
       if (key === target) results.push({ rootPc, scale });
@@ -495,7 +250,7 @@ export function scalesContaining(pcs: number[]): Array<{ rootPc: number; scale: 
   const wanted = new Set(pcs.map((p) => mod(p, 12)));
   const results: Array<{ rootPc: number; scale: ScaleDef }> = [];
   for (const scale of SCALES) {
-    if (scale.id === 'chromatic') continue;
+    if (scale.id === 'chromatic' || hasMicrotones(scale)) continue;
     for (let rootPc = 0; rootPc < 12; rootPc++) {
       const set = new Set(scalePcs(rootPc, scale.id));
       if ([...wanted].every((p) => set.has(p))) results.push({ rootPc, scale });

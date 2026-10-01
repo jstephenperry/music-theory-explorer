@@ -43,7 +43,7 @@ import {
   type Neighbor,
   type NeighborKind,
 } from './chordLogic';
-import { useMediaQuery } from './useMediaQuery';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import s from './Chords.module.css';
 
 const CATEGORY_LABEL: Record<ChordCategory, string> = {
