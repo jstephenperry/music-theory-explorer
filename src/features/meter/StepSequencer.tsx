@@ -54,9 +54,10 @@ export function StepSequencer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [w, muted]);
 
+  const playerSetBpm = player.setBpm;
   useEffect(() => {
-    player.setBpm(bpm);
-  }, [bpm, player.setBpm]);
+    playerSetBpm(bpm);
+  }, [bpm, playerSetBpm]);
 
   const light = (step: number) => {
     if (step === litStep.current) return;

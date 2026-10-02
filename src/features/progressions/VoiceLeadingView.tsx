@@ -113,7 +113,7 @@ export function VoiceLeadingView({ chords, active, onSelect }: { chords: LabChor
               <span>
                 {chords[t.from].rc.display} → {chords[t.to].rc.display}
               </span>
-              <span className="muted" style={{ fontWeight: 600, fontSize: '0.8rem' }}>
+              <span className={s.vlHead}>
                 {t.total} semitone{t.total === 1 ? '' : 's'}, {t.commonTones} held
               </span>
             </div>

@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Piano, type KeyMark } from '../../components/Piano';
 import { Staff } from '../../components/Staff';
-import { Button, Callout, Panel, PageHeader, RootPicker, Tag, Toggle } from '../../components/ui';
+import { Button, Callout, Legend, Panel, PageHeader, RootPicker, Stat, Tag, Toggle } from '../../components/ui';
 import { usePlayer } from '../../audio/usePlayer';
 import { audio } from '../../audio/engine';
 import type { SeqEvent } from '../../audio/sequencer';
@@ -24,7 +24,7 @@ import {
 } from './intervalLogic';
 import { MELODIC_REFERENCES } from './references';
 import { Staircase } from './Staircase';
-import { useUrlParams } from './useUrlParams';
+import { useUrlParams } from '../../hooks/useUrlState';
 import s from './IntervalsPage.module.css';
 
 interface PlayData {
@@ -129,11 +129,8 @@ export default function IntervalsPage() {
     ...(showAltered ? [{ label: 'Augmented and diminished spellings', names: ALTERED_INTERVALS }] : []),
     ...(showCompound ? [{ label: 'Compound intervals', names: COMPOUND_INTERVALS }] : []),
   ];
-  const stairIntervals = useMemo(() => {
-    const names = [...PRIMARY_INTERVALS, ...(showAltered ? ALTERED_INTERVALS : []), ...(showCompound ? COMPOUND_INTERVALS : [])];
-    if (!names.includes(name)) names.push(name);
-    return names.map(interval).sort((a, b) => a.semis - b.semis || a.num - b.num);
-  }, [showAltered, showCompound, name]);
+  const shownNames = [...PRIMARY_INTERVALS, ...(showAltered ? ALTERED_INTERVALS : []), ...(showCompound ? COMPOUND_INTERVALS : [])];
+  const stairIntervals = (shownNames.includes(name) ? shownNames : [...shownNames, name]).map(interval).sort((a, b) => a.semis - b.semis || a.num - b.num);
 
   const consonance = classifyConsonance(iv);
   const inversion = inversionOf(iv);
@@ -253,10 +250,11 @@ export default function IntervalsPage() {
               </div>
             </div>
             <div className={s.facts}>
-              <Fact label="Semitones" value={String(iv.semis)} />
-              <Fact label="Generic size" value={`${iv.num} (${genericWord})`} />
-              <Fact label="Quality" value={qualityWord} />
-              <Fact
+              <Stat size="sm" label="Semitones" value={String(iv.semis)} />
+              <Stat size="sm" label="Generic size" value={`${iv.num} (${genericWord})`} />
+              <Stat size="sm" label="Quality" value={qualityWord} />
+              <Stat
+                size="sm"
                 label="Inversion"
                 value={
                   <button
@@ -271,11 +269,12 @@ export default function IntervalsPage() {
                   </button>
                 }
               />
-              <Fact
+              <Stat
+                size="sm"
                 label="Simple or compound"
                 value={isCompound(iv) ? `compound: ${intervalName(simple)} plus ${Math.round((iv.semis - simple.semis) / 12) === 1 ? 'an octave' : 'two octaves'}` : 'simple'}
               />
-              <Fact label="Consonance" value={<Tag tone={CLASS_TONE[consonance.cls]}>{consonance.cls}</Tag>} />
+              <Stat size="sm" label="Consonance" value={<Tag tone={CLASS_TONE[consonance.cls]}>{consonance.cls}</Tag>} />
               {consonance.note && <p className={s.factNote}>{consonance.note}</p>}
             </div>
           </div>
@@ -286,7 +285,8 @@ export default function IntervalsPage() {
         <Panel title="Just intonation and equal temperament" eyebrow="Tuning">
           <div className={s.tuning}>
             <div className={s.tuningFacts}>
-              <Fact
+              <Stat
+                size="sm"
                 label="Just ratio"
                 value={
                   <span className={s.ratio}>
@@ -294,9 +294,9 @@ export default function IntervalsPage() {
                   </span>
                 }
               />
-              <Fact label="Just" value={`${fmtCents(tuning.justCents)} ¢`} />
-              <Fact label="Equal tempered" value={`${tuning.equalCents} ¢`} />
-              <Fact label="Difference" value={`${tuning.difference >= 0 ? '+' : '−'}${fmtCents(Math.abs(tuning.difference))} ¢`} />
+              <Stat size="sm" label="Just" value={`${fmtCents(tuning.justCents)} ¢`} />
+              <Stat size="sm" label="Equal tempered" value={`${tuning.equalCents} ¢`} />
+              <Stat size="sm" label="Difference" value={`${tuning.difference >= 0 ? '+' : '−'}${fmtCents(Math.abs(tuning.difference))} ¢`} />
             </div>
             <Gauge diff={tuning.difference} />
             <p className={s.tuningText}>
@@ -318,18 +318,15 @@ export default function IntervalsPage() {
 
       <Panel title={`Every interval above ${noteName(root)}`} eyebrow="Staircase">
         <Staircase root={root} intervals={stairIntervals} selected={iv} onSelect={(i) => setState(lower, i)} />
-        <div className={s.legend}>
-          <span>
-            <i style={{ background: 'var(--verdigris)' }} /> Perfect consonance
-          </span>
-          <span>
-            <i style={{ background: 'var(--royal)' }} /> Imperfect consonance
-          </span>
-          <span>
-            <i style={{ background: 'var(--plum)' }} /> Dissonance
-          </span>
-          <span className={s.legendHint}>Step height is the size in semitones; steps of equal height are enharmonic spellings.</span>
-        </div>
+        <Legend
+          className={s.staircaseLegend}
+          items={[
+            { color: 'var(--verdigris)', label: 'Perfect consonance' },
+            { color: 'var(--royal)', label: 'Imperfect consonance' },
+            { color: 'var(--plum)', label: 'Dissonance' },
+          ]}
+          note="Step height is the size in semitones; steps of equal height are enharmonic spellings."
+        />
       </Panel>
 
       <div className={s.twoCol}>
@@ -395,15 +392,6 @@ export default function IntervalsPage() {
           </div>
         </Panel>
       </div>
-    </div>
-  );
-}
-
-function Fact({ label, value }: { label: string; value: React.ReactNode }) {
-  return (
-    <div className={s.fact}>
-      <span className={s.factLabel}>{label}</span>
-      <span className={s.factValue}>{value}</span>
     </div>
   );
 }

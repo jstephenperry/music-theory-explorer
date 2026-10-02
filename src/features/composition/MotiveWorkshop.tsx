@@ -9,7 +9,7 @@ import { MOTIVE_PRESETS } from './motivePresets';
 import { keyName, makeKey } from '../../theory/keys';
 import { midi } from '../../theory/notes';
 import { scoreFromVoices, notateVoice } from '../../theory/score';
-import { SEGMENT_COLORS, motiveNotes, segmentsToScore, spellInKey } from './scoreUtils';
+import { SEGMENT_COLORS, motiveNotes, segmentsToScore, spellInKey } from '../../theory/composition/scoreUtils';
 import type { useScorePlayer } from './useScorePlayer';
 import s from './Composition.module.css';
 

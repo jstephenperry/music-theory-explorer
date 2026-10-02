@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { ScoreView } from '../../components/ScoreView';
 import { PlayButton, Segmented, Slider } from '../../components/ui';
 import { usePersistentState } from '../../hooks/usePersistentState';
-import { BASS_CHOICES, MELODY_TECHNIQUES, MODE_CHOICES, THEME_CHOICE, buildVariation, type BassChoice, type MelodyTechnique, type ModeChoice, type VariationChoice } from './variations';
+import { BASS_CHOICES, MELODY_TECHNIQUES, MODE_CHOICES, THEME_CHOICE, buildVariation, type BassChoice, type MelodyTechnique, type ModeChoice, type VariationChoice } from '../../theory/composition/variations';
 import type { useScorePlayer } from './useScorePlayer';
 import s from './Composition.module.css';
 

@@ -121,9 +121,10 @@ export function Comparison() {
     player.play(events, { bpm: rate, loop: true, length: m === 'ab' ? 2 * n : n });
   };
 
+  const playerSetBpm = player.setBpm;
   useEffect(() => {
-    player.setBpm(rate);
-  }, [rate, player.setBpm]);
+    playerSetBpm(rate);
+  }, [rate, playerSetBpm]);
 
   useEffect(() => {
     if (!player.playing) {

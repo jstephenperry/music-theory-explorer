@@ -3,12 +3,12 @@
  * as the textures of the Classical and Baroque keyboard: chorale, repeated chords, Alberti bass,
  * Bach's broken-chord prelude figuration, a sweeping arpeggio, and the waltz.
  */
-import { makeKey, type Key } from '../../theory/keys';
-import { midi, pc, type Note, type Pitch } from '../../theory/notes';
-import { parseRoman, type RomanChord } from '../../theory/roman';
-import { notateVoice, scoreFromVoices, type PlainNote, type Score, type ScoreNote } from '../../theory/score';
-import { voiceProgression } from '../../theory/voicing';
-import { diatonicIndex, stepPitch } from '../../theory/composition/motive';
+import { makeKey, type Key } from '../keys';
+import { midi, pc, type Note, type Pitch } from '../notes';
+import { parseRoman, type RomanChord } from '../roman';
+import { notateVoice, scoreFromVoices, type PlainNote, type Score, type ScoreNote } from '../score';
+import { voiceProgression } from '../voicing';
+import { diatonicIndex, stepPitch } from '../composition/motive';
 
 export type TextureId = 'chorale' | 'repeated' | 'alberti' | 'prelude' | 'arpeggio' | 'waltz';
 
@@ -72,11 +72,13 @@ export interface ProgressionPreset {
   name: string;
   /** One chord per bar. */
   chords: string[];
+  /** The repertoire work the progression is taken from, when there is one. */
+  workId?: string;
 }
 
 export const TEXTURE_PROGRESSIONS: ProgressionPreset[] = [
   { id: 'cadence', name: 'I IV V⁷ I', chords: ['I', 'IV', 'V7', 'I'] },
-  { id: 'prelude', name: 'I ii⁴₂ V⁶₅ I (as in BWV 846)', chords: ['I', 'ii42', 'V65', 'I'] },
+  { id: 'prelude', name: 'I ii⁴₂ V⁶₅ I (as in BWV 846)', chords: ['I', 'ii42', 'V65', 'I'], workId: 'bwv846' },
   { id: 'circle', name: 'I vi ii⁶ V⁷ I', chords: ['I', 'vi', 'ii6', 'V7', 'I'] },
   { id: 'descending', name: 'I V⁶ vi iii⁶ IV I⁶ ii V', chords: ['I', 'V6', 'vi', 'iii6', 'IV', 'I6', 'ii', 'V'] },
 ];

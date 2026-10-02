@@ -3,7 +3,7 @@
  * Click a pulse to cycle its accent; click the gap between pulses to split or merge beat groups.
  */
 import { Fragment, useImperativeHandle, useRef, type Ref } from 'react';
-import { groupStarts, noteValue, type AccentLevel, type Bar } from './meter';
+import { groupStarts, noteValue, type AccentLevel, type Bar, countSyllables } from './meter';
 import s from './MeterPage.module.css';
 
 export interface BeatGridHandle {
@@ -12,16 +12,6 @@ export interface BeatGridHandle {
 
 const LEVEL_NAME = ['weak pulse', 'secondary accent', 'downbeat'];
 
-/** Counting syllables: beat numbers with "&" and "a" for divisions (1 & a 2 & a ...). */
-export function countSyllables(groups: number[], allOnes: boolean): string[] {
-  if (allOnes) return groups.map((_, i) => String(i + 1));
-  const out: string[] = [];
-  groups.forEach((g, i) => {
-    const subs = g === 2 ? ['&'] : g === 3 ? ['&', 'a'] : g === 4 ? ['e', '&', 'a'] : Array(g - 1).fill('·');
-    out.push(String(i + 1), ...subs);
-  });
-  return out;
-}
 
 export function BeatGrid({
   bars,
@@ -57,15 +47,15 @@ export function BeatGrid({
     [],
   );
 
-  let global = 0;
+  // Pulse offset of each bar from the start of the pattern.
+  const bases = bars.reduce<number[]>((acc, _bar, i) => [...acc, i === 0 ? 0 : acc[i - 1] + bars[i - 1].num], []);
   return (
     <div className={s.grid}>
       {bars.map((bar, bi) => {
         const starts = groupStarts(bar.groups);
         const allOnes = bar.groups.every((g) => g === 1);
         const syl = countSyllables(bar.groups, allOnes);
-        const base = global;
-        global += bar.num;
+        const base = bases[bi];
         return (
           <div key={bi} className={`${s.gridBar} ${bars.length > 1 && bi === selectedBar ? s.gridBarSelected : ''}`}>
             <button type="button" className={s.gridBarHead} onClick={() => onSelectBar(bi)} aria-label={`Bar ${bi + 1}, ${bar.num}/${bar.den}. Select to edit`}>

@@ -382,12 +382,56 @@ export function RootPicker({
 }
 
 // ---------- Stat ----------
-export function Stat({ label, value, title }: { label: ReactNode; value: ReactNode; title?: string }) {
+/** A label over a value. `md` is the display size, `sm` a smaller display size, `xs` body text for long values. */
+export function Stat({ label, value, title, size = 'md' }: { label: ReactNode; value: ReactNode; title?: string; size?: 'md' | 'sm' | 'xs' }) {
   return (
-    <div className={s.stat} title={title}>
+    <div className={cx(s.stat, size === 'sm' && s.statSm, size === 'xs' && s.statXs)} title={title}>
       <span className={s.statLabel}>{label}</span>
       <span className={s.statValue}>{value}</span>
     </div>
+  );
+}
+
+// ---------- Legend ----------
+export interface LegendItem {
+  /** A CSS color, usually a token such as "var(--hl-root)". */
+  color: string;
+  label: ReactNode;
+  title?: string;
+  /** A round swatch instead of a square one. */
+  dot?: boolean;
+  /** An outlined swatch (a ringed key, an absent note). */
+  ring?: boolean;
+}
+
+/** Swatches with labels, and an optional note at the end. */
+export function Legend({ items, note, ariaLabel, center, className }: { items: LegendItem[]; note?: ReactNode; ariaLabel?: string; center?: boolean; className?: string }) {
+  return (
+    <div className={cx(s.legend, center && s.legendCenter, className)} aria-label={ariaLabel}>
+      {items.map((it, i) => (
+        <span key={i} className={s.legendItem} title={it.title}>
+          <span className={cx(s.swatch, it.dot && s.swatchDot, it.ring && s.swatchRing)} style={it.ring ? { borderColor: it.color } : { background: it.color }} aria-hidden="true" />
+          {it.label}
+        </span>
+      ))}
+      {note && <span className={s.legendNote}>{note}</span>}
+    </div>
+  );
+}
+
+// ---------- Chip ----------
+export interface ChipProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  active?: boolean;
+  /** Color of the active state. */
+  tone?: 'accent' | 'royal';
+}
+
+/** A selectable card: a chord, a scale, a technique. Rooms add their own inner layout through `className`. */
+export function Chip({ active, tone = 'accent', className, type = 'button', children, ...rest }: ChipProps) {
+  return (
+    <button type={type} className={cx(s.chip, active && s.chipActive, tone === 'royal' && s.chipRoyal, className)} {...rest}>
+      {children}
+    </button>
   );
 }
 

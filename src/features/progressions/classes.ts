@@ -1,4 +1,4 @@
-import type { HarmonicFunction } from './harmony';
+import type { HarmonicFunction } from '../../theory/harmony';
 import s from './Progressions.module.css';
 
 /** CSS class that sets --fn and --fn-soft for a harmonic function. */

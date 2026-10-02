@@ -7,11 +7,13 @@ everything, including audio synthesis and notation, runs in the browser.
 
 ```
 src/
-  theory/      Pure music-theory engine (no React, no DOM). Fully unit tested.
+  theory/      Pure music-theory engine (no React, no DOM), tests beside each module.
   audio/       Web Audio synthesis engine, lookahead sequencer, playback hooks.
-  components/  Shared UI: Piano, Staff (VexFlow), ui.tsx primitives, Icon, theme helpers.
-  hooks/       usePersistentState, useUrlState, useMediaQuery, useMidiInput, useComputerKeyboard.
+  components/  Shared UI: Piano (and pianoMarks helpers), Staff and ScoreView on the useVexFlow hook, ui.tsx primitives, Icon, theme.
+  hooks/       usePersistentState, useUrlState (and useUrlParams), useMediaQuery, useMidiInput, useComputerKeyboard.
+  lib/         Small shared helpers with no music in them: format.ts (formatCents, flat, cap, countWord).
   app/         App shell, routing (HashRouter), the registry of modes, sections and rooms, layout.
+  repertoire/  The encoded classical excerpts, one file per work, with a registry and borrowing helpers.
   features/    One folder per page ("room"). Each owns its components, styles and logic.
   styles/      global.css: design tokens and a few utility classes.
 ```
@@ -29,6 +31,25 @@ Theory/Composition switch above them; on the home page it shows the mode last vi
 drawer's accent color (brass for Theory, verdigris for Composition). Links between rooms use
 `roomPath(slug)` rather than a literal path. `routes.test.ts` checks the registry and the numbers
 quoted in room descriptions against the data they describe.
+
+## Repertoire (`src/repertoire`)
+
+Every classical excerpt the site shows lives here, one file per work (`bwv772.ts`, `k265.ts` and so
+on), never inline in a room. An `Excerpt` is `{ work, analysis }`: `Work` is the music and its
+provenance (id, composer, title, bars, `spec` in the score text format, tempo, how it was checked);
+`Analysis` is what the room says about it (highlight `layers` and `brackets`, which address notes by
+selector, and `commentary`). Replacing a work means replacing `work` and keeping the analysis shape.
+
+`index.ts` is the registry: `REPERTOIRE`, `excerpt(id)` (throws on an unknown id), `score(id)` (built
+and cached), and helpers for borrowing from a work so a passage is encoded once: `fragment(id,
+'0.0.1-7')` returns the notes of a voice range with rests kept and ties joined, `motiveFragment` the
+same as a `Motive`, and `quarterEntries(id, staff, voice)` one entry per on-beat note with the
+roman numeral in force (the variation workshop reads the K. 265 theme this way). Modeled material
+that is not a transcription (the phrase builder's basic ideas, the texture progressions, the Twinkle
+motive) keeps its own notes and names the work it follows in a `workId`.
+
+`repertoire.test.ts` builds every work, resolves every layer and bracket selector, checks every
+`workId` reference, and compares the derived theme with the arrays it replaced.
 
 ## Theory engine (`src/theory`)
 
@@ -75,10 +96,11 @@ Import from `src/theory` (barrel) or from individual modules.
   `value`, `dots`, `tuplet`, `dur`, `start`, `measure`, `tie`, `grace`, `orn`, `below`, `above`).
   `buildScore(spec)` parses the text format documented at the top of the file (`C4/16 D4 E4`,
   `(C4 E4 G4)/2`, `~` ties, `3:2[ ... ]` tuplets, `^C5/16` grace notes, `!tr` and other ornaments,
-  `_"V7"` labels, `|` barlines checked against the meter, a pickup and a short last bar).
+  `_"V7"` labels, `!trem` tremolos, `|` barlines checked against the meter, a pickup and a short last bar).
   `notateVoice(plainNotes, { time })` writes generated music into measures, splitting at barlines
   and at the beat with ties and grouping triplets. `scoreSounds(score)` turns a score into timed
-  sounds (ties joined, grace notes before the beat); `selectNotes(score, "0.0.1-7, 1.0.2")` selects
+  sounds (ties joined, grace notes before the beat, trills, mordents, turns, tremolos and staccatos
+  realized with `diatonicNeighbors` in the score's key; the fermata is drawn only); `selectNotes(score, "0.0.1-7, 1.0.2")` selects
   notes for highlighting.
 - `composition/motive.ts`: motivic transformations on `Motive` (`{ pitch, dur }[]`): `sequence`
   (tonal, by scale steps), `transposeReal`, `invertDiatonic`, `invertChromatic`, `retrograde`,
@@ -87,6 +109,12 @@ Import from `src/theory` (barrel) or from individual modules.
   returns issues (slots, error or warning, rule, message) for first and second species, judging
   intervals by spelling. `solveCounterpoint(ex, { fixed })` is a backtracking solver that writes
   backward from the cadence; it powers hints and model solutions. `CANTUS_FIRMI`, `RULES`.
+- `composition/phrase.ts`, `cadences.ts`, `textures.ts`, `variations.ts`: the generators behind
+  the phrase builder, cadence gallery, texture lab and variation workshop, each with tests.
+  `scoreUtils.ts` (spelling in a key, clef choice, segments to a bracketed score) and `random.ts`
+  serve the workshops and drills.
+- `harmony.ts`: harmonic function of a chord in a key (`describeChord`) and cadence detection
+  (`detectCadence`), used by the Progression Lab and the phrase builder.
 
 ## Audio (`src/audio`)
 
@@ -121,14 +149,25 @@ Import from `src/theory` (barrel) or from individual modules.
   `brackets` over passages, `active` note ids highlighted during playback without re-engraving, and
   `onNoteClick`.
 - Composition rooms (`src/features/composition`): `useScorePlayer()` plays a `Score` and reports
-  the sounding note ids; `ExcerptView` shows an `Excerpt` (in `excerpts/`) with switchable
+  the sounding note ids; `ExcerptView` shows an `Excerpt` (from `src/repertoire`) with switchable
   highlight layers, brackets, commentary and its source; `Quiz` is the shared multiple-choice drill.
-  Generators with tests: `phrase.ts` (periods, sentences, cadence analysis), `cadences.ts`,
-  `textures.ts`, `variations.ts`.
-- Hooks: `useUrlState(key, default)` and `useUrlParams(defaults)` keep shareable state in the URL;
+  The generators live in `src/theory/composition`.
+- `vexflow.ts`: `loadVexFlow()` (the module and its font, loaded once) and `useVexFlow()`, the
+  lifecycle every engraver shares: host ref, observed width, loaded module, error and theme version.
+  `Staff` and `ScoreView` keep only their layout code.
+- Modulation (`src/features/modulation`): `logic.ts` is a barrel over `keys.ts` (keys in the URL,
+  chord functions, the chords of a key), `relations.ts` (pivots, key relations), `techniques.ts`
+  (the nine techniques, candidate finders, availability, the map) and `examples.ts` (the example
+  model and builders). Scales: `parts.tsx` holds the room's stateless pieces (formula row, step bar,
+  forms, equivalents, legend, marking helpers).
+- Hooks: `useUrlState(key, default)` and `useUrlParams(defaults)` (in `hooks/useUrlState.ts`, the
+  only URL hooks) keep shareable state in the URL;
   `usePersistentState` keeps preferences in localStorage; `useMediaQuery`; `useMidiInput`; `useComputerKeyboard`.
 - `ui.tsx`: `Button`, `PlayButton`, `Segmented`, `Select`, `TextInput`, `Slider`, `Toggle`, `Panel`,
-  `PageHeader`, `Tag`, `Callout`, `Tabs`, `RootPicker`, `Stat`, `Empty`.
+  `PageHeader`, `Tag`, `Callout`, `Tabs`, `RootPicker`, `Stat` (a label over a value, in three sizes),
+  `Legend` (swatches with labels and a trailing note), `Chip` (a selectable card; rooms add their
+  inner layout through `className`, the primitive owns the border, hover and active states), `Empty`.
+  Use these before writing a room-specific chip, legend or fact style.
 - `theme.ts`: `cssVar`, `resolveColor`, `useThemeVersion` for canvas/SVG drawings that need theme colors.
 
 ## Design language
@@ -139,6 +178,10 @@ aged brass. Use the tokens in `styles/global.css` (`--bg`, `--bg-elev`, `--bg-su
 their `-soft` variants). Headings use `--font-display` (Cormorant Garamond), UI text `--font-ui`
 (Source Sans 3), prose `--font-serif` (Source Serif 4). Soft radii, thin rules, no neon, no heavy shadows.
 Both themes (light and dark) must look right; never hard-code colors that ignore the theme.
+Spacing and type come from classes, not inline styles: `global.css` has `.row`, `.row-tight`,
+`.row-between`, `.block`, `.after`, `.flush`, `.note` and `.rule-tight` for the common cases, and a
+room's module holds the rest. Inline `style` is for values computed from data (a bar's fill, a
+swatch's color).
 
 Rooms whose controls change a shared work surface (the keyboard and staff in Scales & Modes, the
 progression strip in the Progression Lab) put that surface first and give it the global `dock`
@@ -155,7 +198,8 @@ Headings and eyebrows name the subject; ledes say what the room does and what it
 
 ## Testing and deployment
 
-- `npm test` runs Vitest; `npm run typecheck`; `npm run build` produces `dist/`.
+- `npm test` runs Vitest (tests sit beside the modules they test); `npm run typecheck`;
+  `npm run lint` fails on any warning; `npm run build` produces `dist/`.
 - Excerpts were checked by hand-run comparison with Mutopia MIDI files; the `source` field of each
   excerpt records what was checked and how.
 - `.github/workflows/deploy.yml` builds, tests and publishes to GitHub Pages on pushes to `main`.

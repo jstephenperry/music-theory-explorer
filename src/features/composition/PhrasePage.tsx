@@ -2,8 +2,7 @@ import { PageHeader, Panel } from '../../components/ui';
 import { CadenceGallery } from './CadenceGallery';
 import { CadenceQuiz } from './CadenceQuiz';
 import { ExcerptView } from './ExcerptView';
-import { OP2_NO1 } from './excerpts/beethoven';
-import { K331_THEME } from './excerpts/mozart';
+import { excerpt } from '../../repertoire';
 import { PhraseBuilder } from './PhraseBuilder';
 import { useScorePlayer } from './useScorePlayer';
 import s from './Composition.module.css';
@@ -19,8 +18,8 @@ export default function PhrasePage() {
       />
       <Panel title="In the repertoire">
         <div className="stack">
-          <ExcerptView excerpt={K331_THEME} player={player} />
-          <ExcerptView excerpt={OP2_NO1} player={player} />
+          <ExcerptView excerpt={excerpt('k331')} player={player} />
+          <ExcerptView excerpt={excerpt('op2no1')} player={player} />
         </div>
       </Panel>
       <Panel title="Cadence gallery" eyebrow="Six cadence types in four parts">

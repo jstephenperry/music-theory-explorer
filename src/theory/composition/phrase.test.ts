@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { makeKey } from '../../theory/keys';
-import { pitchName } from '../../theory/notes';
+import { makeKey } from '../keys';
+import { pitchName } from '../notes';
 import { BASIC_IDEAS, CADENCE_KINDS, PHRASE_TONICS, accompaniment, buildPhrase, type PhraseChoice } from './phrase';
 
 const base: PhraseChoice = { form: 'period', idea: 'lilting', repetition: 'exact', first: 'hc', last: 'pac', tonic: 'C', accomp: 'block' };

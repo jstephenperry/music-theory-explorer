@@ -12,7 +12,9 @@ interface MidiHandlers {
  */
 export function useMidiInput(handlers: MidiHandlers, enabled = true): { status: MidiStatus; devices: string[] } {
   const ref = useRef(handlers);
-  ref.current = handlers;
+  useEffect(() => {
+    ref.current = handlers;
+  });
   const [status, setStatus] = useState<MidiStatus>(() => (typeof navigator !== 'undefined' && 'requestMIDIAccess' in navigator ? 'idle' : 'unsupported'));
   const [devices, setDevices] = useState<string[]>([]);
 

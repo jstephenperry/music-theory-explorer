@@ -9,11 +9,11 @@ import {
   scaleCents,
   scaleDeviations,
   scalesInFamily,
-} from '../scales';
-import { CHORDS } from '../chords';
-import { interval } from '../intervals';
-import { note } from '../notes';
-import { parseToken } from '../catalog/define';
+} from './scales';
+import { CHORDS } from './chords';
+import { interval } from './intervals';
+import { note } from './notes';
+import { parseToken } from './catalog/define';
 
 const rounded = (id: string) => scaleCents(SCALE_BY_ID[id]).map((c) => Math.round(c));
 

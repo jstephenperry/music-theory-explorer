@@ -28,8 +28,9 @@ export function useUrlState(key: string, initial: string): [string, (v: string) 
 }
 
 /**
- * Several URL parameters at once. `set(patch)` applies all keys in one navigation;
- * a value equal to its default (or undefined) removes the key from the URL.
+ * Several URL parameters at once. `set(patch)` applies all keys in one navigation; a value equal to
+ * its default (or undefined) removes the key from the URL. Updates start from the live URL, so
+ * several updates in the same event do not overwrite each other.
  */
 export function useUrlParams<T extends Record<string, string>>(defaults: T): [T, (patch: Partial<T>) => void] {
   const [params, setParams] = useSearchParams();

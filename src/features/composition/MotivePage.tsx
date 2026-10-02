@@ -1,7 +1,6 @@
 import { PageHeader, Panel } from '../../components/ui';
 import { ExcerptView } from './ExcerptView';
-import { INVENTION_1 } from './excerpts/bach';
-import { FIFTH_SYMPHONY } from './excerpts/beethoven';
+import { excerpt } from '../../repertoire';
 import { useScorePlayer } from './useScorePlayer';
 import { MotiveWorkshop } from './MotiveWorkshop';
 import { MotiveQuiz } from './MotiveQuiz';
@@ -18,8 +17,8 @@ export default function MotivePage() {
       />
       <Panel title="In the repertoire">
         <div className="stack">
-          <ExcerptView excerpt={INVENTION_1} player={player} />
-          <ExcerptView excerpt={FIFTH_SYMPHONY} player={player} />
+          <ExcerptView excerpt={excerpt('bwv772')} player={player} />
+          <ExcerptView excerpt={excerpt('op67')} player={player} />
         </div>
       </Panel>
       <Panel title="Motive workshop" eyebrow="Develop a motive">

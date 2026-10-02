@@ -34,10 +34,12 @@ export function Layout() {
   const [theme, setTheme] = usePersistentState<ThemePref>('theme', 'system');
   const [instrument, setInstrument] = usePersistentState<InstrumentId>('instrument', 'piano');
   const [volume, setVolume] = usePersistentState<number>('volume', 0.8);
-  const [navOpen, setNavOpen] = useState(false);
   const [lastMode, setLastMode] = usePersistentState<ModeId>('mode', 'theory');
   const settings = useAudioSettings();
   const location = useLocation();
+  // The drawer remembers the path it was opened on, so navigating closes it without an effect.
+  const [openedAt, setOpenedAt] = useState<string | null>(null);
+  const navOpen = openedAt === location.pathname;
 
   // The drawer shows the rooms of the mode the URL is in. The home page and unknown paths belong to
   // no mode, so they show the mode last visited.
@@ -76,11 +78,10 @@ export function Layout() {
     };
   }, []);
 
-  // Leaving a page stops anything that is playing and closes the mobile menu.
+  // Leaving a page stops anything that is playing.
   useEffect(() => {
     stopAllPlayback();
     audio.allNotesOff();
-    setNavOpen(false);
     window.scrollTo({ top: 0 });
     const route = ROUTES.find((r) => r.path === location.pathname);
     const here = modeForPath(location.pathname);
@@ -133,11 +134,11 @@ export function Layout() {
           (Salamander Grand Piano, Musyng Kite)
         </div>
       </aside>
-      {navOpen && <div className={s.scrim} onClick={() => setNavOpen(false)} aria-hidden="true" />}
+      {navOpen && <div className={s.scrim} onClick={() => setOpenedAt(null)} aria-hidden="true" />}
 
       <div className={s.main}>
         <header className={s.topbar}>
-          <button className={s.menuButton} onClick={() => setNavOpen((o) => !o)} aria-label="Open navigation" aria-expanded={navOpen}>
+          <button className={s.menuButton} onClick={() => setOpenedAt(navOpen ? null : location.pathname)} aria-label="Open navigation" aria-expanded={navOpen}>
             <Icon name="menu" size={20} />
           </button>
           <div className={s.topbarSpacer} />

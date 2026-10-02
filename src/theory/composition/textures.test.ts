@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pitchName } from '../../theory/notes';
+import { pitchName } from '../notes';
 import { TEXTURES, TEXTURE_PROGRESSIONS, TEXTURE_TONICS, buildTexture } from './textures';
 
 const names = (ps: { pitches: Parameters<typeof pitchName>[0][] }[]) => ps.map((n) => n.pitches.map((p) => pitchName(p, false)).join('+') || 'r');

@@ -106,24 +106,8 @@
   font-weight: 600;
   font-size: 0.9rem;
 }
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem 1rem;
-  font-size: 0.8rem;
-  color: var(--ink-muted);
+.belowPiano {
   margin-top: 0.5rem;
-}
-.legendItem {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35em;
-}
-.swatch {
-  display: inline-block;
-  width: 0.8em;
-  height: 0.8em;
-  border-radius: 50%;
 }
 .circleWrap {
   display: flex;
@@ -255,23 +239,11 @@
 }
 .techCard {
   display: flex;
-  flex-direction: column;
   gap: 0.2rem;
-  text-align: left;
   padding: 0.5rem 0.7rem 0.55rem;
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
   background: var(--bg-elev);
-  color: var(--ink);
-  cursor: pointer;
-  font: inherit;
-  transition: border-color 120ms ease, background 120ms ease;
-}
-.techCard:hover {
-  border-color: var(--rule-strong);
 }
 .techCardActive {
-  border-color: var(--accent);
   background: color-mix(in srgb, var(--accent-soft) 55%, var(--bg-elev));
   box-shadow: inset 3px 0 0 var(--accent);
 }

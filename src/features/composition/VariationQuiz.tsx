@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { ScoreView } from '../../components/ScoreView';
 import { PlayButton } from '../../components/ui';
-import { MELODY_TECHNIQUES, THEME_CHOICE, buildVariation, type VariationChoice } from './variations';
+import { MELODY_TECHNIQUES, THEME_CHOICE, buildVariation, type VariationChoice } from '../../theory/composition/variations';
 import { Quiz, type QuizQuestion } from './Quiz';
-import { pick } from './random';
+import { pick } from '../../theory/composition/random';
 import type { useScorePlayer } from './useScorePlayer';
 import s from './Composition.module.css';
 

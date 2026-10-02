@@ -161,7 +161,7 @@ export function JustSection({ a4 }: { a4: number }) {
               </tbody>
             </table>
           </div>
-          <p className="faint" style={{ fontSize: '0.82rem', margin: '0.6rem 0 0' }}>
+          <p className="note">
             Difference: how far 12-TET is from the pure ratio (positive = wider). Beats: rate for the 12-TET version above {pitchName(basePitch)}.
           </p>
         </Panel>
@@ -182,7 +182,7 @@ export function JustSection({ a4 }: { a4: number }) {
               onChange={setMode}
               size="sm"
             />
-            <div className="row" style={{ gap: '0.5rem' }}>
+            <div className="row row-tight">
               <Button size="sm" variant={tl.active === 'just' ? 'primary' : 'secondary'} icon="play" onClick={() => play('just')}>
                 Just
               </Button>
@@ -198,10 +198,10 @@ export function JustSection({ a4 }: { a4: number }) {
               }} aria-label="Stop" />
             </div>
             {j.note && <p className={s.prose}>{j.note}</p>}
-            <hr className="rule" style={{ margin: '0.25rem 0' }} />
-            <div className="row" style={{ justifyContent: 'space-between' }}>
+            <hr className="rule rule-tight" />
+            <div className="row row-between">
               <Toggle label="Hold and detune" checked={holding} onChange={(v) => (v ? setHolding(true) : release())} />
-              <span className="row" style={{ gap: '0.4rem' }}>
+              <span className="row row-tight">
                 <Button size="sm" variant="ghost" onClick={() => setOffset(0)}>
                   Pure
                 </Button>
@@ -256,7 +256,7 @@ export function JustSection({ a4 }: { a4: number }) {
                 </div>
               ))}
             </dl>
-            <div className="row" style={{ gap: '0.5rem' }}>
+            <div className="row row-tight">
               {thirds.map((t) => (
                 <Button key={t.id} size="sm" variant={tl.active === t.id ? 'primary' : 'secondary'} onClick={() => playThird(t.cents, t.id)}>
                   {t.name.split(' ')[0]}
@@ -275,7 +275,7 @@ export function JustSection({ a4 }: { a4: number }) {
             difference in hertz. Pure ratios make the partials coincide exactly, so the beating stops. With pure sine tones there
             are no upper partials, so a mistuned third hardly beats at all: try the Pure timbre.
           </p>
-          <p className="faint" style={{ fontSize: '0.88rem' }}>
+          <p className="note">
             Size check: {cents(5 / 4).toFixed(2)}¢ (5:4) versus 400¢ (12-TET).
           </p>
         </Callout>
@@ -312,14 +312,14 @@ function BeatPlot({ beat, p, q, lower, upper, audible }: { beat: number; p: numb
     return d;
   };
   return (
-    <figure style={{ margin: 0 }}>
-      <svg className={s.wave} style={{ height: 120 }} viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" role="img" aria-label={`Beat envelope over one second: ${beat.toFixed(2)} beats per second`}>
+    <figure className={s.figure}>
+      <svg className={`${s.wave} ${s.waveBeat}`} viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" role="img" aria-label={`Beat envelope over one second: ${beat.toFixed(2)} beats per second`}>
         <line x1={0} x2={W} y1={mid} y2={mid} style={{ stroke: 'var(--rule)' }} vectorEffect="non-scaling-stroke" />
         <path d={path} fill="none" style={{ stroke: 'var(--brass)' }} strokeWidth={1} strokeOpacity={0.8} vectorEffect="non-scaling-stroke" />
         <path d={envPath(1)} fill="none" style={{ stroke: 'var(--accent)' }} strokeWidth={2} vectorEffect="non-scaling-stroke" />
         <path d={envPath(-1)} fill="none" style={{ stroke: 'var(--accent)' }} strokeWidth={2} vectorEffect="non-scaling-stroke" />
       </svg>
-      <figcaption className="faint" style={{ fontSize: '0.8rem', marginTop: '0.3rem' }}>
+      <figcaption className="note">
         {audible
           ? `One second of partial ${p} of the lower note (${(p * lower).toFixed(1)} Hz) plus partial ${q} of the upper (${(q * upper).toFixed(1)} Hz). The envelope pulses ${beat.toFixed(2)} times per second; carrier not to scale.`
           : 'The coinciding partials are too high in the series to give clear beats.'}

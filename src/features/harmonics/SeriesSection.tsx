@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Button, Callout, Panel, PlayButton, RootPicker, Segmented, Stat, Tag } from '../../components/ui';
+import { Button, Callout, Panel, PlayButton, RootPicker, Segmented, Stat, Tag, Legend } from '../../components/ui';
 import { Piano, type KeyMark } from '../../components/Piano';
 import { Staff } from '../../components/Staff';
 import { note, noteName, pitchName, withOctave, type Note } from '../../theory/notes';
@@ -124,10 +124,10 @@ export function SeriesSection({ a4 }: { a4: number }) {
         title={`The harmonic series on ${pitchName(fundamental)}`}
         actions={<PlayButton playing={tl.playing} onPlay={playArpeggio} onStop={tl.stop} label="Play 1 to 16" />}
       >
-        <div className={s.controls} style={{ marginBottom: '1rem' }}>
+        <div className={`${s.controls} block`}>
           <RootPicker spellings="common" label="Fundamental" value={root} onChange={(n) => setRootName(noteName(n, false))} />
           <div>
-            <div className={s.refLabel} style={{ marginBottom: '0.3rem' }}>
+            <div className={`${s.refLabel} ${s.labelGap}`}>
               Octave
             </div>
             <Segmented ariaLabel="Octave of the fundamental" options={OCTAVES} value={octave} onChange={setOctave} size="sm" />
@@ -136,7 +136,7 @@ export function SeriesSection({ a4 }: { a4: number }) {
         </div>
 
         <div className={s.chartWrap}>
-          <svg className={s.chart} viewBox={`0 0 ${W} ${H}`} role="group" aria-label={`Spectrum of the first 16 partials of ${pitchName(fundamental)}. Click a bar to hear a partial.`} style={{ minWidth: 560 }}>
+          <svg className={`${s.chart} ${s.chartWide}`} viewBox={`0 0 ${W} ${H}`} role="group" aria-label={`Spectrum of the first 16 partials of ${pitchName(fundamental)}. Click a bar to hear a partial.`}>
             <line x1={padL} x2={W - padR} y1={base} y2={base} stroke="var(--rule-strong)" strokeWidth={1} />
             {series.map((p, i) => {
               const cx = padL + slot * (i + 0.5);
@@ -192,21 +192,15 @@ export function SeriesSection({ a4 }: { a4: number }) {
             </text>
           </svg>
         </div>
-        <div className={s.legend} style={{ marginTop: '0.5rem' }}>
-          <span>
-            <span className={s.swatch} style={{ background: 'var(--royal)' }} />
-            Flat of 12-TET
-          </span>
-          <span>
-            <span className={s.swatch} style={{ background: 'var(--accent)' }} />
-            Sharp of 12-TET
-          </span>
-          <span>
-            <span className={s.swatch} style={{ background: 'var(--verdigris)' }} />
-            Within 5 cents
-          </span>
-          <span className="faint">Click any bar, note or key to hear it.</span>
-        </div>
+        <Legend
+          className={s.chartLegend}
+          items={[
+            { color: 'var(--royal)', label: 'Flat of 12-TET' },
+            { color: 'var(--accent)', label: 'Sharp of 12-TET' },
+            { color: 'var(--verdigris)', label: 'Within 5 cents' },
+          ]}
+          note="Click any bar, note or key to hear it."
+        />
       </Panel>
 
       <div className={s.grid2}>
@@ -232,7 +226,7 @@ export function SeriesSection({ a4 }: { a4: number }) {
               ariaLabel={`Treble staff with partials ${lowParts.length + 1} to 16 of ${pitchName(fundamental)}, cents deviation below each note`}
             />
           )}
-          <p className="faint" style={{ fontSize: '0.85rem', margin: '0.25rem 0 0.75rem' }}>
+          <p className="note block">
             Numbers above are partials; numbers below are cents from 12-tone equal temperament.
           </p>
           <Piano from={lowKey} to={highKey} marks={marks} pressed={pressed} labels="c" ariaLabel="Keyboard with the nearest key of each partial marked by its number" />
@@ -242,7 +236,7 @@ export function SeriesSection({ a4 }: { a4: number }) {
           <div className={s.detail}>
             <div className={s.detailHead}>
               <span className={s.bigNote}>{pitchName(f.pitch)}</span>
-              <span className={devClass(f.deviation)} style={{ fontWeight: 700, fontSize: '1.1rem' }}>
+              <span className={`${devClass(f.deviation)} ${s.devBig}`}>
                 {Math.abs(f.deviation) < 0.05 ? 'exactly in tune' : `${formatCents(f.deviation, 1)} cents`}
               </span>
             </div>
@@ -273,7 +267,7 @@ export function SeriesSection({ a4 }: { a4: number }) {
                 </button>
               ))}
             </div>
-            <div className="row" style={{ gap: '0.4rem' }}>
+            <div className="row row-tight">
               {CHORD_PRESETS.map((c) => (
                 <Button key={c.label} size="sm" variant="ghost" title={c.title} onClick={() => setChosen(c.parts)}>
                   {c.label}
@@ -326,7 +320,7 @@ function PartialNote({ p }: { p: Partial }) {
       ? 'Another octave of the fundamental, exactly in tune.'
       : `An octave above partial ${p.n / 2}, so it deviates from 12-TET by the same amount.`);
   return (
-    <p className="serif" style={{ margin: 0, color: 'var(--ink-muted)' }}>
+    <p className="serif muted flush">
       {text} {p.n > 1 && <Tag tone={Math.abs(p.deviation) < 5 ? 'verdigris' : p.deviation > 0 ? 'accent' : 'royal'}>{Math.abs(p.deviation) < 5 ? 'close to 12-TET' : p.deviation > 0 ? 'sharp' : 'flat'}</Tag>}
     </p>
   );

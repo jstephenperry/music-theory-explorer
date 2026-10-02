@@ -4,10 +4,11 @@
 import type { Key } from '../../theory/keys';
 import type { Pitch } from '../../theory/notes';
 import type { RomanChord } from '../../theory/roman';
-import { describeChord, FUNCTION_LABEL, type ChordDescription, type HarmonicFunction } from './harmony';
+import { describeChord, FUNCTION_LABEL, type ChordDescription, type HarmonicFunction } from '../../theory/harmony';
 import { chordLabel, tryParseNumeral, type ProgItem } from './model';
 import { cx, fnClass } from './classes';
 import s from './Progressions.module.css';
+import { Legend } from '../../components/ui';
 
 export interface LabChord {
   item: ProgItem;
@@ -54,15 +55,8 @@ const LEGEND: Array<{ fn: HarmonicFunction; tip: string }> = [
   { fn: 'chromatic', tip: 'Chromatic or borrowed: secondary dominants, modal interchange, substitutes, Neapolitan, augmented sixths, mediants.' },
 ];
 
+const FN_COLOR: Record<HarmonicFunction, string> = { tonic: 'var(--verdigris)', predominant: 'var(--royal)', dominant: 'var(--accent)', chromatic: 'var(--plum)' };
+
 export function FunctionLegend() {
-  return (
-    <div className={s.legend} aria-label="Harmonic function colors">
-      {LEGEND.map((l) => (
-        <span key={l.fn} className={cx(s.legendItem, fnClass(l.fn))} title={l.tip}>
-          <span className={s.swatch} aria-hidden="true" />
-          {FUNCTION_LABEL[l.fn]}
-        </span>
-      ))}
-    </div>
-  );
+  return <Legend ariaLabel="Harmonic function colors" items={LEGEND.map((l) => ({ color: FN_COLOR[l.fn], label: FUNCTION_LABEL[l.fn], title: l.tip }))} />;
 }

@@ -8,6 +8,7 @@
  */
 import { pitchInterval, type Interval } from '../intervals';
 import { LETTERS, letterIndex, midi, type Pitch } from '../notes';
+import { cap } from '../../lib/format';
 
 export type Species = 1 | 2;
 
@@ -354,7 +355,6 @@ export function isComplete(ex: Exercise, cp: CPNote[]): boolean {
   return true;
 }
 
-const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 // ---------------------------------------------------------------------------
 // Solver

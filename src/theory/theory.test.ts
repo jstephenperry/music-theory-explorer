@@ -7,7 +7,7 @@ import {
   makeKey, keySignatureFifths, keySignature, relativeKey, diatonicChords, vexKeySpec, closelyRelatedKeys,
   parseRoman, analyzeChord, formatRoman, splitProgression,
   voiceChord, voiceProgression, pitchName as pn,
-} from '..';
+} from './index';
 
 const names = (ns: { letter: string; acc: number }[]) => ns.map((n) => noteName(n as never, false)).join(' ');
 

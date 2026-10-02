@@ -1,7 +1,7 @@
 import type { Player } from '../../audio/usePlayer';
 import { audio } from '../../audio/engine';
 import { Staff } from '../../components/Staff';
-import { Callout, Empty, PlayButton, Segmented, Tag } from '../../components/ui';
+import { Callout, Empty, PlayButton, Segmented, Tag, Legend, Chip } from '../../components/ui';
 import { scaleIntervals, type ScaleDef } from '../../theory/scales';
 import { midi, noteName, pc, type Note } from '../../theory/notes';
 import { transpose } from '../../theory/intervals';
@@ -75,12 +75,12 @@ export function HarmonyPanel({
         {harmony.map((c, i) => {
           const colorful = c.notes.some((n) => charPcs.has(pc(n)));
           return (
-            <button key={i} className={`${s.chordChip} ${active === i ? s.chordChipActive : ''}`} onClick={() => playChord(i)} aria-pressed={active === i}>
+            <Chip key={i} tone="royal" active={active === i} className={s.chordChip} onClick={() => playChord(i)} aria-pressed={active === i}>
               <span className={s.chordNumeral}>{c.numeral}</span>
               <span className={s.chordSymbol}>{c.symbol}</span>
               <span className={s.chordNotes}>{c.notes.map((n) => noteName(n)).join(' ')}</span>
               {colorful && <span className={s.chordColorDot} title="Contains a characteristic note" />}
-            </button>
+            </Chip>
           );
         })}
       </div>
@@ -92,12 +92,10 @@ export function HarmonyPanel({
         eventWidth={56}
         ariaLabel={`Diatonic ${sevenths ? 'seventh chords' : 'triads'} of ${noteName(root)} ${scale.name}: ${harmony.map((c) => c.symbol).join(', ')}`}
       />
-      <div className={s.legend}>
-        <span className={s.legendItem}>
-          <span className={s.chordColorDotInline} /> Contains a characteristic note: these chords carry the scale's color.
-        </span>
-        {harmony.some((c) => !c.chordId) && <Tag tone="plum">≈ marks stacks with no standard name; the nearest enharmonic chord is shown</Tag>}
-      </div>
+      <Legend
+        items={[{ color: 'var(--hl-alt)', label: "Contains a characteristic note: these chords carry the scale's color.", dot: true }]}
+        note={harmony.some((c) => !c.chordId) && <Tag tone="plum">≈ marks stacks with no standard name; the nearest enharmonic chord is shown</Tag>}
+      />
       <Callout title="Numerals from the scale's own tonic">
         Roman numerals here count from {noteName(root)}, not from a parent major key. Case shows quality (upper case major, lower case minor, ° diminished, + augmented),
         and an accidental shows a degree that differs from the major scale on the same tonic, so {shortName(scale.name)} reads {harmony.map((c) => c.numeral).join(' ')}.

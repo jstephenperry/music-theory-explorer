@@ -1,11 +1,6 @@
 import { intervalLongName, type Interval } from '../../theory/intervals';
 
-/** Signed cents with a true minus sign: +4, −31.2, 0. */
-export function formatCents(c: number, digits = 0): string {
-  const r = Number(c.toFixed(digits));
-  if (r === 0) return '0';
-  return (r > 0 ? '+' : '−') + Math.abs(r).toFixed(digits);
-}
+export { formatCents } from '../../lib/format';
 
 export function chunk<T>(arr: T[], n: number): T[][] {
   const out: T[][] = [];

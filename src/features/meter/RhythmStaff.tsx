@@ -4,7 +4,7 @@
  * line wrapping, clickable notes and imperative highlighting for playback (no re-engraving).
  */
 import { useEffect, useImperativeHandle, useRef, useState, type Ref } from 'react';
-import { loadVexFlow } from '../../components/Staff';
+import { loadVexFlow } from '../../components/vexflow';
 import { cssVar, useThemeVersion } from '../../components/theme';
 import { isBeamable, type RMeasure, type RPart } from './rhythmNotation';
 import s from './RhythmStaff.module.css';

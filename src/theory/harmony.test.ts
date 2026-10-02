@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { makeKey } from '../../theory/keys';
-import { parseRoman } from '../../theory/roman';
+import { makeKey } from './keys';
+import { parseRoman } from './roman';
 import { describeChord, detectCadence } from './harmony';
 
 const C = makeKey('C', 'major');

@@ -23,7 +23,7 @@ import {
   type Exercise,
   type Species,
 } from '../../theory/composition/counterpoint';
-import { clefFor } from './scoreUtils';
+import { clefFor } from '../../theory/composition/scoreUtils';
 import type { useScorePlayer } from './useScorePlayer';
 import s from './Composition.module.css';
 

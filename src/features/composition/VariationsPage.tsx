@@ -1,6 +1,6 @@
 import { PageHeader, Panel } from '../../components/ui';
 import { ExcerptView } from './ExcerptView';
-import { K265_THEME, K265_VAR1 } from './excerpts/mozart';
+import { excerpt } from '../../repertoire';
 import { VariationQuiz } from './VariationQuiz';
 import { VariationWorkshop } from './VariationWorkshop';
 import { useScorePlayer } from './useScorePlayer';
@@ -17,8 +17,8 @@ export default function VariationsPage() {
       />
       <Panel title="In the repertoire">
         <div className="stack">
-          <ExcerptView excerpt={K265_THEME} player={player} />
-          <ExcerptView excerpt={K265_VAR1} player={player} />
+          <ExcerptView excerpt={excerpt('k265theme')} player={player} />
+          <ExcerptView excerpt={excerpt('k265var1')} player={player} />
         </div>
       </Panel>
       <Panel title="Variation workshop" eyebrow="Change one thing at a time">

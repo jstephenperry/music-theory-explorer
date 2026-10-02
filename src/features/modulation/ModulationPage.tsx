@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router';
 import { Piano, type KeyMark } from '../../components/Piano';
-import { Button, Callout, PageHeader, Panel, RootPicker, Segmented, Select, Stat, Tabs, Tag } from '../../components/ui';
+import { Button, Callout, PageHeader, Panel, RootPicker, Segmented, Select, Stat, Tabs, Tag, Chip, Legend } from '../../components/ui';
 import { usePersistentState } from '../../hooks/usePersistentState';
 import { keyName, keyNotes, keySignatureFifths, makeKey, type Key, type KeyMode } from '../../theory/keys';
 import { accidentalString, noteName, pc } from '../../theory/notes';
@@ -158,17 +158,14 @@ function RelationPanel({ from, to, onPick }: { from: Key; to: Key; onPick: (k: K
           </li>
         </ul>
         <Piano from={base} to={base + 11} pcMarks={pcMarks} labels="none" height={110} ariaLabel="Scale comparison on one octave" />
-        <div className={s.legend}>
-          <span className={s.legendItem}>
-            <span className={s.swatch} style={{ background: 'var(--brass)' }} /> In both scales
-          </span>
-          <span className={s.legendItem}>
-            <span className={s.swatch} style={{ background: 'var(--ink-faint)' }} /> Only in {keyName(from)}
-          </span>
-          <span className={s.legendItem}>
-            <span className={s.swatch} style={{ background: 'var(--verdigris)' }} /> Only in {keyName(to)}
-          </span>
-        </div>
+        <Legend
+          className={s.belowPiano}
+          items={[
+            { color: 'var(--brass)', label: 'In both scales', dot: true },
+            { color: 'var(--ink-faint)', label: `Only in ${keyName(from)}`, dot: true },
+            { color: 'var(--verdigris)', label: `Only in ${keyName(to)}`, dot: true },
+          ]}
+        />
       </div>
       <CircleDiagram from={from} to={to} onPick={onPick} />
     </div>
@@ -231,11 +228,11 @@ export default function ModulationPage() {
             const st = statuses[i];
             const active = t.id === techId;
             return (
-              <button
+              <Chip
                 key={t.id}
-                type="button"
                 role="radio"
                 aria-checked={active}
+                active={active}
                 className={`${s.techCard} ${active ? s.techCardActive : ''} ${st.available ? '' : s.techCardOff}`}
                 title={t.short}
                 onClick={() => q.set({ t: t.id, opt: '' })}
@@ -246,7 +243,7 @@ export default function ModulationPage() {
                 </span>
                 <span className={s.techName}>{t.name}</span>
                 <span className={s.techShort}>{t.short}</span>
-              </button>
+              </Chip>
             );
           })}
         </div>

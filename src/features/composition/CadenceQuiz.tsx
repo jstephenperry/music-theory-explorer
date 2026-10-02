@@ -2,9 +2,9 @@ import { useMemo } from 'react';
 import { ScoreView } from '../../components/ScoreView';
 import { PlayButton } from '../../components/ui';
 import { keyName, makeKey } from '../../theory/keys';
-import { CADENCE_TYPES, cadenceScore, transposeScore, type CadenceId } from './cadences';
+import { CADENCE_TYPES, cadenceScore, transposeScore, type CadenceId } from '../../theory/composition/cadences';
 import { Quiz, type QuizQuestion } from './Quiz';
-import { pick } from './random';
+import { pick } from '../../theory/composition/random';
 import type { useScorePlayer } from './useScorePlayer';
 import s from './Composition.module.css';
 

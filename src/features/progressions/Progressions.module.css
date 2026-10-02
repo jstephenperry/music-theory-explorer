@@ -177,25 +177,6 @@
   padding-top: 0.5rem;
   border-top: 1px solid var(--rule);
 }
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 1rem;
-  font-size: 0.82rem;
-  color: var(--ink-muted);
-}
-.legendItem {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  cursor: help;
-}
-.swatch {
-  width: 12px;
-  height: 12px;
-  border-radius: 3px;
-  background: var(--fn);
-}
 .cadence {
   display: flex;
   align-items: baseline;
@@ -514,6 +495,11 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
+}
+.vlHead {
+  color: var(--ink-muted);
+  font-weight: 600;
+  font-size: 0.8rem;
 }
 .vlLine {
   width: 18px;

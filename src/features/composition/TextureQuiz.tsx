@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { ScoreView } from '../../components/ScoreView';
 import { PlayButton } from '../../components/ui';
-import { TEXTURES, TEXTURE_PROGRESSIONS, TEXTURE_TONICS, buildTexture, type TextureId } from './textures';
+import { TEXTURES, TEXTURE_PROGRESSIONS, TEXTURE_TONICS, buildTexture, type TextureId } from '../../theory/composition/textures';
 import { Quiz, type QuizQuestion } from './Quiz';
-import { pick } from './random';
+import { pick } from '../../theory/composition/random';
 import type { useScorePlayer } from './useScorePlayer';
 import s from './Composition.module.css';
 

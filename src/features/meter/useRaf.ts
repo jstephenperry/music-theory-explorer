@@ -4,7 +4,9 @@ import { audio } from '../../audio/engine';
 /** Run `cb` on every animation frame while `active` is true. */
 export function useRaf(active: boolean, cb: (now: number) => void): void {
   const ref = useRef(cb);
-  ref.current = cb;
+  useEffect(() => {
+    ref.current = cb;
+  });
   useEffect(() => {
     if (!active) return;
     let id = 0;

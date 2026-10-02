@@ -3,20 +3,11 @@
  * Also used for polymeters (rows = layers' cycles over the shared pulse).
  */
 import { useImperativeHandle, useRef, type Ref } from 'react';
-import { LAYER_COLORS, LAYER_NAMES } from './layers';
+import type { GridRow } from './layers';
 
 export interface GridHandle {
   /** Position in grid steps (fractional), or null to hide. */
   update: (step: number | null) => void;
-}
-
-export interface GridRow {
-  label: string;
-  colorVar: string;
-  /** Cell kinds: 0 = empty, 1 = onset, 2 = strong onset (cycle start). */
-  cells: number[];
-  /** Optional cycle boundaries (drawn as brackets) in steps. */
-  cycle?: number;
 }
 
 const ROW_H = 26;
@@ -117,6 +108,3 @@ export function LcmGrid({
   );
 }
 
-export function layerRows(gridRows: boolean[][], labels?: string[]): GridRow[] {
-  return gridRows.map((r, i) => ({ label: labels?.[i] ?? LAYER_NAMES[i], colorVar: LAYER_COLORS[i], cells: r.map((x) => (x ? 2 : 0)) }));
-}

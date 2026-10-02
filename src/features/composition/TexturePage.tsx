@@ -1,7 +1,6 @@
 import { PageHeader, Panel } from '../../components/ui';
 import { ExcerptView } from './ExcerptView';
-import { CHORALE_269, WTC_C_PRELUDE } from './excerpts/bach';
-import { K545_OPENING } from './excerpts/mozart';
+import { excerpt } from '../../repertoire';
 import { TextureLab } from './TextureLab';
 import { TextureQuiz } from './TextureQuiz';
 import { useScorePlayer } from './useScorePlayer';
@@ -18,9 +17,9 @@ export default function TexturePage() {
       />
       <Panel title="In the repertoire">
         <div className="stack">
-          <ExcerptView excerpt={CHORALE_269} player={player} />
-          <ExcerptView excerpt={K545_OPENING} player={player} />
-          <ExcerptView excerpt={WTC_C_PRELUDE} player={player} />
+          <ExcerptView excerpt={excerpt('bwv269')} player={player} />
+          <ExcerptView excerpt={excerpt('k545')} player={player} />
+          <ExcerptView excerpt={excerpt('bwv846')} player={player} />
         </div>
       </Panel>
       <Panel title="Texture lab" eyebrow="One progression, six textures">

@@ -3,7 +3,7 @@ import { PageHeader, Tabs } from '../../components/ui';
 import { BuildTab } from './BuildTab';
 import type { BuildState } from './chordLogic';
 import { IdentifyTab } from './IdentifyTab';
-import { useQuery } from './useQuery';
+import { useUrlParams } from '../../hooks/useUrlState';
 
 type Tab = 'build' | 'identify';
 
@@ -14,7 +14,7 @@ function parseNotes(s: string): number[] {
 }
 
 export default function ChordsPage() {
-  const [q, update] = useQuery(DEFAULTS);
+  const [q, update] = useUrlParams(DEFAULTS);
   const tab: Tab = q.tab === 'identify' ? 'identify' : 'build';
   const state: BuildState = {
     root: tryNote(q.root) ?? { letter: 'C', acc: 0 },
