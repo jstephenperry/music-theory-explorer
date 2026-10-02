@@ -10,7 +10,8 @@ src/
   theory/      Pure music-theory engine (no React, no DOM). Fully unit tested.
   audio/       Web Audio synthesis engine, lookahead sequencer, playback hooks.
   components/  Shared UI: Piano, Staff (VexFlow), ui.tsx primitives, Icon, theme helpers.
-  hooks/       usePersistentState, useUrlState, useMediaQuery, useMidiInput, useComputerKeyboard.
+  hooks/       usePersistentState, useUrlState (and useUrlParams), useMediaQuery, useMidiInput, useComputerKeyboard.
+  lib/         Small shared helpers with no music in them: format.ts (formatCents, flat, cap, countWord).
   app/         App shell, routing (HashRouter), the registry of modes, sections and rooms, layout.
   repertoire/  The encoded classical excerpts, one file per work, with a registry and borrowing helpers.
   features/    One folder per page ("room"). Each owns its components, styles and logic.
@@ -146,10 +147,14 @@ Import from `src/theory` (barrel) or from individual modules.
   highlight layers, brackets, commentary and its source; `Quiz` is the shared multiple-choice drill.
   Generators with tests: `phrase.ts` (periods, sentences, cadence analysis), `cadences.ts`,
   `textures.ts`, `variations.ts`.
-- Hooks: `useUrlState(key, default)` and `useUrlParams(defaults)` keep shareable state in the URL;
+- Hooks: `useUrlState(key, default)` and `useUrlParams(defaults)` (in `hooks/useUrlState.ts`, the
+  only URL hooks) keep shareable state in the URL;
   `usePersistentState` keeps preferences in localStorage; `useMediaQuery`; `useMidiInput`; `useComputerKeyboard`.
 - `ui.tsx`: `Button`, `PlayButton`, `Segmented`, `Select`, `TextInput`, `Slider`, `Toggle`, `Panel`,
-  `PageHeader`, `Tag`, `Callout`, `Tabs`, `RootPicker`, `Stat`, `Empty`.
+  `PageHeader`, `Tag`, `Callout`, `Tabs`, `RootPicker`, `Stat` (a label over a value, in three sizes),
+  `Legend` (swatches with labels and a trailing note), `Chip` (a selectable card; rooms add their
+  inner layout through `className`, the primitive owns the border, hover and active states), `Empty`.
+  Use these before writing a room-specific chip, legend or fact style.
 - `theme.ts`: `cssVar`, `resolveColor`, `useThemeVersion` for canvas/SVG drawings that need theme colors.
 
 ## Design language
@@ -160,6 +165,10 @@ aged brass. Use the tokens in `styles/global.css` (`--bg`, `--bg-elev`, `--bg-su
 their `-soft` variants). Headings use `--font-display` (Cormorant Garamond), UI text `--font-ui`
 (Source Sans 3), prose `--font-serif` (Source Serif 4). Soft radii, thin rules, no neon, no heavy shadows.
 Both themes (light and dark) must look right; never hard-code colors that ignore the theme.
+Spacing and type come from classes, not inline styles: `global.css` has `.row`, `.row-tight`,
+`.row-between`, `.block`, `.after`, `.flush`, `.note` and `.rule-tight` for the common cases, and a
+room's module holds the rest. Inline `style` is for values computed from data (a bar's fill, a
+swatch's color).
 
 Rooms whose controls change a shared work surface (the keyboard and staff in Scales & Modes, the
 progression strip in the Progression Lab) put that surface first and give it the global `dock`

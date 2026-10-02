@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Piano, type KeyMark } from '../../components/Piano';
 import { Staff, type StaffEvent } from '../../components/Staff';
-import { Button, Callout, Panel, PageHeader, PlayButton, RootPicker, Segmented, Slider, Tabs, Tag, Toggle } from '../../components/ui';
+import { Button, Callout, Legend as UiLegend, Panel, PageHeader, PlayButton, RootPicker, Segmented, Slider, Stat, Tabs, Tag, Toggle, Chip } from '../../components/ui';
 import { usePlayer } from '../../audio/usePlayer';
 import { audio } from '../../audio/engine';
 import { usePersistentState } from '../../hooks/usePersistentState';
@@ -28,7 +28,7 @@ import { bestRootSpelling, formTones, parentRoot, rootFromParam, rootToParam, sc
 import { melody, shortName, type LabelMode, type PlayData, type View } from './shared';
 import { traditionOrder } from './browse';
 import { ScaleBrowser } from './ScaleBrowser';
-import { useUrlParams } from './useUrlParams';
+import { useUrlParams } from '../../hooks/useUrlState';
 import { useDrone } from './useDrone';
 import { ModesPanel } from './ModesPanel';
 import { HarmonyPanel } from './HarmonyPanel';
@@ -349,10 +349,11 @@ export default function ScalesPage() {
           )}
           <p className={s.description}>{scale.description}</p>
           <div className={s.facts}>
-            <Fact label="Notes" value={String(scale.intervals.length)} />
-            {scale.facts?.map(([label, value]) => <Fact key={label} label={label} value={value} small />)}
+            <Stat size="sm" label="Notes" value={String(scale.intervals.length)} />
+            {scale.facts?.map(([label, value]) => <Stat key={label} size="xs" label={label} value={value} />)}
             {customaryTonic && !sameNote(customaryTonic, root) && (
-              <Fact
+              <Stat
+                size="sm"
                 label="Customary tonic"
                 value={
                   <button className={s.linkButton} onClick={() => setRootScale(customaryTonic, scale.id)}>
@@ -362,7 +363,8 @@ export default function ScalesPage() {
               />
             )}
             {pr && (
-              <Fact
+              <Stat
+                size="sm"
                 label="Parent"
                 value={
                   <button className={s.linkButton} onClick={() => setRootScale(pr.root, pr.parent.id)}>
@@ -371,9 +373,10 @@ export default function ScalesPage() {
                 }
               />
             )}
-            {scale.brightness !== undefined && <Fact label="Brightness" value={`${scale.brightness} of 7`} />}
+            {scale.brightness !== undefined && <Stat size="sm" label="Brightness" value={`${scale.brightness} of 7`} />}
             {typicalChord && (
-              <Fact
+              <Stat
+                size="sm"
                 label="Fits over"
                 value={
                   <button className={s.linkButton} onClick={playTypical} title="Play the chord">
@@ -382,7 +385,7 @@ export default function ScalesPage() {
                 }
               />
             )}
-            {transpositions < 12 && <Fact label="Distinct transpositions" value={String(transpositions)} />}
+            {transpositions < 12 && <Stat size="sm" label="Distinct transpositions" value={String(transpositions)} />}
           </div>
           {simpler && !sameNote(simpler, root) && (
             <p className={s.note}>
@@ -519,15 +522,6 @@ function compareMarks(root: Note, aId: string, bId: string, labelMode: LabelMode
   return out;
 }
 
-function Fact({ label, value, small }: { label: string; value: React.ReactNode; small?: boolean }) {
-  return (
-    <div className={`${s.fact} ${small ? s.factSmall : ''}`}>
-      <span className={s.factLabel}>{label}</span>
-      <span className={s.factValue}>{value}</span>
-    </div>
-  );
-}
-
 /** Other scales (in any tradition) with exactly the same pitches on the same root. */
 function sameNotesElsewhere(root: Note, scale: ScaleDef): ScaleDef[] {
   const rootPc = pc(root);
@@ -551,10 +545,10 @@ function Equivalents({ list, root, onLoad }: { list: ScaleDef[]; root: Note; onL
       <span className={s.factLabel}>Same notes on {noteName(root)}</span>
       <div className={s.equivalentList}>
         {shown.map((x) => (
-          <button key={x.id} className={s.equivalent} onClick={() => onLoad(x.id)} title={`${TRADITION_BY_ID[x.tradition].name}: ${x.family}`}>
+          <Chip key={x.id} className={s.equivalent} onClick={() => onLoad(x.id)} title={`${TRADITION_BY_ID[x.tradition].name}: ${x.family}`}>
             {shortName(x.name)}
             <span className={s.equivalentTrad}>{TRADITION_BY_ID[x.tradition].short}</span>
-          </button>
+          </Chip>
         ))}
         {list.length > EQUIVALENT_LIMIT && (
           <button className={s.linkButton} onClick={() => setAll((v) => !v)}>
@@ -693,22 +687,8 @@ function Legend({ view, micro }: { view: View; micro: boolean }) {
               ['tone', 'Scale note'],
               ['alt', 'Characteristic note'],
             ];
-  return (
-    <div className={s.legend}>
-      {items.map(([role, label]) => (
-        <span key={role} className={s.legendItem}>
-          <span className={s.swatch} style={{ background: role === 'muted' ? 'transparent' : `var(--hl-${role})`, borderColor: role === 'muted' ? 'var(--ink-faint)' : `var(--hl-${role})` }} />
-          {label}
-        </span>
-      ))}
-      {view === 'finder' && <span className={s.legendHint}>Click keys to select notes.</span>}
-      {micro && view !== 'finder' && (
-        <span className={s.legendItem}>
-          <span className={`${s.swatch} ${s.swatchRing}`} />
-          Ringed: the pitch lies between keys
-        </span>
-      )}
-    </div>
-  );
+  const legend = items.map(([role, label]) => (role === 'muted' ? { color: 'var(--ink-faint)', label, ring: true } : { color: `var(--hl-${role})`, label, dot: true }));
+  if (micro && view !== 'finder') legend.push({ color: 'var(--hl-tone)', label: 'Ringed: the pitch lies between keys', ring: true });
+  return <UiLegend items={legend} note={view === 'finder' ? 'Click keys to select notes.' : undefined} />;
 }
 

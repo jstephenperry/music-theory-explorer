@@ -50,42 +50,6 @@
   margin: 0 auto;
 }
 
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.3rem 1rem;
-  font-size: 0.8rem;
-  color: var(--ink-muted);
-}
-.legend span {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-.sw {
-  display: inline-block;
-  width: 0.85rem;
-  height: 0.85rem;
-  border-radius: 3px;
-  border: 1px solid var(--rule-strong);
-}
-.swSelected {
-  background: var(--accent);
-}
-.swRelative {
-  background: var(--accent-soft);
-}
-.swRelated {
-  background: var(--brass-soft);
-}
-.swParallel {
-  background: var(--plum-soft);
-}
-.swPointed {
-  background: var(--verdigris-soft);
-  border-color: var(--verdigris);
-}
 
 /* ---------- Wheel ---------- */
 .wheel {

@@ -5,10 +5,10 @@ import { usePersistentState } from '../../hooks/usePersistentState';
 import { BASIC_IDEAS, CADENCE_KINDS, PHRASE_TONICS, buildPhrase, type AccompStyleId, type CadenceKind, type PhraseChoice, type PhraseForm, type Repetition } from './phrase';
 import type { useScorePlayer } from './useScorePlayer';
 import s from './Composition.module.css';
+import { flat } from '../../lib/format';
 
 const DEFAULT: PhraseChoice = { form: 'period', idea: 'lilting', repetition: 'response', first: 'hc', last: 'pac', tonic: 'C', accomp: 'alberti' };
 
-const flat = (t: string) => t.replace('b', '♭');
 
 /** Assemble an eight-bar period or sentence from units, hear it, and see whether it works. */
 export function PhraseBuilder({ player }: { player: ReturnType<typeof useScorePlayer> }) {

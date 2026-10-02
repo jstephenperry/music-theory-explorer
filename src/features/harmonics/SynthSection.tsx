@@ -123,30 +123,30 @@ export function SynthSection({ a4 }: { a4: number }) {
           />
         }
       >
-        <div className={s.controls} style={{ marginBottom: '1rem' }}>
+        <div className={`${s.controls} block`}>
           <Select label="Pitch" value={String(pitchMidi)} onChange={(v) => setPitchMidi(Number(v))} options={PITCHES} />
           <Stat label="Frequency" value={`${freq.toFixed(1)} Hz`} />
           <Stat label="Brightness" value={centroid ? centroid.toFixed(2) : 'none'} title="Spectral centroid: the amplitude-weighted average partial number" />
           <Stat label="Even partials" value={`${Math.round(evenShare * 100)}%`} title="Share of energy in even-numbered partials" />
         </div>
-        <div className="row" style={{ gap: '0.4rem', marginBottom: '0.9rem' }} role="group" aria-label="Presets">
+        <div className="row row-tight block" role="group" aria-label="Presets">
           {SYNTH_PRESETS.map((p) => (
             <Button key={p.id} size="sm" variant={preset === p.id ? 'primary' : 'secondary'} onClick={() => applyPreset(p.id)} title={p.hint} aria-pressed={preset === p.id}>
               {p.name}
             </Button>
           ))}
         </div>
-        <p className={s.prose} style={{ marginBottom: '0.9rem' }}>
+        <p className={`${s.prose} block`}>
           {presetHint}
         </p>
 
         <div className={s.grid2}>
           <div>
-            <div className={s.refLabel} style={{ marginBottom: '0.35rem' }}>
+            <div className={`${s.refLabel} ${s.labelGap}`}>
               Partial amplitudes (drag to draw)
             </div>
             <PartialEditor amps={safeSpec.amps} onChange={setAmp} />
-            <div className="row" style={{ marginTop: '0.75rem', gap: '0.5rem' }}>
+            <div className="row row-tight after">
               <Button size="sm" icon="sparkle" onClick={buildUp} title="Start from the fundamental and add one partial at a time">
                 Build up partial by partial
               </Button>
@@ -156,11 +156,11 @@ export function SynthSection({ a4 }: { a4: number }) {
             </div>
           </div>
           <div>
-            <div className={s.refLabel} style={{ marginBottom: '0.35rem' }}>
+            <div className={`${s.refLabel} ${s.labelGap}`}>
               One period of the waveform
             </div>
             <Waveform spec={safeSpec} showParts={showParts} />
-            <div className="row" style={{ marginTop: '0.75rem', gap: '0.5rem' }}>
+            <div className="row row-tight after">
               <Toggle label="Show components" checked={showParts} onChange={setShowParts} />
               <Button size="sm" icon="shuffle" onClick={randomizePhases} title="Shift each partial in time by a random amount">
                 Randomize phases

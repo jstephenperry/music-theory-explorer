@@ -5,6 +5,7 @@
  */
 import { useImperativeHandle, useRef, type Ref } from 'react';
 import { LAYER_COLORS } from './layers';
+import s from './Polyrhythm.module.css';
 
 const C = 150;
 const R = 118;
@@ -47,7 +48,7 @@ export function PolyClock({ counts, gridSize, handle, label }: { counts: number[
   );
 
   return (
-    <svg viewBox="0 0 300 300" role="img" aria-label={label} style={{ width: '100%', maxWidth: 340, display: 'block', margin: '0 auto' }}>
+    <svg viewBox="0 0 300 300" role="img" aria-label={label} className={s.clockSvg}>
       <circle cx={C} cy={C} r={R + 14} style={{ fill: 'var(--bg-sunk)', stroke: 'var(--rule)' }} />
       <circle cx={C} cy={C} r={R} style={{ fill: 'none', stroke: 'var(--rule-strong)', strokeWidth: 0.8 }} />
       {gridSize <= 120 &&
@@ -117,7 +118,7 @@ export function MeterRings({ lengths, handle, label }: { lengths: number[]; hand
     [lengths],
   );
   return (
-    <svg viewBox="0 0 300 300" role="img" aria-label={label} style={{ width: '100%', maxWidth: 340, display: 'block', margin: '0 auto' }}>
+    <svg viewBox="0 0 300 300" role="img" aria-label={label} className={s.clockSvg}>
       <circle cx={C} cy={C} r={R + 14} style={{ fill: 'var(--bg-sunk)', stroke: 'var(--rule)' }} />
       <line x1={C} y1={C - R - 14} x2={C} y2={C - radii[radii.length - 1] + 14} style={{ stroke: 'var(--brass)', strokeWidth: 1, strokeDasharray: '3 3' }} />
       {lengths.map((n, i) => {

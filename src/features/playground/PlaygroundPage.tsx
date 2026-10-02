@@ -26,7 +26,7 @@ import { usePersistentState } from '../../hooks/usePersistentState';
 import { identifyMidi, romanFor, spellMidis, toneRole } from '../chords/chordLogic';
 import { CandidateList } from '../chords/CandidateList';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
-import { useQuery } from '../chords/useQuery';
+import { useUrlParams } from '../../hooks/useUrlState';
 import {
   COMPUTER_KEYS,
   finishTake,
@@ -49,7 +49,7 @@ const KEY_BASE = 60;
 const sorted = (set: Iterable<number>) => [...set].sort((a, b) => a - b);
 
 export default function PlaygroundPage() {
-  const [q, update] = useQuery({ key: '' });
+  const [q, update] = useUrlParams({ key: '' });
   const keyCtx = keyFromParam(q.key);
   const wide = useMediaQuery('(min-width: 1000px)');
   const medium = useMediaQuery('(min-width: 600px)');

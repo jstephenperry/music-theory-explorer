@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Piano, type KeyMark } from '../../components/Piano';
 import { Staff, type StaffEvent, type StaffMeasure } from '../../components/Staff';
-import { Button, PlayButton, Slider } from '../../components/ui';
+import { Button, PlayButton, Slider, Legend } from '../../components/ui';
 import { audio } from '../../audio/engine';
 import type { SeqEvent } from '../../audio/sequencer';
 import { usePlayer } from '../../audio/usePlayer';
@@ -176,26 +176,17 @@ export function ExampleView({ ex }: { ex: Example }) {
           })}
         </div>
       </div>
-      <div className={s.legend}>
-        <span className={s.legendItem}>
-          <span className={s.swatch} style={{ background: 'var(--ink)' }} /> Old key
-        </span>
-        <span className={s.legendItem}>
-          <span className={s.swatch} style={{ background: 'var(--plum)' }} /> Pivot or reinterpreted chord
-        </span>
-        <span className={s.legendItem}>
-          <span className={s.swatch} style={{ background: 'var(--royal)' }} /> Transition
-        </span>
-        <span className={s.legendItem}>
-          <span className={s.swatch} style={{ background: 'var(--verdigris)' }} /> New key
-        </span>
-        {ex.heldMidi !== undefined && (
-          <span className={s.legendItem}>
-            <span className={s.swatch} style={{ background: 'var(--brass)' }} /> Held common tone
-          </span>
-        )}
-        <span className={s.legendItem}>Click a chord to hear it.</span>
-      </div>
+      <Legend
+        className={s.belowPiano}
+        items={[
+          { color: 'var(--ink)', label: 'Old key', dot: true },
+          { color: 'var(--plum)', label: 'Pivot or reinterpreted chord', dot: true },
+          { color: 'var(--royal)', label: 'Transition', dot: true },
+          { color: 'var(--verdigris)', label: 'New key', dot: true },
+          ...(ex.heldMidi !== undefined ? [{ color: 'var(--brass)', label: 'Held common tone', dot: true }] : []),
+        ]}
+        note="Click a chord to hear it."
+      />
       <Piano from={36} to={84} marks={marks} pressed={player.playing ? pitches.map(midi) : []} ariaLabel="Piano showing the current chord" />
       {ex.enharmonic && <EnharmonicPair ex={ex} />}
     </div>

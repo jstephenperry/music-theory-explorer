@@ -354,21 +354,25 @@
   white-space: nowrap;
 }
 
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 1rem;
-  font-size: 0.8rem;
-  color: var(--ink-muted);
-  align-items: center;
+.chartLegend {
+  margin-top: 0.5rem;
 }
-.swatch {
-  display: inline-block;
-  width: 11px;
-  height: 11px;
-  border-radius: 2px;
-  margin-right: 0.35rem;
-  vertical-align: -1px;
+/* Charts keep their labels readable: the wrapper scrolls on narrow screens. */
+.chartWide {
+  min-width: 560px;
+}
+.labelGap {
+  margin-bottom: 0.35rem;
+}
+.devBig {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.figure {
+  margin: 0;
+}
+.waveBeat {
+  height: 120px;
 }
 
 .demoGrid {

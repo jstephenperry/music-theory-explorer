@@ -2,9 +2,10 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { MODES, ROUTES, routesInMode, routesInSection, sectionsInMode } from '../../app/routes';
 import { Icon } from '../../components/Icon';
+import { countWord } from '../../lib/format';
 import { Piano, marksFromMidi } from '../../components/Piano';
 import { Staff } from '../../components/Staff';
-import { PlayButton } from '../../components/ui';
+import { PlayButton, Chip } from '../../components/ui';
 import { usePlayer } from '../../audio/usePlayer';
 import { audio } from '../../audio/engine';
 import { chordEvents } from '../../audio/sequencer';
@@ -16,9 +17,6 @@ import { voiceProgression } from '../../theory/voicing';
 import s from './HomePage.module.css';
 
 const DEMO = ['I', 'vi', 'ii65', 'V7', 'bVImaj7', 'bVII7', 'Imaj7'];
-const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
-/** A small count as a capitalized word: 17 becomes Seventeen. */
-const countWord = (n: number) => (WORDS[n] ?? String(n)).replace(/^./, (c) => c.toUpperCase());
 
 export default function HomePage() {
   const key = makeKey('Eb');
@@ -48,9 +46,10 @@ export default function HomePage() {
                 <div className={s.overtureLabel}>Seven chords in E♭ major</div>
                 <div className={s.overtureChords}>
                   {chords.map((c, i) => (
-                    <button
+                    <Chip
                       key={i}
-                      className={`${s.chip} ${i === current ? s.chipActive : ''}`}
+                      active={i === current}
+                      className={s.chip}
                       onClick={() => {
                         setSelected(i);
                         player.stop();
@@ -59,7 +58,7 @@ export default function HomePage() {
                     >
                       <span className={s.chipRoman}>{c.display}</span>
                       <span className={s.chipSymbol}>{c.symbol}</span>
-                    </button>
+                    </Chip>
                   ))}
                 </div>
               </div>

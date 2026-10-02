@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import type { Player } from '../../audio/usePlayer';
 import { Staff } from '../../components/Staff';
-import { Button, PlayButton, Select } from '../../components/ui';
+import { Button, PlayButton, Select, Chip } from '../../components/ui';
 import { SCALES, getScale, hasMicrotones, type ScaleDef } from '../../theory/scales';
 import { noteName, type Note } from '../../theory/notes';
 import { compareScales, differenceSummary, scaleTones } from './scaleLogic';
@@ -126,12 +126,12 @@ export function ComparePanel({
                 {neighbors.map((n) => {
                   const d = differenceSummary(root, scale.id, n.id);
                   return (
-                    <button key={n.id} className={`${s.neighbor} ${n.id === other.id ? s.neighborActive : ''}`} onClick={() => onOther(n.id)}>
+                    <Chip key={n.id} tone="royal" active={n.id === other.id} className={s.neighbor} onClick={() => onOther(n.id)}>
                       <span>{shortName(n.name)}</span>
                       <span className={s.neighborDiff}>
                         {d.onlyA[0]} to {d.onlyB[0]}
                       </span>
-                    </button>
+                    </Chip>
                   );
                 })}
               </div>

@@ -28,12 +28,12 @@ import {
   type KeyMode,
 } from '../../theory';
 import { Staff } from '../../components/Staff';
-import { PageHeader, Panel, PlayButton, Segmented, Slider, Stat, Toggle } from '../../components/ui';
+import { PageHeader, Panel, PlayButton, Segmented, Slider, Stat, Toggle, Legend } from '../../components/ui';
 import { usePlayer } from '../../audio/usePlayer';
 import { audio } from '../../audio/engine';
 import { chordEvents } from '../../audio/sequencer';
 import { usePersistentState } from '../../hooks/usePersistentState';
-import { useQuery } from '../chords/useQuery';
+import { useUrlParams } from '../../hooks/useUrlState';
 import { CircleWheel } from './CircleWheel';
 import {
   FLAT_MNEMONIC,
@@ -71,7 +71,7 @@ function placeOf(root: Parameters<typeof slotOfMajorRoot>[0], chordId: string): 
 }
 
 export default function CirclePage() {
-  const [q, update] = useQuery({ key: 'C', mode: 'major' });
+  const [q, update] = useUrlParams({ key: 'C', mode: 'major' });
   const mode: KeyMode = q.mode === 'minor' ? 'minor' : 'major';
   const tonic = tryNote(q.key) ?? { letter: 'C' as const, acc: 0 };
   let key: Key = makeKey(tonic, mode);
@@ -231,25 +231,16 @@ export default function CirclePage() {
               onSelect={select}
             />
           </div>
-          <div className={s.legend} aria-hidden="true">
-            <span>
-              <i className={`${s.sw} ${s.swSelected}`} /> Selected
-            </span>
-            <span>
-              <i className={`${s.sw} ${s.swRelative}`} /> Relative
-            </span>
-            <span>
-              <i className={`${s.sw} ${s.swRelated}`} /> Closely related
-            </span>
-            {showParallel && (
-              <span>
-                <i className={`${s.sw} ${s.swParallel}`} /> Parallel
-              </span>
-            )}
-            <span>
-              <i className={`${s.sw} ${s.swPointed}`} /> Sounding chord
-            </span>
-          </div>
+          <Legend
+            center
+            items={[
+              { color: 'var(--accent)', label: 'Selected' },
+              { color: 'var(--accent-soft)', label: 'Relative' },
+              { color: 'var(--brass-soft)', label: 'Closely related' },
+              ...(showParallel ? [{ color: 'var(--plum-soft)', label: 'Parallel' }] : []),
+              { color: 'var(--verdigris-soft)', label: 'Sounding chord' },
+            ]}
+          />
           {slotPair.length > 1 && (
             <div className={s.enharmonic}>
               <span className={s.overlayLabel}>Enharmonic spelling</span>

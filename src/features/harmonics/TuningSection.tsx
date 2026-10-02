@@ -196,7 +196,7 @@ export function TuningSection({ a4 }: { a4: number }) {
   return (
     <div className={s.section}>
       <Panel eyebrow="Choose a temperament" title={sys.name}>
-        <div className={s.controls} style={{ marginBottom: '1rem' }}>
+        <div className={`${s.controls} block`}>
           <Select label="System" value={sys.id} onChange={(v) => setSystem(v as TuningId)} options={TUNING_SYSTEMS.map((t) => ({ value: t.id, label: t.short }))} />
           <Select
             label="Compare with"
@@ -207,7 +207,7 @@ export function TuningSection({ a4 }: { a4: number }) {
           <Select label="Timbre" value={timbre} onChange={(v) => setTimbre(v as Timbre)} options={TIMBRES.map((t) => ({ value: t.value, label: t.label }))} />
         </div>
         <RootPicker spellings="common" label="Tonic (the tuning is built on this note)" value={tonic} onChange={(n) => setTonicName(noteName(n, false))} />
-        <p className={s.prose} style={{ margin: '1rem 0' }}>
+        <p className={`${s.prose} block`}>
           {sys.description}
         </p>
         <DeviationChart devs={devs} cmp={cmpDevs} cmpName={cmpDevs ? TUNING_BY_ID[compare as TuningId].short : ''} names={names.map((n) => noteName(n))} />
@@ -228,7 +228,7 @@ export function TuningSection({ a4 }: { a4: number }) {
           </>
         }
       >
-        <div className="row" style={{ marginBottom: '0.75rem', justifyContent: 'space-between' }}>
+        <div className="row row-between block">
           <div className="row">
             <Toggle label="Then repeat in 12-TET" checked={repeatEt} onChange={setRepeatEt} />
             <Toggle label="Show cents on keys" checked={showCents} onChange={setShowCents} />
@@ -236,13 +236,13 @@ export function TuningSection({ a4 }: { a4: number }) {
           {tl.playing && repeatEt && sys.id !== 'et12' && <Tag tone={inEt ? 'royal' : 'accent'}>{inEt ? 'Now: 12-TET' : `Now: ${sys.short}`}</Tag>}
         </div>
         <Piano from={narrow ? 60 : 48} to={84} sound={false} onNoteOn={noteOn} onNoteOff={noteOff} pcMarks={pcMarks} pressed={pressed} labels="c" ariaLabel={`Keyboard tuned in ${sys.name} on ${noteName(tonic)}`} />
-        <p className="faint" style={{ fontSize: '0.85rem', margin: '0.5rem 0 0' }}>
+        <p className="note">
           Hold several keys to hear chords in this tuning, or use the computer keyboard (A W S E D F T G Y H U J K; Z and X change octave). Labels show cents from 12-TET.
         </p>
       </Panel>
 
       <Panel eyebrow="How far each third and fifth is from pure" title={`Major triads in ${sys.short}`}>
-        <p className={s.prose} style={{ marginBottom: '0.9rem' }}>
+        <p className={`${s.prose} block`}>
           Each cell shows how far the triad's major third and fifth are from pure (5:4 and 3:2). Click to hear it. Darker cells are rougher.
         </p>
         <div className={s.triads}>
@@ -266,7 +266,7 @@ export function TuningSection({ a4 }: { a4: number }) {
             );
           })}
         </div>
-        <p className="faint" style={{ fontSize: '0.82rem', margin: '0.6rem 0 0' }}>
+        <p className="note">
           Triads are played on the keyboard keys, so in meantone a B major chord uses the E♭ key for its D♯: the out-of-tune third is the price of a 12-key keyboard.
         </p>
       </Panel>
@@ -292,7 +292,7 @@ export function TuningSection({ a4 }: { a4: number }) {
                 </>
               )}
             </dl>
-            <div className="row" style={{ gap: '0.5rem' }}>
+            <div className="row row-tight">
               <Button size="sm" variant="primary" icon="play" onClick={() => playWolf('meantone')}>
                 {noteName(tonic)} to {noteName(alongFifths(tonic, 1))}, then the wolf
               </Button>
@@ -302,7 +302,7 @@ export function TuningSection({ a4 }: { a4: number }) {
                 </Button>
               )}
             </div>
-            <div className="row" style={{ gap: '0.4rem' }}>
+            <div className="row row-tight">
               <Tag tone={activeId === 'good' ? 'verdigris' : 'default'}>
                 {noteName(tonic)} to {noteName(alongFifths(tonic, 1))}
               </Tag>
@@ -320,13 +320,13 @@ export function TuningSection({ a4 }: { a4: number }) {
               {circleNames[12]} is not {circleNames[0]}.
             </p>
             <CommaSpiral circle={circle} names={circleNames} active={activeId} />
-            <div className="row" style={{ gap: '0.5rem' }}>
+            <div className="row row-tight">
               <Button size="sm" variant="primary" icon="play" onClick={playComma}>
                 Climb the fifths
               </Button>
               <Button size="sm" variant="ghost" icon="stop" onClick={tl.stop} aria-label="Stop" />
             </div>
-            <p className="faint" style={{ fontSize: '0.82rem', margin: 0 }}>
+            <p className="note flush">
               Each new note sounds with the previous one (a pure fifth or fourth), then {circleNames[12]} is played against {circleNames[0]}. The syntonic comma (81:80, {SYNTONIC_COMMA.toFixed(2)}¢) is its slightly smaller cousin.
             </p>
           </div>
@@ -360,7 +360,7 @@ function DeviationChart({ devs, cmp, cmpName, names }: { devs: number[]; cmp: nu
   const ticks = [-scale, -scale / 2, 0, scale / 2, scale];
   return (
     <div className={s.chartWrap}>
-      <svg className={s.chart} viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Cents deviation from 12-TET for each note: ${names.map((n, i) => `${n} ${formatCents(devs[i], 1)}`).join(', ')}`} style={{ minWidth: 520 }}>
+      <svg className={`${s.chart} ${s.chartWide}`} viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Cents deviation from 12-TET for each note: ${names.map((n, i) => `${n} ${formatCents(devs[i], 1)}`).join(', ')}`}>
         {ticks.map((t) => (
           <g key={t}>
             <line x1={padL} x2={W - padR} y1={y(t)} y2={y(t)} style={{ stroke: t === 0 ? 'var(--rule-strong)' : 'var(--rule)' }} strokeDasharray={t === 0 ? undefined : '2 4'} />

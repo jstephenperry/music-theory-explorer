@@ -404,3 +404,11 @@
 .statText {
   font-size: 1.1rem;
 }
+
+/* The polyrhythm clock fills its column up to a comfortable size. */
+.clockSvg {
+  width: 100%;
+  max-width: 340px;
+  display: block;
+  margin: 0 auto;
+}

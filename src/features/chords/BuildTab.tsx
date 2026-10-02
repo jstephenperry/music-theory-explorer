@@ -27,7 +27,7 @@ import {
 } from '../../theory';
 import { Piano, type KeyMark } from '../../components/Piano';
 import { Staff } from '../../components/Staff';
-import { Button, Panel, RootPicker, Segmented, Select, Slider, Tag, Toggle } from '../../components/ui';
+import { Button, Panel, RootPicker, Segmented, Select, Slider, Tag, Toggle, Chip, Legend } from '../../components/ui';
 import { usePlayer } from '../../audio/usePlayer';
 import { audio } from '../../audio/engine';
 import { usePersistentState } from '../../hooks/usePersistentState';
@@ -182,18 +182,10 @@ export function BuildTab({ state, onChange }: { state: BuildState; onChange: (pa
             />
             <div className={s.chips} role="radiogroup" aria-label={`${category} chords`}>
               {CHORDS.filter((c) => c.category === category).map((c) => (
-                <button
-                  key={c.id}
-                  type="button"
-                  role="radio"
-                  aria-checked={c.id === chordId}
-                  className={`${s.chip} ${c.id === chordId ? s.chipActive : ''}`}
-                  onClick={() => go({ chordId: c.id, inv: 0 })}
-                  title={c.description ?? c.name}
-                >
+                <Chip key={c.id} role="radio" aria-checked={c.id === chordId} active={c.id === chordId} className={s.chip} onClick={() => go({ chordId: c.id, inv: 0 })} title={c.description ?? c.name}>
                   <span className={s.chipSymbol}>{displaySymbol(root, c.id)}</span>
                   <span className={s.chipName}>{c.name}</span>
-                </button>
+                </Chip>
               ))}
             </div>
           </div>
@@ -330,14 +322,7 @@ export function BuildTab({ state, onChange }: { state: BuildState; onChange: (pa
         </div>
 
         <Piano from={from} to={to} marks={marks} pressed={active} ariaLabel={`Piano showing ${symbol}`} />
-        <div className={s.legend} aria-hidden="true">
-          {(['root', 'tone', 'extra', 'alt'] as const).map((r) => (
-            <span key={r} className={s.legendItem}>
-              <span className={`${s.legendDot} ${s[`role-${r}`]}`} />
-              {ROLE_NAME[r]}
-            </span>
-          ))}
-        </div>
+        <Legend className={s.pianoLegend} items={(['root', 'tone', 'extra', 'alt'] as const).map((r) => ({ color: `var(--hl-${r})`, label: ROLE_NAME[r], dot: true }))} />
       </Panel>
 
       <div className="grid-2">
