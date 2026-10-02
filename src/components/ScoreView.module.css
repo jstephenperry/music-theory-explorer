@@ -1,0 +1,35 @@
+.score {
+  position: relative;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--bg-elev);
+  padding: 0.25rem 0.5rem;
+}
+.canvas {
+  width: 100%;
+  min-height: 60px;
+  /* Long measures are never squeezed below their natural width; on narrow screens the score scrolls. */
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+.canvas svg {
+  display: block;
+}
+/* Notes that are sounding during playback. Overrides VexFlow's fill and stroke attributes. */
+.sounding path,
+.sounding rect,
+.sounding text {
+  fill: var(--accent);
+  stroke: var(--accent);
+}
+.loading,
+.error {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+}
+.error {
+  color: var(--accent);
+}

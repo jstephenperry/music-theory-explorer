@@ -5,13 +5,14 @@ export interface RouteDef {
   title: string;
   /** One-line description used on the home page and in navigation tooltips. */
   blurb: string;
-  section: 'Pitch' | 'Harmony' | 'Rhythm' | 'Sound' | 'Practice';
+  section: 'Pitch' | 'Harmony' | 'Composition' | 'Rhythm' | 'Sound' | 'Practice';
   component: LazyExoticComponent<ComponentType>;
 }
 
 export const SECTIONS: Array<{ id: RouteDef['section']; title: string }> = [
   { id: 'Pitch', title: 'Pitch & Scale' },
   { id: 'Harmony', title: 'Harmony' },
+  { id: 'Composition', title: 'Composition' },
   { id: 'Rhythm', title: 'Rhythm & Time' },
   { id: 'Sound', title: 'Sound & Tuning' },
   { id: 'Practice', title: 'Practice Room' },
@@ -25,7 +26,7 @@ export const ROUTES: RouteDef[] = [
   },
   {
     path: '/scales', title: 'Scales & Modes', section: 'Pitch',
-    blurb: 'Fifty-nine scales and modes: compare brightness, characteristic notes and harmony.',
+    blurb: 'More than 300 scales, modes, maqamat and ragas from 14 traditions, at their true intonation.',
     component: lazy(() => import('../features/scales/ScalesPage')),
   },
   {
@@ -52,6 +53,31 @@ export const ROUTES: RouteDef[] = [
     path: '/tonnetz', title: 'Tonnetz', section: 'Harmony',
     blurb: 'Navigate triads on the Tonnetz with neo-Riemannian P, L and R transformations.',
     component: lazy(() => import('../features/tonnetz/TonnetzPage')),
+  },
+  {
+    path: '/motive', title: 'Motive & Development', section: 'Composition',
+    blurb: 'Repeat, transpose, invert and sequence a motive, as Bach and Beethoven do.',
+    component: lazy(() => import('../features/composition/MotivePage')),
+  },
+  {
+    path: '/phrase', title: 'Phrase & Cadence', section: 'Composition',
+    blurb: 'Periods, sentences and cadences in Mozart and Beethoven; build eight-bar phrases.',
+    component: lazy(() => import('../features/composition/PhrasePage')),
+  },
+  {
+    path: '/texture', title: 'Texture & Accompaniment', section: 'Composition',
+    blurb: 'Chorale, Alberti bass, prelude figuration and waltz: one progression in six textures.',
+    component: lazy(() => import('../features/composition/TexturePage')),
+  },
+  {
+    path: '/counterpoint', title: 'Species Counterpoint', section: 'Composition',
+    blurb: 'Fux’s first and second species with live rule checking, hints and solutions.',
+    component: lazy(() => import('../features/composition/CounterpointPage')),
+  },
+  {
+    path: '/variations', title: 'Theme & Variations', section: 'Composition',
+    blurb: 'Mozart’s variations on “Ah vous dirai-je, Maman” and a workshop to vary the theme.',
+    component: lazy(() => import('../features/composition/VariationsPage')),
   },
   {
     path: '/meter', title: 'Meter & Time', section: 'Rhythm',
