@@ -30,6 +30,8 @@ export interface BasicIdea {
   name: string;
   /** What the idea is modeled on. */
   after: string;
+  /** The repertoire work it is modeled on, when there is one. */
+  workId?: string;
   tonic: Unit;
   /** The same idea answered on the dominant (statement and response). */
   response: Unit;
@@ -47,6 +49,7 @@ export const BASIC_IDEAS: BasicIdea[] = [
     id: 'lilting',
     name: 'Lilting neighbor',
     after: 'the opening of Mozart’s K. 331: a neighbor-note figure, then the same a step lower',
+    workId: 'k331',
     tonic: { melody: 'E5/4. F5/8 E5/4 G5/4 | D5/4. E5/8 D5/4 F5/4', harmony: 'I:4 V7:4' },
     response: { melody: 'D5/4. E5/8 D5/4 F5/4 | C5/4. D5/8 C5/4 E5/4', harmony: 'V7:4 I:4' },
   },
@@ -54,6 +57,7 @@ export const BASIC_IDEAS: BasicIdea[] = [
     id: 'rocket',
     name: 'Rocket and turn',
     after: 'the opening of Beethoven’s Op. 2 No. 1: an arpeggio rising from the fifth, then a falling turn',
+    workId: 'op2no1',
     tonic: { melody: 'G4/4 C5 E5 G5 | E5/4. D5/8 C5/4 r/4', harmony: 'I:8' },
     response: { melody: 'G4/4 B4 D5 G5 | F5/4. E5/8 D5/4 r/4', harmony: 'V:4 V7:4' },
   },

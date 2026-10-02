@@ -12,6 +12,7 @@ src/
   components/  Shared UI: Piano, Staff (VexFlow), ui.tsx primitives, Icon, theme helpers.
   hooks/       usePersistentState, useUrlState, useMediaQuery, useMidiInput, useComputerKeyboard.
   app/         App shell, routing (HashRouter), the registry of modes, sections and rooms, layout.
+  repertoire/  The encoded classical excerpts, one file per work, with a registry and borrowing helpers.
   features/    One folder per page ("room"). Each owns its components, styles and logic.
   styles/      global.css: design tokens and a few utility classes.
 ```
@@ -29,6 +30,25 @@ Theory/Composition switch above them; on the home page it shows the mode last vi
 drawer's accent color (brass for Theory, verdigris for Composition). Links between rooms use
 `roomPath(slug)` rather than a literal path. `routes.test.ts` checks the registry and the numbers
 quoted in room descriptions against the data they describe.
+
+## Repertoire (`src/repertoire`)
+
+Every classical excerpt the site shows lives here, one file per work (`bwv772.ts`, `k265.ts` and so
+on), never inline in a room. An `Excerpt` is `{ work, analysis }`: `Work` is the music and its
+provenance (id, composer, title, bars, `spec` in the score text format, tempo, how it was checked);
+`Analysis` is what the room says about it (highlight `layers` and `brackets`, which address notes by
+selector, and `commentary`). Replacing a work means replacing `work` and keeping the analysis shape.
+
+`index.ts` is the registry: `REPERTOIRE`, `excerpt(id)` (throws on an unknown id), `score(id)` (built
+and cached), and helpers for borrowing from a work so a passage is encoded once: `fragment(id,
+'0.0.1-7')` returns the notes of a voice range with rests kept and ties joined, `motiveFragment` the
+same as a `Motive`, and `quarterEntries(id, staff, voice)` one entry per on-beat note with the
+roman numeral in force (the variation workshop reads the K. 265 theme this way). Modeled material
+that is not a transcription (the phrase builder's basic ideas, the texture progressions, the Twinkle
+motive) keeps its own notes and names the work it follows in a `workId`.
+
+`repertoire.test.ts` builds every work, resolves every layer and bracket selector, checks every
+`workId` reference, and compares the derived theme with the arrays it replaced.
 
 ## Theory engine (`src/theory`)
 
@@ -122,7 +142,7 @@ Import from `src/theory` (barrel) or from individual modules.
   `brackets` over passages, `active` note ids highlighted during playback without re-engraving, and
   `onNoteClick`.
 - Composition rooms (`src/features/composition`): `useScorePlayer()` plays a `Score` and reports
-  the sounding note ids; `ExcerptView` shows an `Excerpt` (in `excerpts/`) with switchable
+  the sounding note ids; `ExcerptView` shows an `Excerpt` (from `src/repertoire`) with switchable
   highlight layers, brackets, commentary and its source; `Quiz` is the shared multiple-choice drill.
   Generators with tests: `phrase.ts` (periods, sentences, cadence analysis), `cadences.ts`,
   `textures.ts`, `variations.ts`.

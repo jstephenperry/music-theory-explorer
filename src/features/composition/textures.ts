@@ -72,11 +72,13 @@ export interface ProgressionPreset {
   name: string;
   /** One chord per bar. */
   chords: string[];
+  /** The repertoire work the progression is taken from, when there is one. */
+  workId?: string;
 }
 
 export const TEXTURE_PROGRESSIONS: ProgressionPreset[] = [
   { id: 'cadence', name: 'I IV V⁷ I', chords: ['I', 'IV', 'V7', 'I'] },
-  { id: 'prelude', name: 'I ii⁴₂ V⁶₅ I (as in BWV 846)', chords: ['I', 'ii42', 'V65', 'I'] },
+  { id: 'prelude', name: 'I ii⁴₂ V⁶₅ I (as in BWV 846)', chords: ['I', 'ii42', 'V65', 'I'], workId: 'bwv846' },
   { id: 'circle', name: 'I vi ii⁶ V⁷ I', chords: ['I', 'vi', 'ii6', 'V7', 'I'] },
   { id: 'descending', name: 'I V⁶ vi iii⁶ IV I⁶ ii V', chords: ['I', 'V6', 'vi', 'iii6', 'IV', 'I6', 'ii', 'V'] },
 ];

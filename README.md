@@ -80,9 +80,10 @@ npm run preview    # serve dist/ locally
   instrument only; a synthesized stand-in plays until they arrive or if they cannot be fetched.
   See [public/samples/CREDITS.md](public/samples/CREDITS.md). Clicks and percussion are synthesized.
 - Each room lives in `src/features/<room>` with its own components, styles and tested logic.
-- Classical excerpts in the Composition rooms are encoded by hand in a compact text format and,
-  where a Mutopia Project edition exists, checked note by note (pitch and onset) against its MIDI
-  file. Each excerpt states how it was checked.
+- Classical excerpts in the Composition rooms live in `src/repertoire`, one file per work, encoded
+  by hand in a compact text format and, where a Mutopia Project edition exists, checked note by
+  note (pitch and onset) against its MIDI file. Each excerpt states how it was checked, and a test
+  checks that every highlight still matches the notes.
 
 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) documents the modules and the shared components.
 

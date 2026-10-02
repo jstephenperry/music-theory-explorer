@@ -5,11 +5,12 @@
  * not quotations of them.
  */
 import { makeKey, type Key } from '../../theory/keys';
-import { midi, pitch, type Pitch } from '../../theory/notes';
+import { midi, type Pitch } from '../../theory/notes';
 import { parseRoman } from '../../theory/roman';
 import { notateVoice, scoreFromVoices, type PlainNote, type Score } from '../../theory/score';
 import { stepPitch } from '../../theory/composition/motive';
 import { accompaniment } from './phrase';
+import { quarterEntries } from '../../repertoire';
 
 export type MelodyTechnique = 'plain' | 'neighbor' | 'runs' | 'triplets' | 'dotted' | 'syncopated' | 'triple';
 export type ModeChoice = 'major' | 'minor';
@@ -37,10 +38,19 @@ export const BASS_CHOICES: Array<{ id: BassChoice; name: string }> = [
   { id: 'none', name: 'Melody alone' },
 ];
 
-/** The theme, bars 1 to 8, one entry per quarter note (the last bar is one half note). */
-const THEME = 'C5 C5 G5 G5 A5 A5 G5 G5 F5 F5 E5 E5 D5 D5 C5'.split(' ').map(pitch);
-const THEME_BASS = 'C3 C4 E4 C4 F4 C4 E4 C4 D4 B3 C4 A3 F3 G3 C3'.split(' ').map(pitch);
-const HARMONY_MAJOR = ['I', 'I', 'I', 'I', 'IV', 'IV', 'I', 'I', 'V43', 'V65', 'I', 'vi', 'ii6', 'V', 'I'];
+/** The work the theme is taken from, a repertoire id. */
+export const THEME_WORK = 'k265theme';
+
+/**
+ * The theme, bars 1 to 8, read beat by beat from the encoded score: one entry per note that starts
+ * on a quarter (the last bar is one half note). Bar 7's dotted figure contributes its two beats.
+ */
+const MELODY_ENTRIES = quarterEntries(THEME_WORK, 0, 0);
+const BASS_ENTRIES = quarterEntries(THEME_WORK, 1, 0);
+export const THEME = MELODY_ENTRIES.map((e) => e.pitch);
+export const THEME_BASS = BASS_ENTRIES.map((e) => e.pitch);
+export const HARMONY_MAJOR = BASS_ENTRIES.map((e) => e.numeral!);
+/** The parallel minor is not in the score: the same plan with the quality of each chord changed. */
 const HARMONY_MINOR = ['i', 'i', 'i', 'i', 'iv', 'iv', 'i', 'i', 'V43', 'V65', 'i', 'VI', 'iio6', 'V', 'i'];
 
 export interface VariationChoice {
