@@ -75,6 +75,8 @@ export interface Score {
   pickup: number;
   /** Number of measures, including a pickup measure. */
   measures: number;
+  /** Length of a short last measure in quarter notes (completing the pickup), or undefined. */
+  ending?: number;
   staves: ScoreStaff[];
 }
 
@@ -87,6 +89,8 @@ export interface ScoreSpec {
   key: Key;
   time: [number, number];
   pickup?: number;
+  /** Length of a short last measure, usually what the pickup leaves out. Its closing barline is omitted. */
+  ending?: number;
   staves: StaffSpec[];
 }
 
@@ -117,7 +121,8 @@ export function measureStart(score: Pick<Score, 'time' | 'pickup'>, m: number): 
 }
 
 /** Length of measure `m` in quarter notes. */
-export function measureLen(score: Pick<Score, 'time' | 'pickup'>, m: number): number {
+export function measureLen(score: Pick<Score, 'time' | 'pickup'> & Partial<Pick<Score, 'measures' | 'ending'>>, m: number): number {
+  if (score.ending && score.measures !== undefined && m === score.measures - 1) return score.ending;
   return score.pickup > 0 && m === 0 ? score.pickup : measureLength(score.time);
 }
 
@@ -281,14 +286,14 @@ export function buildScore(spec: ScoreSpec): Score {
   const total = Math.max(0, ...lengths);
   const shape = { time: spec.time, pickup };
   const measures = measureCount(shape, total);
-  const expected = measureStart(shape, measures);
+  const expected = spec.ending ? measureStart(shape, measures - 1) + spec.ending : measureStart(shape, measures);
   staves.forEach((st, si) =>
     st.voices.forEach((v, vi) => {
       const len = voiceLength(v.notes);
       if (Math.abs(len - expected) > EPS) throw new ScoreSyntaxError(`Voice ${si}.${vi} lasts ${roundQ(len)} quarter notes; the score needs ${roundQ(expected)}`);
     }),
   );
-  return { key: spec.key, time: spec.time, pickup, measures, staves };
+  return { key: spec.key, time: spec.time, pickup, measures, ...(spec.ending ? { ending: spec.ending } : {}), staves };
 }
 
 /** Every note of the score, in staff and voice order. */
@@ -402,7 +407,7 @@ export function writableParts(len: number): Array<{ value: NoteValue; dots: numb
 
 /**
  * Write a sequence of notes (lengths in quarter notes) into one voice, splitting notes at
- * barlines with ties and breaking lengths into writable values. Returns notes ready for a Score.
+ * barlines (and off-beat notes at the next beat) with ties and breaking lengths into writable values. Returns notes ready for a Score.
  */
 export function notateVoice(seq: PlainNote[], opts: { time: [number, number]; pickup?: number; staff?: number; voice?: number }): ScoreNote[] {
   const shape = { time: opts.time, pickup: opts.pickup ?? 0 };
@@ -416,7 +421,11 @@ export function notateVoice(seq: PlainNote[], opts: { time: [number, number]; pi
       const m = measureAt(shape, t);
       const room = measureStart(shape, m) + measureLen(shape, m) - t;
       const chunk = Math.min(left, room);
-      const parts = writableParts(chunk);
+      // A note that starts off the beat and runs past it is written up to the beat, then tied on.
+      const beat = opts.time[1] === 8 && opts.time[0] % 3 === 0 ? 1.5 : 4 / opts.time[1];
+      const inBeat = (t - measureStart(shape, m)) % beat;
+      const toBeat = beat - inBeat;
+      const parts = inBeat > EPS && chunk > toBeat + EPS ? [...writableParts(toBeat), ...writableParts(chunk - toBeat)] : writableParts(chunk);
       parts.forEach((p, pi) => {
         const isLastPart = pi === parts.length - 1 && left - chunk < EPS;
         out.push({

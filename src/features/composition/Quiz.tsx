@@ -13,9 +13,10 @@ export interface QuizQuestion {
 
 /**
  * A multiple-choice drill. `make` creates a fresh question; `render` draws its prompt (scores,
- * play buttons). The running score is remembered per drill.
+ * play buttons) and may reveal more once the question is answered. The running score is remembered
+ * per drill.
  */
-export function Quiz<Q extends QuizQuestion>({ id, make, render, prompt }: { id: string; make: () => Q; render: (q: Q) => ReactNode; prompt: string }) {
+export function Quiz<Q extends QuizQuestion>({ id, make, render, prompt }: { id: string; make: () => Q; render: (q: Q, answered: boolean) => ReactNode; prompt: string }) {
   const [q, setQ] = useState<Q>(make);
   const [picked, setPicked] = useState<number | null>(null);
   const [stats, setStats] = usePersistentState<{ right: number; total: number }>(`quiz.${id}`, { right: 0, total: 0 });
@@ -43,7 +44,7 @@ export function Quiz<Q extends QuizQuestion>({ id, make, render, prompt }: { id:
           )}
         </span>
       </div>
-      {render(q)}
+      {render(q, picked !== null)}
       <div className={s.choices} role="group" aria-label="Answers">
         {q.choices.map((c, i) => {
           const state = picked === null ? '' : i === q.answer ? s.choiceRight : i === picked ? s.choiceWrong : s.choiceDim;

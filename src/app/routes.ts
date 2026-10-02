@@ -65,6 +65,11 @@ export const ROUTES: RouteDef[] = [
     component: lazy(() => import('../features/composition/PhrasePage')),
   },
   {
+    path: '/texture', title: 'Texture & Accompaniment', section: 'Composition',
+    blurb: 'Chorale, Alberti bass, prelude figuration and waltz: one progression in six textures.',
+    component: lazy(() => import('../features/composition/TexturePage')),
+  },
+  {
     path: '/meter', title: 'Meter & Time', section: 'Rhythm',
     blurb: 'Simple, compound, irregular and additive meters with a programmable metronome.',
     component: lazy(() => import('../features/meter/MeterPage')),

@@ -313,7 +313,21 @@ function engrave(VF: VexModule, el: HTMLDivElement, props: ScoreViewProps, width
               return;
             }
             if (n.rest) {
-              const restKey = st.clef === 'bass' ? (multi ? (vi === 0 ? 'f/3' : 'f/2') : 'd/3') : multi ? (vi === 0 ? 'd/5' : 'f/4') : 'b/4';
+              let restKey = st.clef === 'bass' ? (multi ? (vi === 0 ? 'f/3' : 'f/2') : 'd/3') : multi ? (vi === 0 ? 'd/5' : 'f/4') : 'b/4';
+              if (multi) {
+                // Keep clear of the other voice's notes: above them for the upper voice, below for the lower.
+                const others = st.voices
+                  .filter((_, j) => j !== vi)
+                  .flatMap((v) => v.notes)
+                  .filter((o) => !o.rest && o.start < n.start + n.dur - 1e-6 && o.start + o.dur > n.start + 1e-6)
+                  .flatMap((o) => o.pitches.map(staffLine));
+                if (others.length) {
+                  const [l, o] = restKey.split('/');
+                  const base = Number(o) * 7 + letterIndex(l.toUpperCase() as Pitch['letter']);
+                  const line = vi === 0 ? Math.max(base, Math.max(...others) + 4) : Math.min(base, Math.min(...others) - 4);
+                  restKey = `${'cdefgab'[((line % 7) + 7) % 7]}/${Math.floor(line / 7)}`;
+                }
+              }
               const r = new StaveNote({ keys: [restKey], duration: dur + 'r', dots: n.dots, clef: st.clef });
               if (n.dots) Dot.buildAndAttach([r], { all: true });
               if (n.orn?.includes('fermata')) r.addModifier(new Articulation(ORN.fermata.code), 0);

@@ -104,4 +104,20 @@ describe('notateVoice', () => {
     expect(s.measures).toBe(1);
     expect(s.staves[0].voices[0].notes.reduce((a, n) => a + n.dur, 0)).toBe(4);
   });
+
+  it('accepts a short last bar that completes the pickup', () => {
+    const s = buildScore({ key: C, time: [3, 4], pickup: 1, ending: 2, staves: [{ clef: 'treble', voices: ['G4/4 | C5/2 D5/4 | E5/2'] }] });
+    expect(s.measures).toBe(3);
+    expect(s.ending).toBe(2);
+    expect(() => buildScore({ key: C, time: [3, 4], pickup: 1, staves: [{ clef: 'treble', voices: ['G4/4 | C5/2 D5/4 | E5/2'] }] })).toThrow(ScoreSyntaxError);
+  });
+
+  it('writes an off-beat note up to the beat, then ties it on', () => {
+    const v = notateVoice([{ pitches: [], dur: 0.25 }, { pitches: [pitch('E4')], dur: 1.75 }], { time: [4, 4] });
+    expect(v.map((n) => [n.value, n.dots, !!n.tie])).toEqual([
+      [16, 0, false],
+      [8, 1, true],
+      [4, 0, false],
+    ]);
+  });
 });
