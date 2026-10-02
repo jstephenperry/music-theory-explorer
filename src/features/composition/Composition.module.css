@@ -333,3 +333,64 @@
   background: var(--bg-elev);
   font-size: 0.86rem;
 }
+
+/* ---------- Counterpoint ---------- */
+.slotName {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  min-width: min(12rem, 100%);
+  text-align: center;
+}
+.issues {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-width: 80ch;
+}
+.issues li {
+  display: flex;
+  gap: 0.6rem;
+  align-items: baseline;
+  padding: 0.4rem 0.7rem;
+  border-left: 3px solid var(--rule-strong);
+  background: var(--bg-sunk);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  line-height: 1.45;
+}
+.issueError {
+  border-left-color: var(--accent) !important;
+}
+.issueWarning {
+  border-left-color: var(--brass) !important;
+}
+.issueBar {
+  flex: none;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  background: var(--bg-elev);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.1rem 0.55rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.rules {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  gap: 0.9rem 1.5rem;
+}
+.rules dt {
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+.rules dd {
+  margin: 0;
+  font-family: var(--font-serif);
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
