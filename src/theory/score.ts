@@ -13,16 +13,23 @@
  * - "(C4 E4 G4)" is a chord. A trailing "~" ties the note to the next one in the same voice.
  * - "3:2[ G5/16 F5 E5 ]" is a tuplet: three notes in the time of two.
  * - "^C5/16" is a grace note (acciaccatura) attached to the next note.
- * - "!tr", "!mordent" (lower), "!prall" (upper mordent), "!turn", "!stacc", "!fermata" add an ornament
- *   or articulation to the note before.
+ * - "!tr", "!mordent" (lower), "!prall" (upper mordent), "!turn", "!trem" (tremolo in thirty-seconds;
+ *   "!trem16" and "!trem8" for sixteenths and eighths), "!stacc" and "!fermata" add an ornament or
+ *   articulation to the note before. Playback realizes them (see `scoreSounds`); the fermata is
+ *   drawn only.
+ *
+ * Ornaments are realized with the diatonic neighbors of the score's key: a trill alternates the
+ * main note with its upper neighbor, starting on the main note and ending on it; a prall is
+ * main, upper, main; a mordent main, lower, main; a turn upper, main, lower, main. In minor the
+ * lower neighbor of the tonic is the raised leading tone.
  * - '_"V7"' and '="text"' attach a label below or above the note before.
  * - "|" marks a barline; the parser checks that every bar adds up to the time signature.
  */
-import { pitch as parsePitch, midi, type Pitch } from './notes';
-import type { Key } from './keys';
+import { pitch as parsePitch, midi, mod, pc, type Pitch } from './notes';
+import { keyNotes, type Key } from './keys';
 
 export type NoteValue = 1 | 2 | 4 | 8 | 16 | 32;
-export type Ornament = 'tr' | 'mordent' | 'prall' | 'turn' | 'stacc' | 'fermata';
+export type Ornament = 'tr' | 'mordent' | 'prall' | 'turn' | 'trem8' | 'trem16' | 'trem32' | 'stacc' | 'fermata';
 export type Clef = 'treble' | 'bass';
 
 export interface Tuplet {
@@ -141,7 +148,7 @@ export function measureAt(score: Pick<Score, 'time' | 'pickup'>, t: number): num
   return Math.floor((t + EPS) / len);
 }
 
-const ORNAMENTS = new Set<Ornament>(['tr', 'mordent', 'prall', 'turn', 'stacc', 'fermata']);
+const ORNAMENTS = new Set<Ornament>(['tr', 'mordent', 'prall', 'turn', 'trem8', 'trem16', 'trem32', 'stacc', 'fermata']);
 const VALUES = new Set([1, 2, 4, 8, 16, 32]);
 
 /** Split a voice string into tokens, keeping quoted labels, chords and tuplet brackets intact. */
@@ -215,7 +222,7 @@ export function parseVoice(text: string, opts: { time: [number, number]; pickup?
       continue;
     }
     if (tok.startsWith('!')) {
-      const o = tok.slice(1) as Ornament;
+      const o = (tok === '!trem' ? 'trem32' : tok.slice(1)) as Ornament;
       const last = notes[notes.length - 1];
       if (!ORNAMENTS.has(o)) fail('unknown ornament', tok);
       if (!last) fail('ornament before any note', tok);
@@ -336,23 +343,106 @@ export interface PlayNote {
   /** Ids of the written notes that make up this sound (tied notes are joined). */
   ids: string[];
   grace?: boolean;
+  /** One of the quick notes of a realized ornament (trill, mordent, turn, tremolo). */
+  ornament?: boolean;
 }
 
 /** Grace notes take this many quarter notes from the start of their main note. */
 const GRACE_LEN = 0.08;
+/** The quick notes of an ornament are at most this long: a thirty-second note. */
+const ORN_STEP = 0.125;
+/** Repetition length of each tremolo kind, in quarter notes. */
+const TREM_STEP: Partial<Record<Ornament, number>> = { trem8: 0.5, trem16: 0.25, trem32: 0.125 };
 
 /**
- * Sounds of the score in time order: tied notes become one sound, rests are skipped and grace
- * notes are played just before the beat (taking a little time from the previous sound).
+ * The diatonic neighbors of a note in the key, as MIDI numbers. A note outside the key takes the
+ * nearest scale notes on either side. In minor the lower neighbor of the tonic is the raised
+ * leading tone, as in every mordent and trill termination of the common-practice repertoire.
+ */
+export function diatonicNeighbors(m: number, key: Key): { upper: number; lower: number } {
+  const scale = new Set(keyNotes(key).map(pc));
+  const p = mod(m, 12);
+  let upper = m + 2;
+  let lower = m - 2;
+  for (const d of [1, 2]) {
+    if (scale.has(mod(p + d, 12))) {
+      upper = m + d;
+      break;
+    }
+  }
+  for (const d of [1, 2]) {
+    if (scale.has(mod(p - d, 12))) {
+      lower = m - d;
+      break;
+    }
+  }
+  if (key.mode === 'minor' && p === pc(key.tonic)) lower = m - 1;
+  return { upper, lower };
+}
+
+/**
+ * Expand one sound according to its ornaments. The ornament is played on the top note of a chord
+ * while the other notes hold. A staccato halves the sound; the fermata is not realized.
+ */
+function realizeOrnaments(snd: PlayNote, orn: Ornament[], key: Key): PlayNote[] {
+  const { time, duration, midi: ms, ids } = snd;
+  const quick = (t: number, d: number, pitches: number[]): PlayNote => ({ time: t, duration: d, midi: pitches, ids, ornament: true });
+  const trem = orn.find((o) => TREM_STEP[o]);
+  if (trem) {
+    const step = TREM_STEP[trem]!;
+    const count = Math.max(1, Math.round(duration / step));
+    const each = duration / count;
+    return Array.from({ length: count }, (_, i) => quick(time + i * each, each, ms));
+  }
+  const main = ms[ms.length - 1];
+  const held = ms.slice(0, -1);
+  const { upper, lower } = diatonicNeighbors(main, key);
+  let notes: Array<{ midi: number; dur: number }> | null = null;
+  if (orn.includes('tr')) {
+    // Odd count: the trill starts and ends on the main note.
+    const count = 2 * Math.max(1, Math.floor(duration / (2 * ORN_STEP))) + 1;
+    const each = duration / count;
+    notes = Array.from({ length: count }, (_, i) => ({ midi: i % 2 === 0 ? main : upper, dur: each }));
+  } else if (orn.includes('prall') || orn.includes('mordent')) {
+    const q = Math.min(ORN_STEP, duration / 4);
+    notes = [{ midi: main, dur: q }, { midi: orn.includes('prall') ? upper : lower, dur: q }, { midi: main, dur: duration - 2 * q }];
+  } else if (orn.includes('turn')) {
+    const q = Math.min(ORN_STEP, duration / 4);
+    notes = [{ midi: upper, dur: q }, { midi: main, dur: q }, { midi: lower, dur: q }, { midi: main, dur: duration - 3 * q }];
+  }
+  if (!notes) {
+    if (orn.includes('stacc')) return [{ ...snd, duration: duration / 2 }];
+    return [snd];
+  }
+  const out: PlayNote[] = [];
+  if (held.length) out.push({ time, duration, midi: held, ids });
+  let t = time;
+  for (const x of notes) {
+    out.push(quick(t, x.dur, [x.midi]));
+    t += x.dur;
+  }
+  return out;
+}
+
+/**
+ * Sounds of the score in time order: tied notes become one sound, rests are skipped, grace notes
+ * are played just before the beat (taking a little time from the previous sound) and ornaments are
+ * realized in the key of the score (see the module comment).
  */
 export function scoreSounds(score: Score): PlayNote[] {
   const out: PlayNote[] = [];
   for (const st of score.staves) {
     for (const v of st.voices) {
-      let open: PlayNote | null = null;
+      let open: { sound: PlayNote; orn?: Ornament[] } | null = null;
+      const close = () => {
+        if (!open) return;
+        if (open.orn?.length) out.push(...realizeOrnaments(open.sound, open.orn, score.key));
+        else out.push(open.sound);
+        open = null;
+      };
       for (const n of v.notes) {
         if (n.rest) {
-          open = null;
+          close();
           continue;
         }
         n.grace?.forEach((g, gi) => {
@@ -360,15 +450,16 @@ export function scoreSounds(score: Score): PlayNote[] {
           out.push({ time: Math.max(0, at), duration: GRACE_LEN, midi: g.map(midi), ids: [n.id], grace: true });
         });
         const ms = n.pitches.map(midi);
-        if (open && open.midi.join() === ms.join()) {
-          open.duration += n.dur;
-          open.ids.push(n.id);
+        if (open && open.sound.midi.join() === ms.join()) {
+          open.sound.duration += n.dur;
+          open.sound.ids.push(n.id);
         } else {
-          open = { time: n.start, duration: n.dur, midi: ms, ids: [n.id] };
-          out.push(open);
+          close();
+          open = { sound: { time: n.start, duration: n.dur, midi: ms, ids: [n.id] }, orn: n.orn };
         }
-        if (!n.tie) open = null;
+        if (!n.tie) close();
       }
+      close();
     }
   }
   return out.sort((a, b) => a.time - b.time);

@@ -43,4 +43,4 @@ export interface Excerpt {
 
 /** Verification note for excerpts checked note by note against a Mutopia Project edition. */
 export const MUTOPIA = (edition: string) =>
-  `Encoded from the score and checked note by note against the ${edition} edition of the Mutopia Project (mutopiaproject.org). Ornaments are notated but played as written.`;
+  `Encoded from the score and checked note by note against the ${edition} edition of the Mutopia Project (mutopiaproject.org). Ornaments are realized in playback with the diatonic neighbors of the key: trills from the main note, mordents to the lower neighbor.`;

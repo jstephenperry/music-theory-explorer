@@ -75,10 +75,11 @@ Import from `src/theory` (barrel) or from individual modules.
   `value`, `dots`, `tuplet`, `dur`, `start`, `measure`, `tie`, `grace`, `orn`, `below`, `above`).
   `buildScore(spec)` parses the text format documented at the top of the file (`C4/16 D4 E4`,
   `(C4 E4 G4)/2`, `~` ties, `3:2[ ... ]` tuplets, `^C5/16` grace notes, `!tr` and other ornaments,
-  `_"V7"` labels, `|` barlines checked against the meter, a pickup and a short last bar).
+  `_"V7"` labels, `!trem` tremolos, `|` barlines checked against the meter, a pickup and a short last bar).
   `notateVoice(plainNotes, { time })` writes generated music into measures, splitting at barlines
   and at the beat with ties and grouping triplets. `scoreSounds(score)` turns a score into timed
-  sounds (ties joined, grace notes before the beat); `selectNotes(score, "0.0.1-7, 1.0.2")` selects
+  sounds (ties joined, grace notes before the beat, trills, mordents, turns, tremolos and staccatos
+  realized with `diatonicNeighbors` in the score's key; the fermata is drawn only); `selectNotes(score, "0.0.1-7, 1.0.2")` selects
   notes for highlighting.
 - `composition/motive.ts`: motivic transformations on `Motive` (`{ pitch, dur }[]`): `sequence`
   (tonal, by scale steps), `transposeReal`, `invertDiatonic`, `invertChromatic`, `retrograde`,

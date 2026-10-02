@@ -121,3 +121,62 @@ describe('notateVoice', () => {
     ]);
   });
 });
+
+describe('ornament realization', () => {
+  const sounds = (voice: string, key = C) => scoreSounds(buildScore({ key, time: [4, 4], staves: [{ clef: 'treble', voices: [voice] }] }));
+  const span = (s: ReturnType<typeof sounds>) => Math.max(...s.map((x) => x.time + x.duration));
+
+  it('plays a trill from the main note with the diatonic upper neighbor, ending on the main note', () => {
+    const s = sounds('F5/8 !tr E5/16 F5 E5/4 r/2');
+    const trill = s.filter((x) => x.ornament);
+    expect(trill.map((x) => x.midi[0])).toEqual([77, 79, 77, 79, 77]);
+    expect(trill.reduce((a, x) => a + x.duration, 0)).toBeCloseTo(0.5);
+    expect(trill[trill.length - 1].time + trill[trill.length - 1].duration).toBeCloseTo(0.5);
+    expect(s.find((x) => x.midi[0] === 76)!.time).toBeCloseTo(0.5);
+    expect(trill.every((x) => x.ids[0] === '0.0.0')).toBe(true);
+  });
+
+  it('plays a prall as main, upper, main and a mordent as main, lower, main', () => {
+    const prall = sounds('B4/8 !prall r/8 r/2.');
+    expect(prall.map((x) => x.midi[0])).toEqual([71, 72, 71]);
+    expect(prall.map((x) => x.duration)).toEqual([0.125, 0.125, 0.25]);
+    const mordent = sounds('C5/4 !mordent r/2.');
+    expect(mordent.map((x) => x.midi[0])).toEqual([72, 71, 72]);
+    expect(span(mordent)).toBeCloseTo(1);
+  });
+
+  it('uses the raised leading tone below the tonic in minor and natural neighbors elsewhere', () => {
+    const cm = makeKey('C', 'minor');
+    expect(sounds('C5/4 !mordent r/2.', cm).map((x) => x.midi[0])).toEqual([72, 71, 72]);
+    expect(sounds('G4/4 !tr r/2.', cm).map((x) => x.midi[0]).slice(0, 2)).toEqual([67, 68]);
+    expect(sounds('D4/4 !mordent r/2.', cm).map((x) => x.midi[0])).toEqual([62, 60, 62]);
+  });
+
+  it('plays a turn as upper, main, lower, main', () => {
+    const s = sounds('G4/4 !turn r/2.');
+    expect(s.map((x) => x.midi[0])).toEqual([69, 67, 65, 67]);
+    expect(s.map((x) => x.duration)).toEqual([0.125, 0.125, 0.125, 0.625]);
+  });
+
+  it('repeats a tremolo at the written rate, chords included', () => {
+    const s = sounds('(C4 E4)/2 !trem r/2');
+    expect(s).toHaveLength(16);
+    expect(s.every((x) => x.midi.join() === '60,64' && Math.abs(x.duration - 0.125) < 1e-9)).toBe(true);
+    expect(sounds('C4/2 !trem16 r/2')).toHaveLength(8);
+    expect(sounds('C4/2 !trem8 r/2')).toHaveLength(4);
+  });
+
+  it('ornaments the top note of a chord while the others hold, and spans tied notes', () => {
+    const chord = sounds('(C4 E4 G4)/4 !prall r/2.');
+    expect(chord[0]).toMatchObject({ midi: [60, 64], duration: 1 });
+    expect(chord.filter((x) => x.ornament).map((x) => x.midi[0])).toEqual([67, 69, 67]);
+    const tied = sounds('C4/4~ !tr C4/4 r/2');
+    expect(tied).toHaveLength(17);
+    expect(span(tied)).toBeCloseTo(2);
+  });
+
+  it('halves a staccato note and leaves a fermata alone', () => {
+    expect(sounds('C4/4 !stacc r/2.')[0].duration).toBe(0.5);
+    expect(sounds('C4/4 !fermata r/2.')[0].duration).toBe(1);
+  });
+});

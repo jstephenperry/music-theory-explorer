@@ -113,8 +113,12 @@ export function ScoreView(props: ScoreViewProps) {
 
 const ACC: Record<number, string> = { [-2]: 'bb', [-1]: 'b', 0: 'n', 1: '#', 2: '##' };
 const VEX_DUR: Record<number, string> = { 1: 'w', 2: 'h', 4: 'q', 8: '8', 16: '16', 32: '32' };
-const ORN: Record<string, { kind: 'orn' | 'art'; code: string }> = {
+const ORN: Record<string, { kind: 'orn' | 'art' | 'trem'; code: string }> = {
   tr: { kind: 'orn', code: 'tr' },
+  // Tremolo strokes through the stem: one per halving of the note value below an eighth.
+  trem8: { kind: 'trem', code: '1' },
+  trem16: { kind: 'trem', code: '2' },
+  trem32: { kind: 'trem', code: '3' },
   // VexFlow's "mordent" is the short trill (prall) glyph and its "mordentInverted" the mordent with a line.
   mordent: { kind: 'orn', code: 'mordentInverted' },
   prall: { kind: 'orn', code: 'mordent' },
@@ -144,7 +148,7 @@ interface Built {
 }
 
 function engrave(VF: VexModule, el: HTMLDivElement, props: ScoreViewProps, width: number, onClick: (id: string) => void): Map<string, SVGElement[]> {
-  const { Renderer, Stave, StaveNote, GhostNote, Voice, Formatter, Accidental, StaveConnector, Dot, Beam, Barline, StaveTie, Tuplet, GraceNote, GraceNoteGroup, Ornament, Articulation, Stem } = VF;
+  const { Renderer, Stave, StaveNote, GhostNote, Voice, Formatter, Accidental, StaveConnector, Dot, Beam, Barline, StaveTie, Tuplet, GraceNote, GraceNoteGroup, Ornament, Articulation, Stem, Tremolo } = VF;
   const score = props.score;
   el.innerHTML = '';
   const map = new Map<string, SVGElement[]>();
@@ -372,7 +376,7 @@ function engrave(VF: VexModule, el: HTMLDivElement, props: ScoreViewProps, width
             n.orn?.forEach((o) => {
               const spec = ORN[o];
               if (!spec) return;
-              vn.addModifier(spec.kind === 'orn' ? new Ornament(spec.code) : new Articulation(spec.code), 0);
+              vn.addModifier(spec.kind === 'orn' ? new Ornament(spec.code) : spec.kind === 'trem' ? new Tremolo(Number(spec.code)) : new Articulation(spec.code), 0);
             });
             const color = resolveColor(props.colors?.[n.id]);
             if (color) vn.setStyle({ fillStyle: color, strokeStyle: color });
