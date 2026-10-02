@@ -23,7 +23,7 @@ export const FIFTH_SYMPHONY: Excerpt = {
     { first: '0.0.6', last: '0.0.10', label: 'Sequence, a step lower', color: 'alt', layer: 'sequence' },
   ],
   commentary: [
-    'Perhaps the most famous motive ever written is mostly rhythm: three short notes and a long one. Beethoven repeats it a step lower at once, and the whole movement keeps returning to the pattern in every register and instrument.',
+    'The motive is mostly rhythm: three short notes and a long one. Beethoven repeats it a step lower at once, and the whole movement keeps returning to the pattern in every register and instrument.',
   ],
 };
 
@@ -67,7 +67,7 @@ export const OP2_NO1: Excerpt = {
     ],
   },
   layers: [
-    { id: 'bi', label: 'Basic idea', color: 'root', select: '0.0.0-9', description: 'Two bars that state the tonic: an arpeggio rising from the upbeat (the "Mannheim rocket") and a turn figure that settles on F.' },
+    { id: 'bi', label: 'Basic idea', color: 'root', select: '0.0.0-9', description: 'Two bars that state the tonic: an arpeggio rising from the upbeat (a Mannheim rocket) and a turn figure that settles on F.' },
     { id: 'rep', label: 'Repetition', color: 'alt', select: '0.0.11-19', description: 'The basic idea again, on the dominant seventh: a statement and response, like a question and its echo.' },
     { id: 'frag', label: 'Fragmentation', color: 'extra', select: '0.0.21-25, 0.0.27-31', description: 'Only the second bar of the idea, now in one-bar units that alternate tonic and dominant: the music speeds up.' },
     { id: 'cad', label: 'Cadence', color: 'other', select: '0.0.33-39', description: 'A loud chord, a run down and a turn on to C: a half cadence on V, the phrase ends open.' },

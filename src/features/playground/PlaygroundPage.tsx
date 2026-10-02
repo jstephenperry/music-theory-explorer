@@ -289,9 +289,9 @@ export default function PlaygroundPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Practice Room"
+        eyebrow="Practice"
         title="Free Play"
-        lede="A full keyboard that listens. Play with the mouse, your computer keys or a MIDI keyboard, and watch every chord get its name, its notation and its function."
+        lede="A five-octave keyboard with live chord naming. Play with the mouse, your computer keys or a MIDI keyboard, and watch every chord get its name, its notation and its function."
       />
 
       <Panel sunk className={s.console}>

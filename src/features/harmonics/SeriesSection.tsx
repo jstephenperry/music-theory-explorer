@@ -14,7 +14,7 @@ const OCTAVES = [1, 2, 3, 4].map((o) => ({ value: o, label: String(o) }));
 
 const CHORD_PRESETS: Array<{ label: string; parts: number[]; title: string }> = [
   { label: '4:5:6', parts: [4, 5, 6], title: 'A just major triad' },
-  { label: '4:5:6:7', parts: [4, 5, 6, 7], title: 'A just "barbershop" dominant seventh' },
+  { label: '4:5:6:7', parts: [4, 5, 6, 7], title: 'The barbershop dominant seventh, tuned 4:5:6:7' },
   { label: '10:12:15', parts: [10, 12, 15], title: 'A just minor triad' },
   { label: '8 to 14', parts: [8, 9, 10, 11, 12, 13, 14], title: 'The overtone (acoustic) scale' },
   { label: '1 to 6', parts: [1, 2, 3, 4, 5, 6], title: 'The first six partials' },
@@ -297,11 +297,11 @@ export function SeriesSection({ a4 }: { a4: number }) {
           </div>
         </Panel>
       </div>
-      <Callout title="Why the series matters">
+      <Callout title="Partials, timbre and consonance">
         <p>
           Timbre is the balance of partials, and consonance is partials lining up: in a 3:2 fifth every second partial of
-          the upper note meets every third partial of the lower one. Tuning systems are different answers to the fact that
-          these whole-number ratios never fit neatly into twelve equal steps.
+          the upper note meets every third partial of the lower one. Tuning systems are different compromises, because
+          these whole-number ratios do not fit into twelve equal steps.
         </p>
       </Callout>
     </div>
@@ -313,8 +313,8 @@ function PartialNote({ p }: { p: Partial }) {
     1: 'The pitch we name the note by. Every other partial is a whole-number multiple of its frequency.',
     2: 'An octave: the 2:1 ratio. Octaves are pure in every tuning system.',
     3: 'A perfect twelfth (octave plus fifth). The 3:2 fifth between partials 2 and 3 is only 2 cents wider than the tempered fifth.',
-    5: 'A major third two octaves up, 14 cents flat of 12-TET. The 5:4 just third is sweeter and smoother than the piano\'s.',
-    7: 'The famous "blue" seventh: 31 cents flat of a tempered B♭ relative to C. Barbershop singers lock into it.',
+    5: 'A major third two octaves up, 14 cents flat of 12-TET. The 5:4 just third beats less than the piano\'s.',
+    7: 'The harmonic seventh, 31 cents flat of a tempered B♭ above C. Barbershop quartets tune their dominant sevenths to it.',
     9: 'A major second (9:8 above the octave of the fundamental), 4 cents sharp.',
     11: 'Almost exactly halfway between a fourth and a tritone: no 12-TET key comes close.',
     13: 'Between a minor and a major sixth, 41 cents sharp of the minor sixth.',

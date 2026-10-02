@@ -204,7 +204,7 @@ export default function ModulationPage() {
       <PageHeader
         eyebrow="Harmony"
         title="Modulation"
-        lede="Choose two keys and explore every road between them: shared chords, enharmonic trapdoors, sequences and sudden shifts. Hear each technique, see it on the staff and follow it on the keyboard."
+        lede="Choose two keys and compare nine ways between them: pivot chords, common tones, enharmonic reinterpretation, sequences and direct shifts. Hear each technique, see it on the staff and follow it on the keyboard."
       />
 
       <Panel title="Two keys" eyebrow="From and to">

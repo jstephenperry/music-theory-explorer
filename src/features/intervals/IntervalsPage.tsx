@@ -333,7 +333,7 @@ export default function IntervalsPage() {
       </Panel>
 
       <div className={s.twoCol}>
-        <Panel title="Same keys, different names" eyebrow="Enharmonic spelling">
+        <Panel title="Enharmonic spellings" eyebrow="Same keys, different letter names">
           <div className="stack">
             <p className={s.lead}>
               {pitchName(lower)} and the key {iv.semis} semitone{iv.semis === 1 ? '' : 's'} above it can be spelled {spellings.length} ways. The sound is identical on a piano;
@@ -380,7 +380,7 @@ export default function IntervalsPage() {
           </div>
         </Panel>
 
-        <Panel title="Hear it in a tune" eyebrow="Melodic references">
+        <Panel title="Melodic references" eyebrow="Tunes that begin with this interval">
           <div className="stack">
             {iv.semis === 0 ? (
               <p className={s.lead}>A unison has no melodic leap: both notes are the same pitch.</p>

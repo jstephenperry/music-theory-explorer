@@ -35,7 +35,7 @@ export const LIBRARY: LibraryEntry[] = [
   },
   {
     id: 'minor-plagal', name: 'Minor plagal (IV to iv to I)', group: 'Cadences and schemata', era: 'Romantic, Beatles, film',
-    description: 'The major IV turns minor (♭6 borrowed from the parallel minor) before home: a wistful "Amen".',
+    description: 'The major IV turns minor (♭6 borrowed from the parallel minor) before home.',
     progression: 'I IV iv I', mode: 'major', style: 'arpeggio', bpm: 72,
   },
   {
@@ -70,19 +70,19 @@ export const LIBRARY: LibraryEntry[] = [
   },
   {
     id: 'monte', name: 'Monte (rising sequence)', group: 'Cadences and schemata', era: 'Galant',
-    description: 'Each chord is approached by its own dominant, and the pair repeats a step higher: climbing energy.',
+    description: 'Each chord is approached by its own dominant, and the pair repeats a step higher: a rising sequence.',
     progression: 'V7/IV:2 IV:2 V7/V:2 V:2 V7:2 I:6', mode: 'major', style: 'alberti', bpm: 96,
   },
   {
     id: 'fonte', name: 'Fonte (falling sequence)', group: 'Cadences and schemata', era: 'Galant',
-    description: 'A tonicized ii, then the same move a step lower to I: a gentle sigh.',
+    description: 'A tonicized ii, then the same move a step lower to I.',
     progression: 'V7/ii:2 ii:2 V7:2 I:2', mode: 'major', style: 'alberti', bpm: 96,
   },
 
   // ---------- Grounds and sequences ----------
   {
     id: 'andalusian', name: 'Andalusian cadence', group: 'Grounds and sequences', era: 'Renaissance, flamenco, rock',
-    description: 'A descending tetrachord in minor: i, ♭VII, ♭VI, V. The major V gives the Phrygian bite.',
+    description: 'A descending tetrachord in minor: i, ♭VII, ♭VI, V. The major V puts a half step between ♭6 and 5 in the bass.',
     progression: 'i bVII bVI V', mode: 'minor', style: 'strum', bpm: 100,
   },
   {
@@ -102,7 +102,7 @@ export const LIBRARY: LibraryEntry[] = [
   },
   {
     id: 'folia', name: 'La Folia', group: 'Grounds and sequences', era: 'Renaissance, Baroque',
-    description: 'A famous ground with its relative-major middle (VII to III); Corelli, Vivaldi and Rachmaninoff wrote variations.',
+    description: 'A ground bass with its relative-major middle (VII to III); Corelli, Vivaldi and Rachmaninoff wrote variations.',
     progression: 'i V i VII III VII i V', mode: 'minor', style: 'waltz', bpm: 120,
   },
   {
@@ -129,7 +129,7 @@ export const LIBRARY: LibraryEntry[] = [
   },
   {
     id: 'altered-two-five', name: 'ii–V–I with altered V', group: 'Jazz', era: 'Bebop, modern jazz',
-    description: 'V⁷alt adds ♭9, ♯9 and ♭13: maximum tension that resolves by half step into Imaj7.',
+    description: 'V⁷alt adds ♭9, ♯9 and ♭13, all of which resolve by half step into Imaj7.',
     progression: 'ii7 V7alt Imaj7:8', mode: 'major', style: 'comp', bpm: 120,
   },
   {
@@ -144,7 +144,7 @@ export const LIBRARY: LibraryEntry[] = [
   },
   {
     id: 'backdoor', name: 'Backdoor ii–V', group: 'Jazz', era: 'Jazz standards',
-    description: 'iv⁷ to ♭VII⁷, both from the parallel minor, entering the tonic through the "back door".',
+    description: 'iv⁷ to ♭VII⁷, both from the parallel minor, entering the tonic from the flat side; hence the name.',
     progression: 'iv7 bVII7 Imaj7:8', mode: 'major', style: 'comp', bpm: 112,
   },
   {
@@ -206,7 +206,7 @@ export const LIBRARY: LibraryEntry[] = [
   },
   {
     id: 'doo-wop', name: 'Doo-wop', group: 'Blues and gospel', era: '1950s',
-    description: 'The "fifties progression": I, vi, IV, V, often with a triplet piano feel.',
+    description: 'The fifties progression: I, vi, IV, V, often with a triplet piano feel.',
     progression: 'I vi IV V', mode: 'major', style: 'waltz', bpm: 132,
   },
 
@@ -223,12 +223,12 @@ export const LIBRARY: LibraryEntry[] = [
   },
   {
     id: 'lydian', name: 'Lydian vamp', group: 'Modal and rock', era: 'Film, fusion',
-    description: 'I to a major II: the ♯4 in II gives the floating, wondrous Lydian color.',
+    description: 'I to a major II: the ♯4 in II gives the Lydian color.',
     progression: 'Imaj7 II', mode: 'major', style: 'arpeggio', bpm: 92,
   },
   {
     id: 'phrygian', name: 'Phrygian vamp', group: 'Modal and rock', era: 'Flamenco, metal',
-    description: 'Minor i with ♭II a half step above: dark and tense.',
+    description: 'Minor i with ♭II a half step above: the Phrygian signature.',
     progression: 'i bII', mode: 'minor', style: 'strum', bpm: 100,
   },
   {
@@ -238,7 +238,7 @@ export const LIBRARY: LibraryEntry[] = [
   },
   {
     id: 'mario', name: 'Aeolian cadence (♭VI ♭VII I)', group: 'Modal and rock', era: 'Video games, rock anthems',
-    description: 'Two borrowed major chords climb by whole steps into a major tonic: triumphant.',
+    description: 'Two borrowed major chords climb by whole steps into a major tonic.',
     progression: 'I:8 bVI:2 bVII:2 I:4', mode: 'major', style: 'block', bpm: 112,
   },
   {
@@ -260,19 +260,19 @@ export const LIBRARY: LibraryEntry[] = [
   },
   {
     id: 'mediant-plagal', name: 'Major III and minor iv', group: 'Pop', era: '1990s alternative rock',
-    description: 'A major III (a chromatic mediant with a raised 5th) and a borrowed iv: bright then bittersweet.',
+    description: 'A major III (a chromatic mediant with a raised 5th) and a borrowed iv.',
     progression: 'I III IV iv', mode: 'major', style: 'strum', bpm: 92,
   },
 
   // ---------- Chromatic and cinematic ----------
   {
     id: 'film-mediants', name: 'Chromatic mediant film progression', group: 'Chromatic and cinematic', era: 'Film scores',
-    description: 'Major triads a major third apart share one tone; the others move by half step. Heroic and otherworldly.',
+    description: 'Major triads a major third apart share one tone; the other two notes move by half step.',
     progression: 'I bVI I III', mode: 'major', style: 'block', bpm: 72,
   },
   {
     id: 'dark-mediants', name: 'Minor mediant shadows', group: 'Chromatic and cinematic', era: 'Film scores',
-    description: 'Minor triads a third apart, each keeping one common tone with i: sinister and floating.',
+    description: 'Minor triads a third apart, each keeping one common tone with i.',
     progression: 'i bvi i biii', mode: 'minor', style: 'block', bpm: 66,
   },
   {

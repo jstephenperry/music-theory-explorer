@@ -190,7 +190,7 @@ const NEW_FN_SCORE: Record<Fn, number> = { predominant: 4, submediant: 3, tonic:
 function pivotWhy(p: { old: KeyChord; new: KeyChord }): string {
   const nf = p.new.fn;
   if (nf === 'predominant') return `A predominant in the new key, so it leads straight to the new V⁷.`;
-  if (nf === 'submediant') return `Submediant in the new key: it moves naturally to a predominant and then to V⁷.`;
+  if (nf === 'submediant') return `Submediant in the new key: it moves to a predominant and then to V⁷.`;
   if (nf === 'tonic') return `Already the new tonic: smooth, but the new key arrives before its dominant confirms it.`;
   if (nf === 'dominant') return `The new dominant itself: direct, but there is little time to prepare the turn.`;
   return `Weaker function in the new key; it needs a predominant before the cadence.`;
@@ -516,7 +516,7 @@ export const TECHNIQUES: TechniqueInfo[] = [
   {
     id: 'direct',
     name: 'Direct (phrase)',
-    short: 'The new key simply begins with the next phrase.',
+    short: 'The new key begins with the next phrase.',
     explanation:
       'No shared chord at all: one phrase closes with a cadence in the old key and the next phrase starts in the new key. It relies on the phrase break and a strong new tonic, so it is natural between related keys and a deliberate jolt between distant ones.',
     bestFor: 'Phrase boundaries, any key',
@@ -558,7 +558,7 @@ export const TECHNIQUES: TechniqueInfo[] = [
     name: 'Sequential',
     short: 'A chain of dominants falls by fifths into the new key.',
     explanation:
-      'A repeated pattern carries the music around the circle of fifths. Each chord becomes the dominant of the next until the chain lands on the new key’s V⁷, so the destination feels inevitable rather than abrupt.',
+      'A repeated pattern carries the music around the circle of fifths. Each chord becomes the dominant of the next until the chain lands on the new key’s V⁷, so the arrival is prepared rather than abrupt.',
     bestFor: 'Keys several fifths away',
   },
   {
@@ -923,7 +923,7 @@ function directExample(from: Key, to: Key): Example {
     if (i === 0) st.phraseStart = true;
     steps.push(st);
   });
-  return makeExample(from, to, steps, `A cadence closes ${keyName(from)}; the next phrase simply begins in ${keyName(to)}.`);
+  return makeExample(from, to, steps, `A cadence closes ${keyName(from)}; the next phrase begins in ${keyName(to)}.`);
 }
 
 /** Old-key diatonic triad that leads most smoothly into `target` (most common tones, then least motion). */
@@ -1036,7 +1036,7 @@ function truckExample(from: Key, to: Key, option: string): Example {
     if (i === 0 && option !== 'v7') st.phraseStart = true;
     steps.push(st);
   });
-  return makeExample(from, to, steps, `The same progression, simply shifted up to ${keyName(to)}.`);
+  return makeExample(from, to, steps, `The same progression, shifted up to ${keyName(to)}.`);
 }
 
 /** Build the playable example for a technique (null when unavailable). */

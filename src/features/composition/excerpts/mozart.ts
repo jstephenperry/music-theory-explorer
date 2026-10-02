@@ -144,7 +144,7 @@ export const K265_VAR1: Excerpt = {
     { id: 'bass', label: 'Bass', color: 'alt', select: '1.0.0-6', description: 'The left hand keeps the bass of the theme almost unchanged, so the harmony is the same as before.' },
   ],
   commentary: [
-    'The first variation keeps the harmony and the outline of the melody and fills in the time between the theme’s notes. Each quarter note becomes four sixteenths circling it: the note’s upper neighbor, the note, its lower neighbor, the note. The lower neighbors are often chromatic (B below C, F sharp below G), which adds bite.',
+    'The first variation keeps the harmony and the outline of the melody and fills in the time between the theme’s notes. Each quarter note becomes four sixteenths circling it: the note’s upper neighbor, the note, its lower neighbor, the note. The lower neighbors are often chromatic (B below C, F sharp below G).',
     'This is melodic figuration, the oldest and most common way to vary a theme. Switch on “Theme notes” to see the original tune inside the decoration.',
   ],
 };

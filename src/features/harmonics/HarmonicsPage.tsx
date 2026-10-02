@@ -24,7 +24,7 @@ const A4_OPTIONS = [
   { value: 432, label: '432', title: 'A popular alternative reference' },
   { value: 440, label: '440', title: 'Modern standard pitch (ISO 16)' },
   { value: 442, label: '442', title: 'Common in European orchestras' },
-  { value: 466, label: '466', title: 'Venetian "cornett pitch" (about a semitone above 440)' },
+  { value: 466, label: '466', title: 'Venetian cornett pitch (about a semitone above 440)' },
 ];
 
 export default function HarmonicsPage() {
@@ -45,7 +45,7 @@ export default function HarmonicsPage() {
       <PageHeader
         eyebrow="Sound & Tuning"
         title="Harmonics & Tuning"
-        lede="Every musical tone is a stack of partials. Hear the harmonic series, build timbres from sine waves, and compare the tuning systems musicians have used to tame the octave."
+        lede="Every musical tone is a stack of partials. Hear the harmonic series, build timbres from sine waves, and compare seven ways of dividing the octave, from Pythagorean tuning to 31 equal steps."
       >
         <div className={s.refBar}>
           <span className={s.refLabel} id="a4-label">

@@ -294,7 +294,7 @@ export const PRESETS: Preset[] = [
   {
     id: 'film',
     name: 'Film-score mediants',
-    desc: 'Major triads a third apart, the sound of heroic film music: down by major thirds (PL), then up by minor thirds (PR).',
+    desc: 'Major triads a third apart, common in film scores: down by major thirds (PL), then up by minor thirds (PR).',
     steps: [['P', 'L'], ['P', 'L'], ['P', 'L'], ['P', 'R'], ['P', 'R'], ['P', 'R'], ['P', 'R']],
   },
 ];

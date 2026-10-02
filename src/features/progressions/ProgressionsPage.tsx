@@ -243,7 +243,7 @@ export default function ProgressionsPage() {
       <PageHeader
         eyebrow="Harmony"
         title="Progression Lab"
-        lede="Build chord progressions with roman numerals, from the diatonic basics to borrowed chords, applied dominants, tritone substitutes, augmented sixths and chromatic mediants. Hear them voiced in four parts, see every voice move, and ask what could come next."
+        lede="Build chord progressions with roman numerals, from the diatonic basics to borrowed chords, applied dominants, tritone substitutes, augmented sixths and chromatic mediants. Hear them voiced in four parts, see every voice move, and get suggestions for the next chord."
       />
 
       <Panel>
@@ -338,7 +338,7 @@ export default function ProgressionsPage() {
               <dt>Half</dt>
               <dd>Ends on V. In minor, iv⁶ to V is a Phrygian half cadence.</dd>
               <dt>Plagal</dt>
-              <dd>IV or iv to I, the "Amen" cadence.</dd>
+              <dd>IV or iv to I, the cadence sung to Amen at the end of hymns.</dd>
               <dt>Deceptive</dt>
               <dd>V to vi (or ♭VI): the expected tonic is replaced.</dd>
               <dt>Backdoor, tritone</dt>

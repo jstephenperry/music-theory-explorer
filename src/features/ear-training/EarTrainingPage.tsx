@@ -175,9 +175,9 @@ export default function EarTrainingPage() {
   return (
     <div className={s.page}>
       <PageHeader
-        eyebrow="Practice Room"
+        eyebrow="Practice"
         title="Ear Training"
-        lede="Listen, name what you hear, then compare it with the right answer on the keyboard and the staff. The trainer quietly brings back the items you miss."
+        lede="Listen, name what you hear, then compare it with the right answer on the keyboard and the staff. Items you miss come up more often."
       />
       <Tabs tabs={EXERCISES.map((e) => ({ id: e.id, label: e.label }))} value={type} onChange={(v) => setTypeParam(v)} ariaLabel="Exercise type" />
 

@@ -256,7 +256,7 @@ export default function TonnetzPage() {
       <PageHeader
         eyebrow="Harmony"
         title="Tonnetz"
-        lede="Euler's table of tones, revived by Riemann and today's music theorists: every triangle is a triad, and neighbors differ by a single note. Walk the lattice with P, L and R and hear how little has to move."
+        lede="Euler's table of tones (1739), taken up by Riemann and by neo-Riemannian theory: every triangle is a triad, and neighbors differ by a single note. Walk the lattice with P, L and R and hear how few notes move."
       />
 
       <Panel>
@@ -384,7 +384,7 @@ export default function TonnetzPage() {
         </div>
       </div>
 
-      <Panel title="Reading the Tonnetz" eyebrow="What you are looking at">
+      <Panel title="Reading the Tonnetz" eyebrow="Nodes, triangles and edges">
         <div className="grid-2">
           <div className={s.explain}>
             <ul>
@@ -394,9 +394,9 @@ export default function TonnetzPage() {
                 Two triangles that share an edge share two notes. Crossing that edge replaces only the third note, by a semitone or a whole step: the smoothest
                 possible change of harmony.
               </li>
-              <li>The lattice repeats in every direction (it is really a torus), so each triad appears many times; the trail shows the path you took.</li>
+              <li>The lattice repeats in every direction (it is a torus), so each triad appears many times; the trail shows the path you took.</li>
             </ul>
-            <Callout title="Why it matters">
+            <Callout title="Chains of moves reach distant triads">
               Late Romantic and film composers chain these moves to reach distant triads with almost no motion in the voices, which is why C major to G♯ minor
               (H) can sound inevitable rather than random.
             </Callout>

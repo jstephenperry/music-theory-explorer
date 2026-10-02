@@ -13,9 +13,9 @@ export default function PhrasePage() {
   return (
     <div className={s.page}>
       <PageHeader
-        eyebrow="Composition"
+        eyebrow="Melody & Phrase"
         title="Phrase & Cadence"
-        lede="Classical melodies are built from phrases, and phrases end with cadences, the punctuation of music. See the two great Classical phrase forms, the period and the sentence, in Mozart and Beethoven, learn the cadences by ear, then build eight-bar phrases of your own."
+        lede="Classical melodies are built from phrases, and phrases end with cadences. See the two common Classical phrase forms, the period and the sentence, in Mozart’s K. 331 and Beethoven’s Op. 2 No. 1, learn six cadence types by ear, then build eight-bar phrases of your own."
       />
       <Panel title="In the repertoire">
         <div className="stack">
@@ -23,7 +23,7 @@ export default function PhrasePage() {
           <ExcerptView excerpt={OP2_NO1} player={player} />
         </div>
       </Panel>
-      <Panel title="Cadence gallery" eyebrow="Musical punctuation">
+      <Panel title="Cadence gallery" eyebrow="Six cadence types in four parts">
         <CadenceGallery player={player} />
       </Panel>
       <Panel title="Phrase builder" eyebrow="Build a period or a sentence">
