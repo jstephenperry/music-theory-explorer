@@ -386,6 +386,8 @@ export interface PlainNote {
   below?: string;
   above?: string;
   orn?: Ornament[];
+  /** Part of a triplet: `dur` is the actual length (1/3 for a triplet eighth). Triplets are grouped in threes. */
+  triplet?: boolean;
 }
 
 const WRITABLE: Array<{ value: NoteValue; dots: number; len: number }> = [];
@@ -414,7 +416,29 @@ export function notateVoice(seq: PlainNote[], opts: { time: [number, number]; pi
   const prefix = `${opts.staff ?? 0}.${opts.voice ?? 0}`;
   const out: ScoreNote[] = [];
   let t = 0;
+  let triplets = 0;
   for (const n of seq) {
+    if (n.triplet) {
+      // Written as the next longer plain value under a 3:2 bracket (a triplet eighth is an eighth).
+      const w = writableParts((n.dur * 3) / 2)[0];
+      out.push({
+        id: `${prefix}.${out.length}`,
+        pitches: n.pitches,
+        ...(n.pitches.length === 0 ? { rest: 'rest' as const } : {}),
+        value: w.value,
+        dots: w.dots,
+        tuplet: { actual: 3, normal: 2, group: Math.floor(triplets / 3) },
+        dur: n.dur,
+        start: t,
+        measure: measureAt(shape, t),
+        ...(n.below ? { below: n.below } : {}),
+        ...(n.above ? { above: n.above } : {}),
+        ...(n.orn ? { orn: n.orn } : {}),
+      });
+      triplets++;
+      t += n.dur;
+      continue;
+    }
     let left = n.dur;
     let first = true;
     while (left > EPS) {

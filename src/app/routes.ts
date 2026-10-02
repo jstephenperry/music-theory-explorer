@@ -75,6 +75,11 @@ export const ROUTES: RouteDef[] = [
     component: lazy(() => import('../features/composition/CounterpointPage')),
   },
   {
+    path: '/variations', title: 'Theme & Variations', section: 'Composition',
+    blurb: 'Mozart’s variations on “Ah vous dirai-je, Maman” and a workshop to vary the theme.',
+    component: lazy(() => import('../features/composition/VariationsPage')),
+  },
+  {
     path: '/meter', title: 'Meter & Time', section: 'Rhythm',
     blurb: 'Simple, compound, irregular and additive meters with a programmable metronome.',
     component: lazy(() => import('../features/meter/MeterPage')),

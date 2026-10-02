@@ -431,7 +431,12 @@ function engrave(VF: VexModule, el: HTMLDivElement, props: ScoreViewProps, width
       }
       perStaffVoices.forEach((vs, si) => vs.forEach((v) => v.draw(ctx, staves[si])));
       beams.forEach((b) => b.setContext(ctx).draw());
-      tuplets.forEach((t) => t.setContext(ctx).draw());
+      tuplets.forEach((t) => {
+        t.setContext(ctx).draw();
+        // The bracket number sits outside the notes' boxes: count it as ink.
+        const y = t.getYPosition();
+        extend(y - 16, y + 4);
+      });
       x += w;
     });
 
