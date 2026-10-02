@@ -18,6 +18,11 @@ enabled; see [Deploying](#deploying)).
 | Progression Lab | Write progressions in roman numerals or chord symbols. Add borrowed chords, secondary dominants, tritone substitutes, Neapolitan and augmented sixth chords, and chromatic mediants. Includes four-part voice leading, seven accompaniment styles, a library of 52 named progressions, next-chord suggestions, and reharmonization tools. |
 | Modulation | Choose two keys and compare nine techniques: pivot chord, direct, secondary dominant, common tone, enharmonic diminished seventh, enharmonic German sixth, sequence, modal interchange, and truck driver. A map shows how reachable every key is from the source key. |
 | Tonnetz | A neo-Riemannian lattice. Apply P, L, R, N, S and H transformations and play hexatonic, octatonic and other cycles. |
+| Motive & Development | Bach's Invention No. 1 and the opening of Beethoven's Fifth with the motive, its transposition, inversion and sequence highlighted. Develop a motive of your own (or one of four presets) by chaining up to ten operations: sequence, real transposition, inversion, retrograde, augmentation, diminution and fragmentation. A drill asks which technique produced a passage. |
+| Phrase & Cadence | Mozart's K. 331 theme (a period) and Beethoven's Op. 2 No. 1 (a sentence) with their phrase members marked. A gallery of six cadences in four-part harmony. A phrase builder assembles an eight-bar period or sentence from a basic idea, its repetition, fragments and a chosen cadence, in seven keys, and analyzes the result. A cadence ear-training drill. |
+| Texture & Accompaniment | Bach's chorale BWV 269, Mozart's K. 545 and Bach's Prelude BWV 846 as examples of homophony, melody with Alberti bass and broken-chord figuration. A texture lab writes one voice-led progression as a chorale, repeated chords, Alberti bass, prelude figuration, wide arpeggio or waltz. A texture ear-training drill. |
+| Species Counterpoint | Write first or second species counterpoint above or below a cantus firmus (Fux's Dorian melody or four practice melodies). Thirteen rules are checked as you write, with problem notes marked; hints keep your notes and suggest the next one; a solver shows a model solution. |
+| Theme & Variations | Mozart's K. 265 theme and the opening of Variation I with the theme's notes marked inside the figuration. A workshop varies the theme by figuration, rhythm, meter, mode and accompaniment. A drill asks what changed. |
 | Meter & Time | Simple, compound, irregular, additive and mixed meters with an editable accent grid, a metronome with swing and tap tempo, beamed notation, and a rhythm step sequencer (clave, tresillo, bossa nova and others). |
 | Polyrhythm | Layered polyrhythms on a clock and a grid, polymeter, hemiola, and a demo that speeds a polyrhythm up until it becomes a chord. |
 | Harmonics & Tuning | The harmonic series, additive synthesis, just versus equal intervals with audible beating, and playable historical tunings (Pythagorean, meantone, just, Werckmeister III, 19 and 31 equal). |
@@ -63,6 +68,9 @@ npm run preview    # serve dist/ locally
   instrument only; a synthesized stand-in plays until they arrive or if they cannot be fetched.
   See [public/samples/CREDITS.md](public/samples/CREDITS.md). Clicks and percussion are synthesized.
 - Each room lives in `src/features/<room>` with its own components, styles and tested logic.
+- Classical excerpts in the Composition rooms are encoded by hand in a compact text format and,
+  where a Mutopia Project edition exists, checked note by note (pitch and onset) against its MIDI
+  file. Each excerpt states how it was checked.
 
 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) documents the modules and the shared components.
 

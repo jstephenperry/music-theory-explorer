@@ -32,8 +32,8 @@ export default function HomePage() {
           <div className="eyebrow">An open concert hall for music theory</div>
           <h1 className={s.title}>Music Theory Explorer</h1>
           <p className={s.lede}>
-            Play, hear and see how music works: modes beyond major and minor, chromatic harmony, modulation, meter and
-            tuning. Every idea is an instrument you can touch, on a keyboard and on the stave.
+            Play, hear and see how music works: modes beyond major and minor, chromatic harmony, modulation, the craft of
+            composition, meter and tuning. Every idea is an instrument you can touch, on a keyboard and on the stave.
           </p>
           <div className={s.overture}>
             <div className={s.overtureHead}>

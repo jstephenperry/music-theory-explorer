@@ -56,6 +56,24 @@ Import from `src/theory` (barrel) or from individual modules.
   shell, spread, rootless), `voiceProgression(chords)` and `voiceLead(prev, next)` for smooth
   four-part voice leading that avoids crossings and parallel fifths and octaves.
 
+- `score.ts`: a small score model for notated music. `Score` = `{ key, time, pickup, measures,
+  ending?, staves }`; each staff has voices of `ScoreNote` (`id` "staff.voice.index", `pitches`,
+  `value`, `dots`, `tuplet`, `dur`, `start`, `measure`, `tie`, `grace`, `orn`, `below`, `above`).
+  `buildScore(spec)` parses the text format documented at the top of the file (`C4/16 D4 E4`,
+  `(C4 E4 G4)/2`, `~` ties, `3:2[ ... ]` tuplets, `^C5/16` grace notes, `!tr` and other ornaments,
+  `_"V7"` labels, `|` barlines checked against the meter, a pickup and a short last bar).
+  `notateVoice(plainNotes, { time })` writes generated music into measures, splitting at barlines
+  and at the beat with ties and grouping triplets. `scoreSounds(score)` turns a score into timed
+  sounds (ties joined, grace notes before the beat); `selectNotes(score, "0.0.1-7, 1.0.2")` selects
+  notes for highlighting.
+- `composition/motive.ts`: motivic transformations on `Motive` (`{ pitch, dur }[]`): `sequence`
+  (tonal, by scale steps), `transposeReal`, `invertDiatonic`, `invertChromatic`, `retrograde`,
+  `scaleRhythm`, `fragment`, `stepPitch`, and `develop(original, ops, key)` for chains of `DEV_OPS`.
+- `composition/counterpoint.ts`: two-voice species counterpoint after Fux. `checkCounterpoint(ex, cp)`
+  returns issues (slots, error or warning, rule, message) for first and second species, judging
+  intervals by spelling. `solveCounterpoint(ex, { fixed })` is a backtracking solver that writes
+  backward from the cadence; it powers hints and model solutions. `CANTUS_FIRMI`, `RULES`.
+
 ## Audio (`src/audio`)
 
 - `audio` singleton (`engine.ts`): `playNote(midi, dur, when?, vel)`, `playChord(midis, dur, when?, vel, strum)`,
@@ -83,6 +101,16 @@ Import from `src/theory` (barrel) or from individual modules.
   Events: `{ keys: Pitch[], duration, rest, top, bottom, color, keyColors, micro }` (`micro` holds
   per-key microtonal accidentals). Accidentals are computed
   automatically against the key signature. `loadVexFlow()` exposes VexFlow for custom engraving.
+- `ScoreView`: engraves a `Score` with VexFlow: grand staves with independent voices, line breaking
+  (`barsPerLine` keeps phrases together), beaming by beat, tuplets, grace notes, ornaments, ties
+  across lines, labels between the staves, colored notes (`colors`: note id to a color role),
+  `brackets` over passages, `active` note ids highlighted during playback without re-engraving, and
+  `onNoteClick`.
+- Composition rooms (`src/features/composition`): `useScorePlayer()` plays a `Score` and reports
+  the sounding note ids; `ExcerptView` shows an `Excerpt` (in `excerpts/`) with switchable
+  highlight layers, brackets, commentary and its source; `Quiz` is the shared multiple-choice drill.
+  Generators with tests: `phrase.ts` (periods, sentences, cadence analysis), `cadences.ts`,
+  `textures.ts`, `variations.ts`.
 - Hooks: `useUrlState(key, default)` and `useUrlParams(defaults)` keep shareable state in the URL;
   `usePersistentState` keeps preferences in localStorage; `useMediaQuery`; `useMidiInput`; `useComputerKeyboard`.
 - `ui.tsx`: `Button`, `PlayButton`, `Segmented`, `Select`, `TextInput`, `Slider`, `Toggle`, `Panel`,
@@ -103,6 +131,8 @@ Writing style: American English, concise, no emoji, no em or en dashes used as p
 ## Testing and deployment
 
 - `npm test` runs Vitest; `npm run typecheck`; `npm run build` produces `dist/`.
+- Excerpts were checked by hand-run comparison with Mutopia MIDI files; the `source` field of each
+  excerpt records what was checked and how.
 - `.github/workflows/deploy.yml` builds, tests and publishes to GitHub Pages on pushes to `main`.
 - `amplify.yml` provides equivalent settings for AWS Amplify Hosting.
 - The build uses a relative base path and hash routing, so it can be served from any path or domain.
