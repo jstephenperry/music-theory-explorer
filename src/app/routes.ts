@@ -5,13 +5,14 @@ export interface RouteDef {
   title: string;
   /** One-line description used on the home page and in navigation tooltips. */
   blurb: string;
-  section: 'Pitch' | 'Harmony' | 'Rhythm' | 'Sound' | 'Practice';
+  section: 'Pitch' | 'Harmony' | 'Composition' | 'Rhythm' | 'Sound' | 'Practice';
   component: LazyExoticComponent<ComponentType>;
 }
 
 export const SECTIONS: Array<{ id: RouteDef['section']; title: string }> = [
   { id: 'Pitch', title: 'Pitch & Scale' },
   { id: 'Harmony', title: 'Harmony' },
+  { id: 'Composition', title: 'Composition' },
   { id: 'Rhythm', title: 'Rhythm & Time' },
   { id: 'Sound', title: 'Sound & Tuning' },
   { id: 'Practice', title: 'Practice Room' },
@@ -25,7 +26,7 @@ export const ROUTES: RouteDef[] = [
   },
   {
     path: '/scales', title: 'Scales & Modes', section: 'Pitch',
-    blurb: 'Fifty-nine scales and modes: compare brightness, characteristic notes and harmony.',
+    blurb: 'More than 300 scales, modes, maqamat and ragas from 14 traditions, at their true intonation.',
     component: lazy(() => import('../features/scales/ScalesPage')),
   },
   {
@@ -52,6 +53,11 @@ export const ROUTES: RouteDef[] = [
     path: '/tonnetz', title: 'Tonnetz', section: 'Harmony',
     blurb: 'Navigate triads on the Tonnetz with neo-Riemannian P, L and R transformations.',
     component: lazy(() => import('../features/tonnetz/TonnetzPage')),
+  },
+  {
+    path: '/motive', title: 'Motive & Development', section: 'Composition',
+    blurb: 'Repeat, transpose, invert and sequence a motive, as Bach and Beethoven do.',
+    component: lazy(() => import('../features/composition/MotivePage')),
   },
   {
     path: '/meter', title: 'Meter & Time', section: 'Rhythm',
