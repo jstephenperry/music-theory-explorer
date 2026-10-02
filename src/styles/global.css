@@ -61,6 +61,7 @@
   --radius-lg: 14px;
   --sidebar-w: 264px;
   --content-max: 1180px;
+  --topbar-h: 54px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -304,6 +305,22 @@ kbd {
 
 .tabular {
   font-variant-numeric: tabular-nums;
+}
+
+/*
+ * A docked work surface (a keyboard, a staff, a progression strip) stays in view below the top bar
+ * while the panels that change it scroll underneath. Only on screens tall and wide enough to leave
+ * room for the content below; pages let the user unpin it.
+ */
+.dock {
+  box-shadow: var(--shadow-md);
+}
+@media (min-width: 900px) and (min-height: 760px) {
+  .dock {
+    position: sticky;
+    top: calc(var(--topbar-h) + 0.6rem);
+    z-index: 15;
+  }
 }
 
 /* Ornamental double rule, like a concert program. */

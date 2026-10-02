@@ -360,7 +360,40 @@
   margin-top: 0.25rem;
 }
 
-/* ---------- Instrument panel ---------- */
+/* ---------- Instrument panel: keyboard and staff side by side, pinned while the page scrolls ---------- */
+.instrument {
+  padding: 0.9rem 1.1rem 0.8rem;
+}
+.instrument > header {
+  margin-bottom: 0.6rem;
+}
+.instrumentRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: stretch;
+}
+.pianoCol,
+.staffCol {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.pin {
+  display: inline-flex;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+@media (max-width: 900px) {
+  .instrumentRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .pin {
+    display: none;
+  }
+}
+
 .legend {
   display: flex;
   flex-wrap: wrap;
@@ -391,29 +424,27 @@
 .transport {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.9rem 1.25rem;
+  gap: 0.6rem 1.1rem;
   align-items: flex-end;
+  margin-top: 0.7rem;
 }
-.droneRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem 1.5rem;
-  align-items: center;
-  padding: 0.8rem 1rem;
-  border-radius: var(--radius);
-  background: var(--bg-sunk);
-  border: 1px solid var(--rule);
+.transport .legend {
+  margin-left: auto;
+  align-self: center;
 }
 .droneControls {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem 1rem;
+  gap: 0.5rem 0.7rem;
   align-items: center;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius);
+  background: var(--bg-sunk);
+  border: 1px solid var(--rule);
 }
 .droneHint {
-  flex: 1 1 320px;
-  margin: 0;
-  font-size: 0.86rem;
+  margin: 0.6rem 0 0;
+  font-size: 0.84rem;
   color: var(--ink-muted);
 }
 

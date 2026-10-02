@@ -140,6 +140,13 @@ their `-soft` variants). Headings use `--font-display` (Cormorant Garamond), UI 
 (Source Sans 3), prose `--font-serif` (Source Serif 4). Soft radii, thin rules, no neon, no heavy shadows.
 Both themes (light and dark) must look right; never hard-code colors that ignore the theme.
 
+Rooms whose controls change a shared work surface (the keyboard and staff in Scales & Modes, the
+progression strip in the Progression Lab) put that surface first and give it the global `dock`
+class: on screens at least 900 px wide and 760 px tall it is `position: sticky` below the top bar
+(`--topbar-h`), so the panels that change it scroll underneath while it stays in view. Each room
+has a "Keep in view" toggle (persisted) that removes the class. Long lists (the progression library,
+the scale browser columns) scroll inside a bounded box rather than extending the page.
+
 Writing style: American English, concise, no emoji, no em or en dashes used as punctuation.
 User-facing text follows the No AI Slop rules (github.com/realrossmanngroup/no_ai_slop_writing_rules):
 no intensifiers or filler, no hollow claims, no dramatic or vague headings, no scare quotes, and

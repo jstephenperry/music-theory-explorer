@@ -237,6 +237,7 @@ export default function ModulationPage() {
                 role="radio"
                 aria-checked={active}
                 className={`${s.techCard} ${active ? s.techCardActive : ''} ${st.available ? '' : s.techCardOff}`}
+                title={t.short}
                 onClick={() => q.set({ t: t.id, opt: '' })}
               >
                 <span className={s.techTop}>

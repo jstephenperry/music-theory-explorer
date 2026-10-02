@@ -16,18 +16,17 @@ function EntryCard({ e, keyObj, onLoad, onPreview, previewing }: { e: LibraryEnt
   const rcs = items.map((it) => tryParseNumeral(it.numeral, k));
   return (
     <article className={s.entry}>
-      <h4 className={s.entryName}>{e.name}</h4>
-      <div className={s.entryMeta}>
-        <Tag tone="brass">{e.era}</Tag>
-        <Tag tone={e.mode === 'minor' ? 'royal' : e.mode === 'major' ? 'verdigris' : 'default'}>{e.mode === 'both' ? 'any mode' : e.mode}</Tag>
+      <div className={s.entryHead}>
+        <h4 className={s.entryName}>{e.name}</h4>
+        <span className={s.entryNumerals} title={rcs.map((r) => (r ? chordLabel(r) : '')).join('  ')}>
+          {rcs.map((r) => r?.display).join('  ')}
+        </span>
+        <span className={s.entryMeta}>
+          <Tag tone="brass">{e.era}</Tag>
+          <Tag tone={e.mode === 'minor' ? 'royal' : e.mode === 'major' ? 'verdigris' : 'default'}>{e.mode === 'both' ? 'any mode' : e.mode}</Tag>
+        </span>
       </div>
       <p className={s.entryDesc}>{e.description}</p>
-      <div className={s.entryNumerals} title={rcs.map((r) => (r ? chordLabel(r) : '')).join('  ')}>
-        {rcs.map((r) => r?.display).join('  ')}
-      </div>
-      <div className="faint" style={{ fontSize: '0.78rem' }}>
-        {rcs.map((r) => (r ? chordLabel(r) : '')).join(' · ')}
-      </div>
       <div className={s.entryActions}>
         <Button size="sm" variant="primary" icon="arrow-right" onClick={onLoad} aria-label={`Load ${e.name}`}>
           Load
@@ -72,6 +71,7 @@ export function LibraryPanel({
           Loaded in your current tonic; Load switches to the mode it is written for.
         </span>
       </div>
+      <div className={s.libraryList}>
       {groups.map((g) => (
         <section key={g} className={s.libraryGroup} aria-label={g}>
           <h3 className={s.libraryGroupTitle}>{g}</h3>
@@ -84,7 +84,8 @@ export function LibraryPanel({
           </div>
         </section>
       ))}
-      {groups.length === 0 && <p className="muted">No progressions match.</p>}
+      {groups.length === 0 && <p className="muted" style={{ padding: '0.75rem 0.9rem' }}>No progressions match.</p>}
+      </div>
     </div>
   );
 }

@@ -49,6 +49,7 @@ export default function ProgressionsPage() {
   const loop = params.loop !== '0';
 
   const [click, setClick] = usePersistentState('progressions:click', false);
+  const [pinned, setPinned] = usePersistentState<boolean>('progressions:pin', true);
   const [showVL, setShowVL] = usePersistentState('progressions:voiceLeading', true);
   const [paletteTab, setPaletteTab] = usePersistentState<PaletteGroup['id']>('progressions:paletteTab', 'borrowed');
   const [selected, setSelected] = useState<number | null>(null);
@@ -292,12 +293,16 @@ export default function ProgressionsPage() {
         )}
       </Panel>
 
-      <div ref={stripRef} style={{ scrollMarginTop: '1rem' }}>
+      <div ref={stripRef} style={{ scrollMarginTop: '1rem' }} className={pinned ? 'dock' : undefined}>
         <Panel
+          className={s.stripPanel}
           eyebrow={`${keyName(key)} · ${chords.length} chord${chords.length === 1 ? '' : 's'} · ${totalBeats} beats`}
           title="Progression"
           actions={
             <>
+              <span className={s.pin} title="Keep the progression in view while the editing panels below scroll">
+                <Toggle label="Keep in view" checked={pinned} onChange={setPinned} />
+              </span>
               <Button size="sm" icon="undo" onClick={undo} disabled={historySize === 0}>
                 Undo
               </Button>
@@ -324,7 +329,32 @@ export default function ProgressionsPage() {
               <span className="muted">{cadence.detail}</span>
             </div>
           </div>
-          <details className={s.glossary}>
+        </Panel>
+      </div>
+
+      <Panel title="Notation and keyboard" eyebrow="Four-part voice leading" actions={<Toggle label="Voice-leading view" checked={showVL} onChange={setShowVL} />}>
+        <div className={s.notation}>
+          {chords.length ? (
+            <Staff
+              clef="grand"
+              keySig={key}
+              measures={measures}
+              activeIndex={focusIdx}
+              onEventClick={selectChord}
+              eventWidth={58}
+              ariaLabel={`Grand staff: ${chords.map((c) => c.rc.display).join(', ')} in ${keyName(key)}`}
+            />
+          ) : (
+            <Empty>Add chords to see them engraved.</Empty>
+          )}
+          <div className={s.pianoWrap}>
+            <div className={s.pianoInner}>
+              <Piano from={36} to={84} marks={pianoMarks} pressed={activeChord !== null ? chords[activeChord]?.voicing.map(midi) ?? [] : []} labels="c" ariaLabel="Piano showing the current voicing" />
+            </div>
+          </div>
+          {showVL && chords.length > 1 && <VoiceLeadingView chords={chords} active={focusIdx} onSelect={selectChord} />}
+        </div>
+        <details className={s.glossary}>
             <summary>Harmonic function and cadence types</summary>
             <dl>
               <dt>Tonic</dt>
@@ -344,9 +374,8 @@ export default function ProgressionsPage() {
               <dt>Backdoor, tritone</dt>
               <dd>♭VII⁷ to I and ♭II⁷ to I: jazz substitutes for V⁷ to I.</dd>
             </dl>
-          </details>
-        </Panel>
-      </div>
+        </details>
+      </Panel>
 
       <Panel title="Type or paste a progression" eyebrow="Text entry">
         <TextEntry items={items} keyObj={key} onApply={(next) => setItems(next, null)} />
@@ -395,30 +424,6 @@ export default function ProgressionsPage() {
         </Panel>
         </div>
       </div>
-
-      <Panel title="Notation and keyboard" eyebrow="Four-part voice leading" actions={<Toggle label="Voice-leading view" checked={showVL} onChange={setShowVL} />}>
-        <div className={s.notation}>
-          {chords.length ? (
-            <Staff
-              clef="grand"
-              keySig={key}
-              measures={measures}
-              activeIndex={focusIdx}
-              onEventClick={selectChord}
-              eventWidth={58}
-              ariaLabel={`Grand staff: ${chords.map((c) => c.rc.display).join(', ')} in ${keyName(key)}`}
-            />
-          ) : (
-            <Empty>Add chords to see them engraved.</Empty>
-          )}
-          <div className={s.pianoWrap}>
-            <div className={s.pianoInner}>
-              <Piano from={36} to={84} marks={pianoMarks} pressed={activeChord !== null ? chords[activeChord]?.voicing.map(midi) ?? [] : []} labels="c" ariaLabel="Piano showing the current voicing" />
-            </div>
-          </div>
-          {showVL && chords.length > 1 && <VoiceLeadingView chords={chords} active={focusIdx} onSelect={selectChord} />}
-        </div>
-      </Panel>
 
       <Panel title="Progression library" eyebrow={`${LIBRARY.length} named progressions`}>
         <LibraryPanel keyObj={key} previewId={player.playing ? previewId : null} onLoad={load} onPreview={preview} />
