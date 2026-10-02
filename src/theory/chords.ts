@@ -55,18 +55,18 @@ export const CHORDS: ChordDef[] = [
   { id: '5', name: 'Power chord', symbol: '5', aliases: ['5', '(no3)'], intervals: ['P1', 'P5'], category: 'Suspended & power', description: 'Root and fifth only. Neither major nor minor; the staple of distorted guitar.' },
 
   // Sixths
-  { id: '6', name: 'Major sixth', symbol: '6', aliases: ['6', 'M6', 'maj6', 'add6'], intervals: ['P1', 'M3', 'P5', 'M6'], category: 'Sixths', description: 'Major triad with an added major sixth. A sweet, vintage tonic sound.' },
+  { id: '6', name: 'Major sixth', symbol: '6', aliases: ['6', 'M6', 'maj6', 'add6'], intervals: ['P1', 'M3', 'P5', 'M6'], category: 'Sixths', description: 'Major triad with an added major sixth. A tonic chord of swing-era and early pop harmony.' },
   { id: 'm6', name: 'Minor sixth', symbol: 'm6', aliases: ['m6', 'min6', '-6'], intervals: ['P1', 'm3', 'P5', 'M6'], category: 'Sixths', description: 'Minor triad with a major sixth: the Dorian tonic chord.' },
   { id: '69', name: 'Six-nine', symbol: '6/9', aliases: ['69', '6/9', '6add9'], intervals: ['P1', 'M3', 'P5', 'M6', 'M9'], category: 'Sixths', description: 'Major sixth with an added ninth. A pentatonic, consonant jazz tonic.' },
   { id: 'm69', name: 'Minor six-nine', symbol: 'm6/9', aliases: ['m69', 'm6/9', '-69'], intervals: ['P1', 'm3', 'P5', 'M6', 'M9'], category: 'Sixths' },
 
   // Sevenths
-  { id: 'maj7', name: 'Major seventh', symbol: 'maj7', aliases: ['maj7', 'M7', 'Δ7', 'Δ', 'ma7', 'j7'], intervals: ['P1', 'M3', 'P5', 'M7'], category: 'Sevenths', description: 'Major triad plus major seventh. Lush and relaxed.' },
+  { id: 'maj7', name: 'Major seventh', symbol: 'maj7', aliases: ['maj7', 'M7', 'Δ7', 'Δ', 'ma7', 'j7'], intervals: ['P1', 'M3', 'P5', 'M7'], category: 'Sevenths', description: 'Major triad plus major seventh. A tonic chord in jazz and bossa nova.' },
   { id: '7', name: 'Dominant seventh', symbol: '7', aliases: ['7', 'dom7', 'dom'], intervals: ['P1', 'M3', 'P5', 'm7'], category: 'Sevenths', description: 'Major triad plus minor seventh. The tritone between 3 and ♭7 wants to resolve.' },
-  { id: 'm7', name: 'Minor seventh', symbol: 'm7', aliases: ['m7', 'min7', '-7', 'mi7'], intervals: ['P1', 'm3', 'P5', 'm7'], category: 'Sevenths', description: 'Minor triad plus minor seventh. Smooth and mellow.' },
-  { id: 'mMaj7', name: 'Minor major seventh', symbol: 'm(maj7)', aliases: ['mMaj7', 'm(maj7)', 'mM7', 'm(M7)', '-maj7', 'minmaj7', 'mmaj7'], intervals: ['P1', 'm3', 'P5', 'M7'], category: 'Sevenths', description: 'Minor triad plus major seventh. Tense, noir, "spy movie".' },
+  { id: 'm7', name: 'Minor seventh', symbol: 'm7', aliases: ['m7', 'min7', '-7', 'mi7'], intervals: ['P1', 'm3', 'P5', 'm7'], category: 'Sevenths', description: 'Minor triad plus minor seventh. The ii chord of a major key.' },
+  { id: 'mMaj7', name: 'Minor major seventh', symbol: 'm(maj7)', aliases: ['mMaj7', 'm(maj7)', 'mM7', 'm(M7)', '-maj7', 'minmaj7', 'mmaj7'], intervals: ['P1', 'm3', 'P5', 'M7'], category: 'Sevenths', description: 'Minor triad plus major seventh. Used for suspense in film and television scores.' },
   { id: 'm7b5', name: 'Half-diminished seventh', symbol: 'ø7', aliases: ['m7b5', 'ø7', 'ø', 'min7b5', '-7b5', 'm7(b5)'], intervals: ['P1', 'm3', 'd5', 'm7'], category: 'Sevenths', description: 'Diminished triad plus minor seventh. The ii chord of a minor key.' },
-  { id: 'dim7', name: 'Diminished seventh', symbol: '°7', aliases: ['dim7', 'o7', '°7'], intervals: ['P1', 'm3', 'd5', 'd7'], category: 'Sevenths', description: 'Three stacked minor thirds. Symmetric: any note can be heard as the root, which makes it a powerful pivot for modulation.' },
+  { id: 'dim7', name: 'Diminished seventh', symbol: '°7', aliases: ['dim7', 'o7', '°7'], intervals: ['P1', 'm3', 'd5', 'd7'], category: 'Sevenths', description: 'Three stacked minor thirds. Symmetric: any note can be heard as the root, which makes it a useful pivot for modulation.' },
   { id: '7#5', name: 'Augmented seventh', symbol: '7♯5', aliases: ['7#5', 'aug7', '+7', '7+', '7(#5)'], intervals: ['P1', 'M3', 'A5', 'm7'], category: 'Sevenths', description: 'Dominant seventh with a raised fifth that leads up chromatically.' },
   { id: 'maj7#5', name: 'Augmented major seventh', symbol: 'maj7♯5', aliases: ['maj7#5', '+maj7', 'augmaj7', 'maj7+', '+M7', 'Δ7#5', 'maj7(#5)'], intervals: ['P1', 'M3', 'A5', 'M7'], category: 'Sevenths', description: 'Augmented triad with a major seventh.' },
   { id: '7b5', name: 'Dominant seventh flat five', symbol: '7♭5', aliases: ['7b5', '7(b5)'], intervals: ['P1', 'M3', 'd5', 'm7'], category: 'Sevenths', description: 'Contains two tritones; identical to its own tritone substitution.' },
@@ -96,7 +96,7 @@ export const CHORDS: ChordDef[] = [
 
   // Altered dominants
   { id: '7b9', name: 'Dominant seventh flat nine', symbol: '7♭9', aliases: ['7b9', '7(b9)'], intervals: ['P1', 'M3', 'P5', 'm7', 'm9'], category: 'Altered dominants', description: 'Classic minor-key dominant; the top four notes form a diminished seventh chord.' },
-  { id: '7#9', name: 'Dominant seventh sharp nine', symbol: '7♯9', aliases: ['7#9', '7(#9)'], intervals: ['P1', 'M3', 'P5', 'm7', 'A9'], category: 'Altered dominants', description: 'The "Hendrix chord": major and minor third at once.' },
+  { id: '7#9', name: 'Dominant seventh sharp nine', symbol: '7♯9', aliases: ['7#9', '7(#9)'], intervals: ['P1', 'M3', 'P5', 'm7', 'A9'], category: 'Altered dominants', description: 'The Hendrix chord, from Purple Haze: major and minor third at once.' },
   { id: '7#11', name: 'Dominant seventh sharp eleven', symbol: '7♯11', aliases: ['7#11', '7(#11)'], intervals: ['P1', 'M3', 'P5', 'm7', 'A11'], category: 'Altered dominants', description: 'The Lydian dominant sound.' },
   { id: '7b13', name: 'Dominant seventh flat thirteen', symbol: '7♭13', aliases: ['7b13', '7(b13)'], intervals: ['P1', 'M3', 'P5', 'm7', 'm13'], category: 'Altered dominants' },
   { id: '9#11', name: 'Ninth sharp eleven', symbol: '9♯11', aliases: ['9#11', '9(#11)'], intervals: ['P1', 'M3', 'P5', 'm7', 'M9', 'A11'], category: 'Altered dominants' },

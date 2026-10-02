@@ -1,14 +1,28 @@
-import { HashRouter, Route, Routes } from 'react-router';
+import { HashRouter, Link, Navigate, Route, Routes, useLocation } from 'react-router';
 import { Layout } from './Layout';
-import { ROUTES } from './routes';
+import { MODES, ROUTES } from './routes';
 import HomePage from '../features/home/HomePage';
+import ModePage from '../features/home/ModePage';
 import { PageHeader } from '../components/ui';
-import { Link } from 'react-router';
 
 function NotFound() {
   return (
-    <PageHeader eyebrow="Intermission" title="This seat does not exist" lede={<>The page you asked for is not on the program. <Link to="/">Return to the foyer.</Link></>} />
+    <PageHeader
+      eyebrow="Error 404"
+      title="Page not found"
+      lede={
+        <>
+          There is no page at this address. <Link to="/">Go to the home page.</Link>
+        </>
+      }
+    />
   );
+}
+
+/** Sends an old flat room path (`/intervals?root=C`) to its mode path (`/theory/intervals?root=C`), keeping the query string. */
+function LegacyRedirect({ to }: { to: string }) {
+  const { search } = useLocation();
+  return <Navigate to={{ pathname: to, search }} replace />;
 }
 
 export function App() {
@@ -17,8 +31,14 @@ export function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<HomePage />} />
+          {MODES.map((m) => (
+            <Route key={m.id} path={m.path.slice(1)} element={<ModePage mode={m} />} />
+          ))}
           {ROUTES.map((r) => (
             <Route key={r.path} path={r.path.slice(1)} element={<r.component />} />
+          ))}
+          {ROUTES.map((r) => (
+            <Route key={`legacy${r.slug}`} path={r.slug.slice(1)} element={<LegacyRedirect to={r.path} />} />
           ))}
           <Route path="*" element={<NotFound />} />
         </Route>

@@ -11,9 +11,9 @@ export default function VariationsPage() {
   return (
     <div className={s.page}>
       <PageHeader
-        eyebrow="Composition"
+        eyebrow="Form"
         title="Theme & Variations"
-        lede="A theme and variations keeps a melody’s phrase and harmony and changes everything else. Follow Mozart’s variations on a children’s song, then vary the theme yourself: figuration, rhythm, meter, mode and accompaniment."
+        lede="A theme and variations keeps a melody’s phrase and harmony and changes everything else. Follow Mozart’s K. 265 variations on the song Ah vous dirai-je, Maman, then vary the theme yourself: figuration, rhythm, meter, mode and accompaniment."
       />
       <Panel title="In the repertoire">
         <div className="stack">

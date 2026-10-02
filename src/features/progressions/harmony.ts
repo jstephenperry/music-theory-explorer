@@ -151,7 +151,7 @@ export function describeChord(rc: RomanChord, key: Key): ChordDescription {
     const tendency = DEGREE_TENDENCY[degree];
     const details: Record<number, string> = {
       1: 'Home. Stable, the goal of cadences.',
-      2: 'Predominant: leads naturally to V.',
+      2: 'Predominant: leads to V.',
       3: key.mode === 'major' ? 'Weak tonic substitute that shares two tones with I; often leads to vi or IV.' : 'The relative major. A tonic-family chord that often moves to iv or VI.',
       4: 'Predominant: moves to V, or straight home to I in a plagal cadence.',
       5: key.mode === 'major' || quality === 'major' ? 'Dominant: its leading tone and tritone pull to the tonic.' : 'Minor v has no leading tone, so its pull home is gentle and modal.',
@@ -230,7 +230,7 @@ export function describeChord(rc: RomanChord, key: Key): ChordDescription {
       fn: 'chromatic',
       tendency: 'tonic',
       role: 'Chromatic mediant',
-      detail: 'Root a third from the tonic, with altered quality: a striking, cinematic shift that keeps one common tone (or none).',
+      detail: 'Root a third from the tonic, with altered quality: a shift common in film scores that keeps one common tone (or none).',
     };
   }
   if (quality === 'augmented') {
@@ -287,7 +287,7 @@ export function detectCadence(chords: RomanChord[], key: Key, sopranoPc?: number
       return { id: 'tritone', label: 'Tritone-substitute cadence', detail: '♭II⁷ to I: the bass slides down a half step instead of falling a fifth.' };
     }
     if (fromTonic(prev) === 5 && !prev.tonicized) {
-      return { id: 'plagal', label: 'Plagal cadence', detail: 'IV (or iv) to I: the "Amen" close, without the leading tone.' };
+      return { id: 'plagal', label: 'Plagal cadence', detail: 'IV (or iv) to I: the Amen close of hymns, without the leading tone.' };
     }
   }
   if (isDominantOfKey(last, key) && fromTonic(last) === 7) {

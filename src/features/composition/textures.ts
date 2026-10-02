@@ -62,7 +62,7 @@ export const TEXTURES: TextureDef[] = [
     id: 'waltz',
     name: 'Waltz accompaniment',
     short: 'Waltz',
-    description: 'In triple meter: the bass on the downbeat, the rest of the chord on beats two and three (“oom-pah-pah”), under a melody.',
+    description: 'In triple meter: the bass on the downbeat, the rest of the chord on beats two and three (oom-pah-pah), under a melody.',
     examples: 'Schubert’s and Chopin’s waltzes; Johann Strauss.',
   },
 ];

@@ -157,8 +157,8 @@ const ET31_FIFTH = (18 * 1200) / 31;
 
 export const TUNING_SYSTEMS: TuningSystem[] = [
   { id: 'et12', name: '12-tone equal temperament', short: '12-TET', fifth: 700, description: 'Every semitone is exactly 100 cents. All keys sound alike; no interval except the octave is pure.' },
-  { id: 'pythagorean', name: 'Pythagorean', short: 'Pythagorean', fifth: PURE_FIFTH, description: 'A chain of pure 3:2 fifths. Fifths and fourths are perfect, but major thirds are 22 cents wide and one fifth is a howling wolf.' },
-  { id: 'meantone', name: 'Quarter-comma meantone', short: '¼-comma meantone', fifth: MEANTONE_FIFTH, description: 'Fifths narrowed by ¼ of the syntonic comma so that four of them make a pure 5:4 major third. Sweet thirds in common keys; the fifth that closes the chain (G♯ to E♭ on C) is a wolf.' },
+  { id: 'pythagorean', name: 'Pythagorean', short: 'Pythagorean', fifth: PURE_FIFTH, description: 'A chain of pure 3:2 fifths. Fifths and fourths are perfect, but major thirds are 22 cents wide and the fifth that closes the chain is a wolf, 23.5 cents narrow.' },
+  { id: 'meantone', name: 'Quarter-comma meantone', short: '¼-comma meantone', fifth: MEANTONE_FIFTH, description: 'Fifths narrowed by ¼ of the syntonic comma so that four of them make a pure 5:4 major third. Pure thirds in common keys; the fifth that closes the chain (G♯ to E♭ on C) is a wolf.' },
   { id: 'just', name: '5-limit just intonation', short: 'Just (5-limit)', description: 'Ratios of small whole numbers built on the tonic (5:4 thirds, 3:2 fifths). I, IV and V are perfectly pure, but ii is out of tune and other keys fall apart.' },
   { id: 'werckmeister3', name: 'Werckmeister III', short: 'Werckmeister III', description: 'A 1691 well temperament: four fifths (C to G, G to D, D to A and B to F♯) narrowed by ¼ Pythagorean comma, the rest pure. Every key is playable, each with its own color.' },
   { id: 'et19', name: '19-tone equal temperament', short: '19-TET', fifth: ET19_FIFTH, description: 'Divides the octave into 19 steps. Its 11-step fifth (694.7 cents) behaves like a meantone; mapped here to the 12 nearest keys.' },

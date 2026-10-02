@@ -241,7 +241,7 @@ export function TuningSection({ a4 }: { a4: number }) {
         </p>
       </Panel>
 
-      <Panel eyebrow="Key color" title={`Major triads in ${sys.short}`}>
+      <Panel eyebrow="How far each third and fifth is from pure" title={`Major triads in ${sys.short}`}>
         <p className={s.prose} style={{ marginBottom: '0.9rem' }}>
           Each cell shows how far the triad's major third and fifth are from pure (5:4 and 3:2). Click to hear it. Darker cells are rougher.
         </p>

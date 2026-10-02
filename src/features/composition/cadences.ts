@@ -74,7 +74,7 @@ export const CADENCE_TYPES: CadenceType[] = [
     name: 'Plagal cadence',
     short: 'Plagal',
     mode: 'major',
-    description: 'IV (or the minor iv) to I: the "Amen" of hymns. In Classical music it usually follows an authentic cadence as a closing gesture rather than ending a phrase by itself.',
+    description: 'IV (or the minor iv) to I, sung to Amen at the end of hymns. In Classical music it usually follows an authentic cadence as a closing gesture rather than ending a phrase by itself.',
     listenFor: 'No leading tone: the inner voices fall back by step to the tonic chord over a held tonic in the soprano.',
     examples: [
       ['C5/2 C5/2 | C5/1', 'G4/2 A4/2 | G4/1', 'E4/2 F4/2 | E4/1', 'C3/2 _"I" F3/2 _"IV" | C3/1 _"I"'],

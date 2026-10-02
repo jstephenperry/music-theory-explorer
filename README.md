@@ -9,31 +9,43 @@ enabled; see [Deploying](#deploying)).
 
 ## What is in it
 
+The site has two modes, each with its own navigation. Theory mode has twelve rooms; Composition mode
+has five. Every room has a playable piano, notation that follows your choices, and audio.
+
+### Theory mode
+
 | Room | What you can do |
 | --- | --- |
 | Intervals | Pick two keys or an interval name. See quality, inversion, consonance, enharmonic spellings, and the just ratio against equal temperament. |
-| Scales & Modes | 324 scales, modes, maqamat and ragas from 14 traditions, picked by tradition, then family, then scale, or by search: Western modes, jazz and blues, Messiaen's modes, Arabic maqam, Turkish makam, Persian dastgāh, Byzantine echoi, Jewish prayer modes and cantillation, Hindustani ragas by thaat, all 72 Carnatic melakartas plus janya ragas, Chinese, Japanese and Korean scales, gamelan and Thai tunings, Ethiopian qenet and ancient Greek harmoniai. Microtonal scales play at their true intonation and are notated with half-flat, koron or comma accidentals. Ragas show aroha and avaroha; maqamat show their ajnas and alternative descents. Compare scales by cents, walk the brightness ladder, play over a drone, see the chords each 12-tone scale produces, and find scales that contain a set of notes. |
+| Scales & Modes | 324 scales, modes, maqamat and ragas from 14 traditions, picked by tradition, then family, then scale, or by search: Western modes, jazz and blues, Messiaen's modes, Arabic maqam, Turkish makam, Persian dastgāh, Byzantine echoi, Jewish prayer modes and cantillation, Hindustani ragas by thaat, all 72 Carnatic melakartas plus janya ragas, Chinese, Japanese and Korean scales, gamelan and Thai tunings, Ethiopian qenet and ancient Greek harmoniai. The 64 microtonal scales play at their own intonation and are notated with half-flat, koron or comma accidentals. Ragas show aroha and avaroha; maqamat show their ajnas and alternative descents. Compare scales by cents, walk the brightness ladder, play over a drone, see the chords each 12-tone scale produces, and find scales that contain a set of notes. |
 | Circle of Fifths | Key signatures, relative and closely related keys, diatonic chords, mode overlays, and a cycle of dominant sevenths played around the circle. |
-| Chords | Build any chord from triads to altered dominants, augmented sixths and quartal voicings. Change inversion and voicing (close, open, drop 2, drop 3, shell, rootless). Play notes to have the chord named. |
+| Chords | Build any of 58 chord types, from triads to altered dominants, augmented sixths and quartal voicings. Change inversion and voicing (close, open, drop 2, drop 3, shell, rootless). Play notes to have the chord named. |
 | Progression Lab | Write progressions in roman numerals or chord symbols. Add borrowed chords, secondary dominants, tritone substitutes, Neapolitan and augmented sixth chords, and chromatic mediants. Includes four-part voice leading, seven accompaniment styles, a library of 52 named progressions, next-chord suggestions, and reharmonization tools. |
 | Modulation | Choose two keys and compare nine techniques: pivot chord, direct, secondary dominant, common tone, enharmonic diminished seventh, enharmonic German sixth, sequence, modal interchange, and truck driver. A map shows how reachable every key is from the source key. |
 | Tonnetz | A neo-Riemannian lattice. Apply P, L, R, N, S and H transformations and play hexatonic, octatonic and other cycles. |
+| Meter & Time | Simple, compound, irregular, additive and mixed meters with an editable accent grid, a metronome with swing and tap tempo, beamed notation, and a rhythm step sequencer with nine patterns (son and rumba clave, tresillo, bossa nova and others). |
+| Polyrhythm | Layered polyrhythms on a clock and a grid, polymeter, hemiola, and a demo that speeds a polyrhythm up until it becomes a chord. |
+| Harmonics & Tuning | The harmonic series, additive synthesis, just versus equal intervals with audible beating, and seven playable tunings: 12-tone equal temperament, Pythagorean, quarter-comma meantone, 5-limit just intonation, Werckmeister III, and 19- and 31-tone equal temperament. |
+| Ear Training | Six drills: intervals, chord qualities, scales, scale degrees, cadences and progressions. Items you miss come up more often. Results are kept in your browser. |
+| Free Play | A five-octave keyboard that names chords as you play them, with MIDI input, computer-keyboard input, sustain, and a phrase recorder. |
+
+### Composition mode
+
+| Room | What you can do |
+| --- | --- |
 | Motive & Development | Bach's Invention No. 1 and the opening of Beethoven's Fifth with the motive, its transposition, inversion and sequence highlighted. Develop a motive of your own (or one of four presets) by chaining up to ten operations: sequence, real transposition, inversion, retrograde, augmentation, diminution and fragmentation. A drill asks which technique produced a passage. |
-| Phrase & Cadence | Mozart's K. 331 theme (a period) and Beethoven's Op. 2 No. 1 (a sentence) with their phrase members marked. A gallery of six cadences in four-part harmony. A phrase builder assembles an eight-bar period or sentence from a basic idea, its repetition, fragments and a chosen cadence, in seven keys, and analyzes the result. A cadence ear-training drill. |
+| Phrase & Cadence | Mozart's K. 331 theme (a period) and Beethoven's Op. 2 No. 1 (a sentence) with their phrase members marked. A gallery of six cadence types in four-part harmony. A phrase builder assembles an eight-bar period or sentence from a basic idea, its repetition, fragments and a chosen cadence, in seven keys, and analyzes the result. A cadence ear-training drill. |
 | Texture & Accompaniment | Bach's chorale BWV 269, Mozart's K. 545 and Bach's Prelude BWV 846 as examples of homophony, melody with Alberti bass and broken-chord figuration. A texture lab writes one voice-led progression as a chorale, repeated chords, Alberti bass, prelude figuration, wide arpeggio or waltz. A texture ear-training drill. |
 | Species Counterpoint | Write first or second species counterpoint above or below a cantus firmus (Fux's Dorian melody or four practice melodies). Thirteen rules are checked as you write, with problem notes marked; hints keep your notes and suggest the next one; a solver shows a model solution. |
 | Theme & Variations | Mozart's K. 265 theme and the opening of Variation I with the theme's notes marked inside the figuration. A workshop varies the theme by figuration, rhythm, meter, mode and accompaniment. A drill asks what changed. |
-| Meter & Time | Simple, compound, irregular, additive and mixed meters with an editable accent grid, a metronome with swing and tap tempo, beamed notation, and a rhythm step sequencer (clave, tresillo, bossa nova and others). |
-| Polyrhythm | Layered polyrhythms on a clock and a grid, polymeter, hemiola, and a demo that speeds a polyrhythm up until it becomes a chord. |
-| Harmonics & Tuning | The harmonic series, additive synthesis, just versus equal intervals with audible beating, and playable historical tunings (Pythagorean, meantone, just, Werckmeister III, 19 and 31 equal). |
-| Ear Training | Intervals, chord qualities, scales, scale degrees, cadences and progressions. Items you miss come up more often. Results are kept in your browser. |
-| Free Play | A five-octave keyboard that names chords as you play them, with MIDI input, computer-keyboard input, sustain, and a phrase recorder. |
 
 Input: mouse or touch on the on-screen piano, the computer keyboard (A W S E D F T G Y H U J K,
 with Z and X to change octave), or a MIDI keyboard in browsers that support Web MIDI
 (Chrome, Edge, Opera).
 
-Most rooms store their state in the URL, so a link reproduces what you were looking at.
+Most rooms store their state in the URL, so a link reproduces what you were looking at. Room URLs are
+nested under their mode (`#/theory/intervals`, `#/composition/motive`); the older flat paths
+(`#/intervals`) redirect and keep their query string.
 
 ## Running locally
 
@@ -57,7 +69,7 @@ npm run preview    # serve dist/ locally
 ## How it is built
 
 - React 19, TypeScript and Vite. Routing uses `HashRouter`, so the build runs from any path
-  without server rewrites.
+  without server rewrites. `src/app/routes.ts` is the registry of modes, sections and rooms.
 - `src/theory` is a self-contained theory engine with no UI code: spelled notes and intervals,
   the scale and chord catalogs, keys, roman numeral parsing and analysis, and voice leading.
   Spelling is always derived from interval arithmetic, so C♯ Lydian contains F𝄪, not G.

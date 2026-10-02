@@ -4,7 +4,7 @@ import { audio, INSTRUMENTS, type InstrumentId } from '../audio/engine';
 import { stopAllPlayback, useAudioSettings } from '../audio/usePlayer';
 import { Icon } from '../components/Icon';
 import { usePersistentState } from '../hooks/usePersistentState';
-import { ROUTES, SECTIONS } from './routes';
+import { MODES, MODE_BY_ID, ROUTES, modeForPath, routesInSection, sectionsInMode, type ModeId } from './routes';
 import s from './Layout.module.css';
 
 type ThemePref = 'system' | 'light' | 'dark';
@@ -35,8 +35,17 @@ export function Layout() {
   const [instrument, setInstrument] = usePersistentState<InstrumentId>('instrument', 'piano');
   const [volume, setVolume] = usePersistentState<number>('volume', 0.8);
   const [navOpen, setNavOpen] = useState(false);
+  const [lastMode, setLastMode] = usePersistentState<ModeId>('mode', 'theory');
   const settings = useAudioSettings();
   const location = useLocation();
+
+  // The drawer shows the rooms of the mode the URL is in. The home page and unknown paths belong to
+  // no mode, so they show the mode last visited.
+  const urlMode = modeForPath(location.pathname);
+  const mode = urlMode ?? MODE_BY_ID[lastMode];
+  useEffect(() => {
+    if (urlMode && urlMode.id !== lastMode) setLastMode(urlMode.id);
+  }, [urlMode, lastMode, setLastMode]);
 
   useEffect(() => {
     if (theme === 'system') document.documentElement.removeAttribute('data-theme');
@@ -74,25 +83,33 @@ export function Layout() {
     setNavOpen(false);
     window.scrollTo({ top: 0 });
     const route = ROUTES.find((r) => r.path === location.pathname);
-    document.title = route ? `${route.title} · Music Theory Explorer` : 'Music Theory Explorer';
+    const here = modeForPath(location.pathname);
+    document.title = [route?.title, here?.title, 'Music Theory Explorer'].filter(Boolean).join(' · ');
   }, [location.pathname]);
 
   const nextTheme: Record<ThemePref, ThemePref> = { system: 'light', light: 'dark', dark: 'system' };
-  const themeLabel = theme === 'system' ? 'Theme: follow system' : theme === 'light' ? 'Theme: Matinee (light)' : 'Theme: Evening (dark)';
+  const themeLabel = theme === 'system' ? 'Theme: follow system' : theme === 'light' ? 'Theme: light' : 'Theme: dark';
 
   return (
-    <div className={s.shell}>
+    <div className={s.shell} data-mode={mode.id}>
       <a href="#main" className={s.skip}>
         Skip to content
       </a>
-      <aside className={`${s.sidebar} ${navOpen ? s.sidebarOpen : ''}`} aria-label="Sections">
+      <aside className={`${s.sidebar} ${navOpen ? s.sidebarOpen : ''}`} aria-label={`${mode.title} rooms`}>
         <Brand />
-        <nav className={s.nav}>
-          {SECTIONS.map((sec) => (
+        <nav className={s.modeSwitch} aria-label="Mode">
+          {MODES.map((m) => (
+            <NavLink key={m.id} to={m.path} className={`${s.modeTab} ${m.id === mode.id ? s.modeTabActive : ''}`} aria-current={m.id === mode.id ? 'true' : undefined} title={m.blurb}>
+              {m.title}
+            </NavLink>
+          ))}
+        </nav>
+        <nav className={s.nav} aria-label={`${mode.title} rooms`}>
+          {sectionsInMode(mode.id).map((sec) => (
             <div key={sec.id} className={s.navSection}>
               <div className={s.navHeading}>{sec.title}</div>
               <ul>
-                {ROUTES.filter((r) => r.section === sec.id).map((r) => (
+                {routesInSection(sec.id).map((r) => (
                   <li key={r.path}>
                     <NavLink to={r.path} className={({ isActive }) => `${s.navLink} ${isActive ? s.navLinkActive : ''}`} title={r.blurb}>
                       {r.title}
@@ -150,7 +167,7 @@ export function Layout() {
           </button>
         </header>
         <main id="main" className={s.content}>
-          <Suspense fallback={<div className={s.loading}>Raising the curtain…</div>}>
+          <Suspense fallback={<div className={s.loading}>Loading…</div>}>
             <Outlet />
           </Suspense>
         </main>

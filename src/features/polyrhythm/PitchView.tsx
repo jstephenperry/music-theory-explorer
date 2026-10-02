@@ -123,7 +123,7 @@ export function PitchView() {
 
   return (
     <div className={s.stack}>
-      <Panel title="From rhythm to pitch" eyebrow="Speed up a polyrhythm until it sings">
+      <Panel title="From rhythm to pitch" eyebrow="Speed up a polyrhythm until it becomes a pitch">
         <div className={s.chips} role="group" aria-label="Ratio">
           {RATIOS.map((r) => {
             const active = r.a === ratio.a && r.b === ratio.b;

@@ -58,6 +58,7 @@ export default function ScalesPage() {
   const [direction, setDirection] = usePersistentState<Direction>('scales.direction', 'up');
   const [bpm, setBpm] = usePersistentState<number>('scales.bpm', 132);
   const [droneFifth, setDroneFifth] = usePersistentState<boolean>('scales.droneFifth', true);
+  const [pinned, setPinned] = usePersistentState<boolean>('scales.pin', true);
   const [drone, setDrone] = useState(false);
   const [kbd, setKbd] = useState<number[]>([]);
   const [flash, setFlash] = useState<number | null>(null);
@@ -193,6 +194,26 @@ export default function ScalesPage() {
   const simpler = tones.some((t) => Math.abs(t.note.acc) > 1) ? bestRootSpelling(pc(root), scale.id) : null;
   const characteristic = tones.filter((t, i) => t.characteristic && i < tones.length - 1);
 
+  const instrumentActions = (
+    <>
+      <Segmented<LabelMode>
+        ariaLabel="Key labels"
+        size="sm"
+        value={labelMode}
+        onChange={setLabelMode}
+        options={[
+          { value: 'names', label: 'Names' },
+          { value: 'degrees', label: 'Degrees' },
+          { value: 'intervals', label: 'Intervals' },
+          { value: 'none', label: 'None' },
+        ]}
+      />
+      <span className={s.pin} title="Keep the keyboard and staff in view while the panels below scroll">
+        <Toggle label="Keep in view" checked={pinned} onChange={setPinned} />
+      </span>
+    </>
+  );
+
   return (
     <div className={s.page}>
       <PageHeader
@@ -217,6 +238,94 @@ export default function ScalesPage() {
             <Button size="sm" variant="ghost" icon="chevron-right" aria-label={`Next scale in ${tradition.name}`} onClick={() => step(1)} />
           </div>
         </div>
+      </Panel>
+
+      <Panel className={`${s.instrument} ${pinned ? 'dock' : ''}`} title="Keyboard and staff" actions={instrumentActions}>
+        <div className={s.instrumentRow}>
+          <div className={s.pianoCol}>
+            <Piano
+              from={narrow && (view === 'modes' || view === 'compare') ? tones[0].midi - 2 : PIANO_FROM}
+              to={narrow && (view === 'modes' || view === 'compare') ? tones[tones.length - 1].midi + 2 : PIANO_TO}
+              height={narrow ? undefined : 180}
+              pcMarks={pcMarks}
+              marks={marks}
+              pressed={pressed}
+              onKeyClick={view === 'finder' ? finderToggle : undefined}
+              ariaLabel={`Piano showing ${title}`}
+            />
+          </div>
+          <div className={s.staffCol}>
+            <Staff
+              clef="treble"
+              events={staffEvents}
+              activeIndex={data?.kind === 'scale' ? data.index : null}
+              onEventClick={(i) => {
+                audio.playNote(tones[i].play, 0.9);
+                flashNote(tones[i].midi);
+              }}
+              ariaLabel={`Staff showing ${title} ascending: ${tones.map((t) => t.spoken).join(', ')}`}
+            />
+          </div>
+        </div>
+        <div className={s.transport}>
+          <PlayButton playing={player.playing && data?.kind === 'scale'} onPlay={playScale} onStop={player.stop} label="Play scale" />
+          <Segmented<Direction>
+            ariaLabel="Direction"
+            size="sm"
+            value={direction}
+            onChange={setDirection}
+            options={[
+              { value: 'up', label: scale.tradition === 'hindustani' && ascForm ? 'Aroha' : 'Ascending' },
+              { value: 'down', label: scale.tradition === 'hindustani' && descForm ? 'Avaroha' : 'Descending' },
+              { value: 'updown', label: 'Up and down' },
+            ]}
+          />
+          <Slider
+            label="Tempo"
+            min={50}
+            max={260}
+            step={2}
+            value={bpm}
+            onChange={(v) => {
+              setBpm(v);
+              player.setBpm(v);
+            }}
+            format={(v) => `${v} bpm`}
+            width={110}
+          />
+          <div className={s.droneControls}>
+            <Toggle
+              label={<strong>Drone on {rootName}</strong>}
+              checked={drone}
+              onChange={(v) => {
+                setDrone(v);
+                // The shared computer-keyboard hook ignores keys while an <input> has focus; release it so playing can start at once.
+                (document.activeElement as HTMLElement | null)?.blur();
+              }}
+            />
+            <Segmented<string>
+              ariaLabel="Drone voicing"
+              size="sm"
+              value={droneFifth ? 'fifth' : 'tonic'}
+              onChange={(v) => setDroneFifth(v === 'fifth')}
+              options={[
+                { value: 'tonic', label: 'Tonic and octave' },
+                { value: 'fifth', label: 'With fifth' },
+              ]}
+            />
+          </div>
+          <Legend view={view} micro={micro} />
+        </div>
+        {drone && (
+          <p className={s.droneHint}>
+            Play over the drone on the keys or the computer keyboard: <kbd>A</kbd> to <kbd>K</kbd> for white keys, <kbd>W</kbd> <kbd>E</kbd> <kbd>T</kbd> <kbd>Y</kbd> <kbd>U</kbd> for
+            black keys, <kbd>Z</kbd> and <kbd>X</kbd> to shift octaves. The characteristic notes are what distinguish the mode.
+            {droneFifth && !scale.intervals.includes('P5') && ' This scale has no perfect fifth, so the drone fifth clashes; use the tonic and octave instead.'}
+          </p>
+        )}
+      </Panel>
+
+      <Panel title="Choose a scale" eyebrow="By tradition, family and name, or by search">
         <ScaleBrowser scale={scale} onPick={pickScale} />
       </Panel>
 
@@ -314,98 +423,6 @@ export default function ScalesPage() {
           )}
         </div>
       </section>
-
-      <Panel
-        title="Keyboard and staff"
-        actions={
-          <Segmented<LabelMode>
-            ariaLabel="Key labels"
-            size="sm"
-            value={labelMode}
-            onChange={setLabelMode}
-            options={[
-              { value: 'names', label: 'Names' },
-              { value: 'degrees', label: 'Degrees' },
-              { value: 'intervals', label: 'Intervals' },
-              { value: 'none', label: 'None' },
-            ]}
-          />
-        }
-      >
-        <div className="stack">
-          <Piano
-            from={narrow && (view === 'modes' || view === 'compare') ? tones[0].midi - 2 : PIANO_FROM}
-            to={narrow && (view === 'modes' || view === 'compare') ? tones[tones.length - 1].midi + 2 : PIANO_TO}
-            pcMarks={pcMarks}
-            marks={marks}
-            pressed={pressed}
-            onKeyClick={view === 'finder' ? finderToggle : undefined}
-            ariaLabel={`Piano showing ${title}`}
-          />
-          <Legend view={view} micro={micro} />
-          <Staff
-            clef="treble"
-            events={staffEvents}
-            activeIndex={data?.kind === 'scale' ? data.index : null}
-            onEventClick={(i) => {
-              audio.playNote(tones[i].play, 0.9);
-              flashNote(tones[i].midi);
-            }}
-            ariaLabel={`Staff showing ${title} ascending: ${tones.map((t) => t.spoken).join(', ')}`}
-          />
-          <div className={s.transport}>
-            <PlayButton playing={player.playing && data?.kind === 'scale'} onPlay={playScale} onStop={player.stop} label="Play scale" />
-            <Segmented<Direction>
-              ariaLabel="Direction"
-              value={direction}
-              onChange={setDirection}
-              options={[
-                { value: 'up', label: scale.tradition === 'hindustani' && ascForm ? 'Aroha' : 'Ascending' },
-                { value: 'down', label: scale.tradition === 'hindustani' && descForm ? 'Avaroha' : 'Descending' },
-                { value: 'updown', label: 'Up and down' },
-              ]}
-            />
-            <Slider
-              label="Tempo"
-              min={50}
-              max={260}
-              step={2}
-              value={bpm}
-              onChange={(v) => {
-                setBpm(v);
-                player.setBpm(v);
-              }}
-              format={(v) => `${v} bpm`}
-            />
-          </div>
-          <div className={s.droneRow}>
-            <div className={s.droneControls}>
-              <Toggle label={<strong>Drone on {rootName}</strong>} checked={drone}
-                onChange={(v) => {
-                  setDrone(v);
-                  // The shared computer-keyboard hook ignores keys while an <input> has focus; release it so playing can start at once.
-                  (document.activeElement as HTMLElement | null)?.blur();
-                }}
-              />
-              <Segmented<string>
-                ariaLabel="Drone voicing"
-                size="sm"
-                value={droneFifth ? 'fifth' : 'tonic'}
-                onChange={(v) => setDroneFifth(v === 'fifth')}
-                options={[
-                  { value: 'tonic', label: 'Tonic and octave' },
-                  { value: 'fifth', label: 'With fifth' },
-                ]}
-              />
-            </div>
-            <p className={s.droneHint}>
-              Hold the drone and improvise on the keys or with your computer keyboard (<kbd>A</kbd> to <kbd>K</kbd> for white keys, <kbd>W</kbd> <kbd>E</kbd> <kbd>T</kbd>{' '}
-              <kbd>Y</kbd> <kbd>U</kbd> for black keys, <kbd>Z</kbd> and <kbd>X</kbd> shift octaves). Lean on the characteristic notes to hear the mode.
-              {droneFifth && !scale.intervals.includes('P5') && ' This scale has no perfect fifth, so the drone fifth clashes on purpose; try the tonic and octave instead.'}
-            </p>
-          </div>
-        </div>
-      </Panel>
 
       <Panel>
         <Tabs<View>

@@ -8,9 +8,9 @@ export default function CounterpointPage() {
   return (
     <div className={s.page}>
       <PageHeader
-        eyebrow="Composition"
+        eyebrow="Texture & Voices"
         title="Species Counterpoint"
-        lede="For three centuries composers learned to write independent lines from Johann Joseph Fux’s Gradus ad Parnassum (1725): Haydn worked through it, Mozart taught from it and Beethoven studied it. Write a line against a given melody, the cantus firmus, and the rules are checked as you go."
+        lede="Composers learned to write independent lines from Johann Joseph Fux’s Gradus ad Parnassum (1725); Haydn, Mozart and Beethoven all worked from it. Write a line against a given melody, the cantus firmus, and the rules are checked as you go."
       />
       <Panel title="Write a counterpoint" eyebrow="Fux’s exercise">
         <div className="stack">
@@ -22,7 +22,7 @@ export default function CounterpointPage() {
           <CounterpointExercise player={player} />
         </div>
       </Panel>
-      <Panel title="The rules" eyebrow="What the checker listens for">
+      <Panel title="The rules" eyebrow="Thirteen rules the checker applies">
         <CounterpointRules />
       </Panel>
     </div>

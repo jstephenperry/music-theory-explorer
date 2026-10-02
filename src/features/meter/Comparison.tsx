@@ -73,7 +73,7 @@ const EXAMPLES: Example[] = [
       groups: [3, 3, 3, 3],
     },
     insight:
-      'These sound exactly the same when the dotted quarter of 12/8 equals the quarter of 4/4. Slow blues and doo-wop are usually written in 12/8; jazz and rock charts often write the same feel as 4/4 with triplets (or “swing eighths”).',
+      'These sound exactly the same when the dotted quarter of 12/8 equals the quarter of 4/4. Slow blues and doo-wop are usually written in 12/8; jazz and rock charts often write the same feel as 4/4 with triplets (or swing eighths).',
   },
 ];
 

@@ -110,7 +110,7 @@ export function SynthSection({ a4 }: { a4: number }) {
   return (
     <div className={s.section}>
       <Panel
-        eyebrow="Fourier at the keyboard"
+        eyebrow="Additive synthesis"
         title="Build a timbre from sine waves"
         actions={
           <PlayButton

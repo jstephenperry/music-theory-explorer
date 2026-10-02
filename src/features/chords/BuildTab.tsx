@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
+import { roomPath } from '../../app/routes';
 import {
   CHORDS,
   CHORD_CATEGORIES,
@@ -340,7 +341,7 @@ export function BuildTab({ state, onChange }: { state: BuildState; onChange: (pa
       </Panel>
 
       <div className="grid-2">
-        <Panel title="How it is built" eyebrow="Anatomy">
+        <Panel title="How it is built" eyebrow="Interval stack">
           <div className={s.anatomy}>
             <ol className={s.tower} aria-label="Chord tones from the bottom up with the intervals between them">
               {stack.tones
@@ -415,7 +416,7 @@ export function BuildTab({ state, onChange }: { state: BuildState; onChange: (pa
                         <Button size="sm" variant="ghost" icon="play" aria-label={`Play ${noteName(root)} ${sc.scale.name}`} onClick={() => playScale(sc.notes)} />
                         <Link
                           className={s.scaleLink}
-                          to={{ pathname: '/scales', search: `?${new URLSearchParams({ root: noteName(root, false), scale: sc.scale.id })}` }}
+                          to={{ pathname: roomPath('/scales'), search: `?${new URLSearchParams({ root: noteName(root, false), scale: sc.scale.id })}` }}
                           title="Open in Scales & Modes"
                         >
                           Open
@@ -435,9 +436,9 @@ export function BuildTab({ state, onChange }: { state: BuildState; onChange: (pa
         </Panel>
       </div>
 
-      <Panel title="Chord neighborhood" eyebrow="Family tree">
+      <Panel title="Related chords" eyebrow="One note added, removed or moved">
         <p className={s.small}>
-          Every chord one small step from <strong>{displaySymbol(root, chordId)}</strong>. Click one to travel there.
+          Every chord one small step from <strong>{displaySymbol(root, chordId)}</strong>. Click one to open it.
         </p>
         <div className={s.hood}>
           {neighborGroups.map((g) => (

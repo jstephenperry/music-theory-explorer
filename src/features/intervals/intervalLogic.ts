@@ -220,13 +220,13 @@ const CONTEXTS: Record<string, ContextDef> = {
     text: '{a} and {b} are the raised 4th and lowered 6th of {key}: an augmented sixth turned inside out, which closes inward onto the dominant.',
   },
   m3: { scale: 'aeolian', from: 1, to: 3, mode: 'minor', text: '{a} to {b} is the minor third of {key}, the bottom of its tonic triad.' },
-  A2: { scale: 'harmonic-minor', from: 6, to: 7, mode: 'harmonic minor', text: 'Between the lowered 6th {a} and the leading tone {b} of {key}: the exotic gap that gives the scale its color.' },
+  A2: { scale: 'harmonic-minor', from: 6, to: 7, mode: 'harmonic minor', text: 'Between the lowered 6th {a} and the leading tone {b} of {key}: the augmented second that marks the harmonic minor scale.' },
   M3: { scale: 'ionian', from: 1, to: 3, mode: 'major', text: 'Tonic to mediant of {key}: the bottom of the major triad.' },
   d4: {
     scale: 'harmonic-minor', from: 7, to: 3, mode: 'harmonic minor',
     text: 'From the leading tone {a} up to the minor third {b} of {key}. It sounds like a major third, but {a} rises to the tonic while {b} stays put.',
   },
-  P4: { scale: 'ionian', from: 5, to: 1, mode: 'major', text: 'From the dominant {a} up to the tonic {b} of {key}: the classic upbeat-to-downbeat opening leap.' },
+  P4: { scale: 'ionian', from: 5, to: 1, mode: 'major', text: 'From the dominant {a} up to the tonic {b} of {key}: the upbeat-to-downbeat leap that opens many tunes.' },
   A4: {
     scale: 'ionian', from: 4, to: 7, mode: 'major',
     text: '{a} is the 4th and {b} the 7th of {key}. Spelled as a fourth, the tritone expands outward to a sixth: {a} falls and {b} rises.',

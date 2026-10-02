@@ -12,9 +12,9 @@ export default function TexturePage() {
   return (
     <div className={s.page}>
       <PageHeader
-        eyebrow="Composition"
+        eyebrow="Texture & Voices"
         title="Texture & Accompaniment"
-        lede="The same chords can become a hymn, a prelude or a sonata, depending on how the notes are laid out in time and register. Compare three classic textures in Bach and Mozart, then write one progression out in six different ways."
+        lede="The same chords can become a hymn, a prelude or a sonata, depending on how the notes are laid out in time and register. Compare three textures in Bach and Mozart, then write one progression out in six different ways."
       />
       <Panel title="In the repertoire">
         <div className="stack">

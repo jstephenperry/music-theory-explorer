@@ -11,10 +11,24 @@ src/
   audio/       Web Audio synthesis engine, lookahead sequencer, playback hooks.
   components/  Shared UI: Piano, Staff (VexFlow), ui.tsx primitives, Icon, theme helpers.
   hooks/       usePersistentState, useUrlState, useMediaQuery, useMidiInput, useComputerKeyboard.
-  app/         App shell, routing (HashRouter), route registry, layout.
+  app/         App shell, routing (HashRouter), the registry of modes, sections and rooms, layout.
   features/    One folder per page ("room"). Each owns its components, styles and logic.
   styles/      global.css: design tokens and a few utility classes.
 ```
+
+## Modes and routing (`src/app`)
+
+The site has two modes, Theory and Composition, defined in `routes.ts` (`MODES`). Every section
+belongs to one mode and every room to one section, so `ROUTES` is built with a `room(slug, section,
+...)` helper that derives the full path from the mode: `/theory/intervals`, `/composition/motive`.
+`App.tsx` registers a landing page per mode (`ModePage`), the rooms, a redirect from each old flat
+path (`/intervals`) to its nested path that keeps the query string, and a 404. `Layout.tsx` reads
+the mode from the URL (`modeForPath`) and shows that mode's sections in the drawer, with a
+Theory/Composition switch above them; on the home page it shows the mode last visited
+(`usePersistentState('mode')`). The `data-mode` attribute on the shell sets `--mode-accent`, the
+drawer's accent color (brass for Theory, verdigris for Composition). Links between rooms use
+`roomPath(slug)` rather than a literal path. `routes.test.ts` checks the registry and the numbers
+quoted in room descriptions against the data they describe.
 
 ## Theory engine (`src/theory`)
 
@@ -124,9 +138,20 @@ aged brass. Use the tokens in `styles/global.css` (`--bg`, `--bg-elev`, `--bg-su
 `--ink-muted`, `--rule`, `--rule-strong`, `--accent`, `--brass`, `--verdigris`, `--royal`, `--plum` and
 their `-soft` variants). Headings use `--font-display` (Cormorant Garamond), UI text `--font-ui`
 (Source Sans 3), prose `--font-serif` (Source Serif 4). Soft radii, thin rules, no neon, no heavy shadows.
-Both themes (Matinee light, Evening dark) must look right; never hard-code colors that ignore the theme.
+Both themes (light and dark) must look right; never hard-code colors that ignore the theme.
+
+Rooms whose controls change a shared work surface (the keyboard and staff in Scales & Modes, the
+progression strip in the Progression Lab) put that surface first and give it the global `dock`
+class: on screens at least 900 px wide and 760 px tall it is `position: sticky` below the top bar
+(`--topbar-h`), so the panels that change it scroll underneath while it stays in view. Each room
+has a "Keep in view" toggle (persisted) that removes the class. Long lists (the progression library,
+the scale browser columns) scroll inside a bounded box rather than extending the page.
 
 Writing style: American English, concise, no emoji, no em or en dashes used as punctuation.
+User-facing text follows the No AI Slop rules (github.com/realrossmanngroup/no_ai_slop_writing_rules):
+no intensifiers or filler, no hollow claims, no dramatic or vague headings, no scare quotes, and
+every number checked against the data (the route test enforces the counts in room descriptions).
+Headings and eyebrows name the subject; ledes say what the room does and what it contains.
 
 ## Testing and deployment
 

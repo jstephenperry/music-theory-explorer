@@ -2,6 +2,11 @@
   display: grid;
   grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
   min-height: 100vh;
+  /* The drawer's accent names the mode: brass for Theory, verdigris for Composition. */
+  --mode-accent: var(--brass-bright);
+}
+.shell[data-mode='composition'] {
+  --mode-accent: var(--verdigris-bright);
 }
 
 .skip {
@@ -67,6 +72,38 @@
   margin-top: 0.3rem;
 }
 
+/* ---------- Mode switch: Theory or Composition ---------- */
+.modeSwitch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin: 0.9rem 0.75rem 0;
+  padding: 4px;
+  border: 1px solid color-mix(in srgb, var(--brass) 35%, transparent);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.18);
+}
+.modeTab {
+  display: block;
+  padding: 0.4rem 0.5rem;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--wood-muted);
+  transition: color 120ms ease, background 120ms ease;
+}
+.modeTab:hover {
+  color: var(--wood-ink);
+}
+.modeTabActive {
+  color: var(--wood-2);
+  background: var(--mode-accent);
+}
+
 .nav {
   padding: 0.6rem 0.75rem 1rem;
   flex: 1;
@@ -84,7 +121,7 @@
   letter-spacing: 0.2em;
   text-transform: uppercase;
   font-weight: 700;
-  color: var(--brass-bright);
+  color: var(--mode-accent);
   opacity: 0.85;
   padding: 0 0.7rem 0.35rem;
 }
@@ -115,7 +152,7 @@
   bottom: 6px;
   width: 3px;
   border-radius: 2px;
-  background: var(--brass-bright);
+  background: var(--mode-accent);
 }
 
 .sidebarFoot {
@@ -139,6 +176,7 @@
   position: sticky;
   top: 0;
   z-index: 20;
+  min-height: var(--topbar-h);
   display: flex;
   align-items: center;
   gap: 0.75rem;

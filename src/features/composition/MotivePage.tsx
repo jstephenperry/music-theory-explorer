@@ -12,7 +12,7 @@ export default function MotivePage() {
   return (
     <div className={s.page}>
       <PageHeader
-        eyebrow="Composition"
+        eyebrow="Melody & Phrase"
         title="Motive & Development"
         lede="A motive is the smallest idea that keeps its identity when it changes. See how Bach and Beethoven repeat, transpose, invert and sequence a few notes into a whole piece, then develop a motive of your own."
       />
