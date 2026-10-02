@@ -7,7 +7,7 @@ import { interval, intervalBetween, transpose, transposeDown } from '../../theor
 import { parallelKey, diatonicChordsOfScale, type Key } from '../../theory/keys';
 import { mod, noteName, pc, type Note } from '../../theory/notes';
 import { analyzeChord, tryParseRoman, type RomanChord } from '../../theory/roman';
-import { isDiatonicIn, isDominantType } from './harmony';
+import { isDiatonicIn, isDominantType } from '../../theory/harmony';
 import { normalizeNumeral, type ProgItem } from './model';
 import { baseTriad } from './suggest';
 

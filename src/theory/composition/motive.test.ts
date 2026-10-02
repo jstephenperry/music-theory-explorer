@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { contour, develop, invertChromatic, invertDiatonic, retrograde, scaleRhythm, sequence, stepContour, stepPitch, transposeReal, type Motive } from '../composition/motive';
+import { contour, develop, invertChromatic, invertDiatonic, retrograde, scaleRhythm, sequence, stepContour, stepPitch, transposeReal, type Motive } from './motive';
 import { makeKey } from '../keys';
 import { pitch, pitchName } from '../notes';
 

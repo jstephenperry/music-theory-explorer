@@ -1,12 +1,12 @@
 /**
  * Harmonic function, chromatic role and cadence analysis for the Progression Lab.
  */
-import { chordQualityClass } from '../../theory/chords';
-import { interval, intervalBetween, transpose, transposeDown } from '../../theory/intervals';
-import { parallelKey, type Key } from '../../theory/keys';
-import { mod, noteName, pc, type Note } from '../../theory/notes';
-import { buildScale, scalePcs } from '../../theory/scales';
-import { parseRoman, type RomanChord } from '../../theory/roman';
+import { chordQualityClass } from './chords';
+import { interval, intervalBetween, transpose, transposeDown } from './intervals';
+import { parallelKey, type Key } from './keys';
+import { mod, noteName, pc, type Note } from './notes';
+import { buildScale, scalePcs } from './scales';
+import { parseRoman, type RomanChord } from './roman';
 
 export type HarmonicFunction = 'tonic' | 'predominant' | 'dominant' | 'chromatic';
 export type Tendency = 'tonic' | 'predominant' | 'dominant';

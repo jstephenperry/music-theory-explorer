@@ -7,8 +7,8 @@ import { RULES } from '../theory/composition/counterpoint';
 import { TECHNIQUES } from '../features/modulation/logic';
 import { TUNING_SYSTEMS } from '../features/harmonics/tuning';
 import { EXERCISES } from '../features/ear-training/earTraining';
-import { CADENCE_TYPES } from '../features/composition/cadences';
-import { TEXTURES } from '../features/composition/textures';
+import { CADENCE_TYPES } from '../theory/composition/cadences';
+import { TEXTURES } from '../theory/composition/textures';
 
 const blurbOf = (slug: string) => ROUTES.find((r) => r.slug === slug)!.blurb;
 

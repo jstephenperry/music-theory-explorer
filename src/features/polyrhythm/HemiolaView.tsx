@@ -61,9 +61,10 @@ export function HemiolaView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
+  const playerSetBpm = player.setBpm;
   useEffect(() => {
-    player.setBpm(bpm);
-  }, [bpm, player.setBpm]);
+    playerSetBpm(bpm);
+  }, [bpm, playerSetBpm]);
 
   const light = (i: number) => {
     if (i === litCell.current) return;

@@ -4,8 +4,8 @@ import { PlayButton } from '../../components/ui';
 import { DEV_OPS, applyOp, type DevOp } from '../../theory/composition/motive';
 import { MOTIVE_PRESETS } from './motivePresets';
 import { Quiz, type QuizQuestion } from './Quiz';
-import { choicesWith, pick } from './random';
-import { motiveNotes, segmentsToScore } from './scoreUtils';
+import { choicesWith, pick } from '../../theory/composition/random';
+import { motiveNotes, segmentsToScore } from '../../theory/composition/scoreUtils';
 import type { useScorePlayer } from './useScorePlayer';
 import s from './Composition.module.css';
 

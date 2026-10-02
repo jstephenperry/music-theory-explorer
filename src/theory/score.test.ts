@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { buildScore, measureStart, notateVoice, parseVoice, scoreFromVoices, scoreSounds, selectNotes, writableParts, ScoreSyntaxError } from '../score';
-import { makeKey } from '../keys';
-import { pitch } from '../notes';
+import { buildScore, measureStart, notateVoice, parseVoice, scoreFromVoices, scoreSounds, selectNotes, writableParts, ScoreSyntaxError } from './score';
+import { makeKey } from './keys';
+import { pitch } from './notes';
 
 const C = makeKey('C');
 

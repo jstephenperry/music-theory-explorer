@@ -6,14 +6,14 @@
  * numerals with their length in beats ("I:4 V7:4"), so the cadences can be recognized by the same
  * analysis the Progression Lab uses.
  */
-import { pitchInterval, transposePitch, transposePitchDown, type Interval } from '../../theory/intervals';
-import { makeKey, type Key } from '../../theory/keys';
-import { letterIndex, midi, pc, type Note, type Pitch } from '../../theory/notes';
-import { parseRoman, type RomanChord } from '../../theory/roman';
-import { notateVoice, parseVoice, scoreFromVoices, type PlainNote, type Score, type ScoreNote } from '../../theory/score';
-import type { ScoreBracket } from '../../components/ScoreView';
-import { stepPitch } from '../../theory/composition/motive';
-import { detectCadence, type Cadence } from '../progressions/harmony';
+import { pitchInterval, transposePitch, transposePitchDown, type Interval } from '../intervals';
+import { makeKey, type Key } from '../keys';
+import { letterIndex, midi, pc, type Note, type Pitch } from '../notes';
+import { parseRoman, type RomanChord } from '../roman';
+import { notateVoice, parseVoice, scoreFromVoices, type PlainNote, type Score, type ScoreNote } from '../score';
+import type { ScoreBracket } from '../score';
+import { stepPitch } from '../composition/motive';
+import { detectCadence, type Cadence } from '../harmony';
 
 export const PHRASE_TIME: [number, number] = [4, 4];
 const BAR = 4;

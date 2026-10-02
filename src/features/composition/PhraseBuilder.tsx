@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { ScoreView } from '../../components/ScoreView';
 import { Callout, PlayButton, Segmented, Slider } from '../../components/ui';
 import { usePersistentState } from '../../hooks/usePersistentState';
-import { BASIC_IDEAS, CADENCE_KINDS, PHRASE_TONICS, buildPhrase, type AccompStyleId, type CadenceKind, type PhraseChoice, type PhraseForm, type Repetition } from './phrase';
+import { BASIC_IDEAS, CADENCE_KINDS, PHRASE_TONICS, buildPhrase, type AccompStyleId, type CadenceKind, type PhraseChoice, type PhraseForm, type Repetition } from '../../theory/composition/phrase';
 import type { useScorePlayer } from './useScorePlayer';
 import s from './Composition.module.css';
 import { flat } from '../../lib/format';

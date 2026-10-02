@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pitchName } from '../../theory/notes';
+import { pitchName } from '../notes';
 import { BASS_CHOICES, MELODY_TECHNIQUES, MODE_CHOICES, THEME_CHOICE, buildVariation } from './variations';
 
 const names = (ns: { pitches: Parameters<typeof pitchName>[0][] }[]) => ns.map((n) => n.pitches.map((p) => pitchName(p, false)).join('+') || 'r');

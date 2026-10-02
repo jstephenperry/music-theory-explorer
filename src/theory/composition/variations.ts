@@ -4,11 +4,11 @@
  * meter, mode or accompaniment. The results are generated, in the manner of Mozart's variations,
  * not quotations of them.
  */
-import { makeKey, type Key } from '../../theory/keys';
-import { midi, type Pitch } from '../../theory/notes';
-import { parseRoman } from '../../theory/roman';
-import { notateVoice, scoreFromVoices, type PlainNote, type Score } from '../../theory/score';
-import { stepPitch } from '../../theory/composition/motive';
+import { makeKey, type Key } from '../keys';
+import { midi, type Pitch } from '../notes';
+import { parseRoman } from '../roman';
+import { notateVoice, scoreFromVoices, type PlainNote, type Score } from '../score';
+import { stepPitch } from '../composition/motive';
 import { accompaniment } from './phrase';
 import { quarterEntries } from '../../repertoire';
 

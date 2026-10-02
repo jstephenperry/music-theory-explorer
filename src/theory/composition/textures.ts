@@ -3,12 +3,12 @@
  * as the textures of the Classical and Baroque keyboard: chorale, repeated chords, Alberti bass,
  * Bach's broken-chord prelude figuration, a sweeping arpeggio, and the waltz.
  */
-import { makeKey, type Key } from '../../theory/keys';
-import { midi, pc, type Note, type Pitch } from '../../theory/notes';
-import { parseRoman, type RomanChord } from '../../theory/roman';
-import { notateVoice, scoreFromVoices, type PlainNote, type Score, type ScoreNote } from '../../theory/score';
-import { voiceProgression } from '../../theory/voicing';
-import { diatonicIndex, stepPitch } from '../../theory/composition/motive';
+import { makeKey, type Key } from '../keys';
+import { midi, pc, type Note, type Pitch } from '../notes';
+import { parseRoman, type RomanChord } from '../roman';
+import { notateVoice, scoreFromVoices, type PlainNote, type Score, type ScoreNote } from '../score';
+import { voiceProgression } from '../voicing';
+import { diatonicIndex, stepPitch } from '../composition/motive';
 
 export type TextureId = 'chorale' | 'repeated' | 'alberti' | 'prelude' | 'arpeggio' | 'waltz';
 

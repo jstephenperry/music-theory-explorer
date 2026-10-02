@@ -21,3 +21,16 @@ export function audibleLayers(muted: boolean[], solo: boolean[], n: number): boo
   const anySolo = solo.slice(0, n).some(Boolean);
   return Array.from({ length: n }, (_, i) => (anySolo ? !!solo[i] : !muted[i]));
 }
+
+export interface GridRow {
+  label: string;
+  colorVar: string;
+  /** Cell kinds: 0 = empty, 1 = onset, 2 = strong onset (cycle start). */
+  cells: number[];
+  /** Optional cycle boundaries (drawn as brackets) in steps. */
+  cycle?: number;
+}
+
+export function layerRows(gridRows: boolean[][], labels?: string[]): GridRow[] {
+  return gridRows.map((r, i) => ({ label: labels?.[i] ?? LAYER_NAMES[i], colorVar: LAYER_COLORS[i], cells: r.map((x) => (x ? 2 : 0)) }));
+}

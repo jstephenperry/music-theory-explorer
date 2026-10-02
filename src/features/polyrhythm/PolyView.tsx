@@ -15,7 +15,8 @@ import { isBeamable } from '../meter/rhythmNotation';
 import { outputLatency, useRaf } from '../meter/useRaf';
 import { indexAt } from '../meter/meter';
 import { PolyClock, type ClockHandle } from './PolyClock';
-import { LcmGrid, layerRows, type GridHandle } from './LcmGrid';
+import { LcmGrid, type GridHandle } from './LcmGrid';
+import { layerRows } from './layers';
 import { audibleLayers, DEFAULT_LAYER_SOUNDS, LAYER_COLORS, LAYER_NAMES, percFor, soundOptions } from './layers';
 import { gcd, mnemonic, polyGrid, polyNotation, POLY_PRESETS, type PolyNotation } from './rhythm';
 import s from './Polyrhythm.module.css';
@@ -99,9 +100,10 @@ export function PolyView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key, muted, solo, sounds, pulse]);
 
+  const playerSetBpm = player.setBpm;
   useEffect(() => {
-    player.setBpm(bpm);
-  }, [bpm, player.setBpm]);
+    playerSetBpm(bpm);
+  }, [bpm, playerSetBpm]);
 
   // ---------- Animation ----------
   const clock = useRef<ClockHandle>(null);

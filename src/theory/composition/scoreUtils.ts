@@ -1,8 +1,8 @@
-import { keyNotes, keySignatureFifths, type Key } from '../../theory/keys';
-import { midi, mod, pc, pitchFromMidi, type Pitch } from '../../theory/notes';
-import { notateVoice, scoreFromVoices, type Clef, type PlainNote, type Score, type ScoreNote } from '../../theory/score';
-import type { ScoreBracket } from '../../components/ScoreView';
-import type { Motive } from '../../theory/composition/motive';
+import { keyNotes, keySignatureFifths, type Key } from '../keys';
+import { midi, mod, pc, pitchFromMidi, type Pitch } from '../notes';
+import { notateVoice, scoreFromVoices, type Clef, type PlainNote, type Score, type ScoreNote } from '../score';
+import type { ScoreBracket } from '../score';
+import type { Motive } from '../composition/motive';
 
 /** Spell a MIDI note as a pitch of the key when it belongs to it, otherwise with the key's preferred accidental. */
 export function spellInKey(m: number, key: Key): Pitch {

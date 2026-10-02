@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { ScoreView } from '../../components/ScoreView';
 import { PlayButton, Segmented, Slider } from '../../components/ui';
 import { usePersistentState } from '../../hooks/usePersistentState';
-import { TEXTURES, TEXTURE_PROGRESSIONS, TEXTURE_TONICS, buildTexture, type TextureId } from './textures';
+import { TEXTURES, TEXTURE_PROGRESSIONS, TEXTURE_TONICS, buildTexture, type TextureId } from '../../theory/composition/textures';
 import type { useScorePlayer } from './useScorePlayer';
 import s from './Composition.module.css';
 import { flat } from '../../lib/format';

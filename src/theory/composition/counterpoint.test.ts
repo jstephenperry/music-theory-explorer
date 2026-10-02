@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CANTUS_FIRMI, checkCounterpoint, isComplete, leadingTone, solveCounterpoint, type CPNote, type Exercise } from '../composition/counterpoint';
+import { CANTUS_FIRMI, checkCounterpoint, isComplete, leadingTone, solveCounterpoint, type CPNote, type Exercise } from './counterpoint';
 import { pitch, pitchName } from '../notes';
 
 const ps = (s: string): CPNote[] => s.split(' ').map((t) => (t === 'r' ? 'rest' : t === '_' ? null : pitch(t)));

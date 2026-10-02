@@ -15,7 +15,9 @@ export function useComputerKeyboard(
   enabled = true,
 ) {
   const ref = useRef(handlers);
-  ref.current = handlers;
+  useEffect(() => {
+    ref.current = handlers;
+  });
   const octave = useRef(0);
   const down = useRef(new Map<string, number>());
 

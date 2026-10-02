@@ -505,3 +505,14 @@ export function serializeBars(bars: Bar[]): string {
     })
     .join(',');
 }
+
+/** Counting syllables: beat numbers with "&" and "a" for divisions (1 & a 2 & a ...). */
+export function countSyllables(groups: number[], allOnes: boolean): string[] {
+  if (allOnes) return groups.map((_, i) => String(i + 1));
+  const out: string[] = [];
+  groups.forEach((g, i) => {
+    const subs = g === 2 ? ['&'] : g === 3 ? ['&', 'a'] : g === 4 ? ['e', '&', 'a'] : Array(g - 1).fill('·');
+    out.push(String(i + 1), ...subs);
+  });
+  return out;
+}

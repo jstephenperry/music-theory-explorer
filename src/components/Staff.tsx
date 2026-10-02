@@ -5,29 +5,13 @@
  * chord symbols above and analysis text (roman numerals) below; highlighting; automatic
  * accidentals that respect the key signature and earlier accidentals in the bar; line wrapping.
  */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { midi as toMidi, letterIndex, type Pitch } from '../theory/notes';
 import { signatureAccidentalMap, keySignatureFifths, vexKeySpec, type Key } from '../theory/keys';
-import { resolveColor, useThemeVersion, cssVar } from './theme';
+import { resolveColor, cssVar } from './theme';
 import s from './Staff.module.css';
 
-type VexModule = typeof import('vexflow/bravura');
-let vfPromise: Promise<VexModule> | null = null;
-
-/** Load VexFlow and its music font once. Exposed for features that need custom notation. */
-export function loadVexFlow(): Promise<VexModule> {
-  if (!vfPromise) {
-    vfPromise = import('vexflow/bravura').then(async (mod) => {
-      try {
-        await Promise.all([document.fonts.load('30px Bravura'), document.fonts.load('14px Academico')]);
-      } catch {
-        /* render anyway */
-      }
-      return mod;
-    });
-  }
-  return vfPromise;
-}
+import { useVexFlow, type VexModule } from './vexflow';
 
 export type Duration = 'w' | 'h' | 'q' | '8' | '16' | '32' | 'wd' | 'hd' | 'qd' | '8d' | '16d';
 
@@ -96,34 +80,11 @@ function chooseClef(all: Pitch[]): 'treble' | 'bass' | 'grand' {
 }
 
 export function Staff(props: StaffProps) {
-  const host = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState(0);
-  const [vf, setVf] = useState<VexModule | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const theme = useThemeVersion();
+  const { host, width, vf, error, setError, theme } = useVexFlow();
   const clickRef = useRef(props.onEventClick);
-  clickRef.current = props.onEventClick;
-
   useEffect(() => {
-    let alive = true;
-    loadVexFlow()
-      .then((m) => alive && setVf(m))
-      .catch((e) => alive && setError(String(e)));
-    return () => {
-      alive = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    const el = host.current;
-    if (!el) return;
-    const ro = new ResizeObserver((entries) => {
-      const w = Math.floor(entries[0].contentRect.width);
-      setWidth((prev) => (Math.abs(prev - w) > 2 ? w : prev));
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
+    clickRef.current = props.onEventClick;
+  });
 
   const serialized = JSON.stringify({ ...props, onEventClick: undefined });
 

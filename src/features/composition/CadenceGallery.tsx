@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { ScoreView } from '../../components/ScoreView';
 import { PlayButton, Segmented } from '../../components/ui';
 import { usePersistentState } from '../../hooks/usePersistentState';
-import { CADENCE_TYPES, cadenceScore, cadenceType, type CadenceId } from './cadences';
+import { CADENCE_TYPES, cadenceScore, cadenceType, type CadenceId } from '../../theory/composition/cadences';
 import type { useScorePlayer } from './useScorePlayer';
 import s from './Composition.module.css';
 

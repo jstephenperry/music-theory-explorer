@@ -10,7 +10,8 @@ import { usePersistentState } from '../../hooks/usePersistentState';
 import type { SoundId } from '../meter/patterns';
 import { outputLatency, useRaf } from '../meter/useRaf';
 import { MeterRings, type RingsHandle } from './PolyClock';
-import { LcmGrid, type GridHandle, type GridRow } from './LcmGrid';
+import { LcmGrid, type GridHandle } from './LcmGrid';
+import type { GridRow } from './layers';
 import { DEFAULT_LAYER_SOUNDS, LAYER_COLORS, LAYER_NAMES, percFor, soundOptions } from './layers';
 import { phaseDrift, polymeter, POLYMETER_PRESETS } from './rhythm';
 import s from './Polyrhythm.module.css';
@@ -68,9 +69,10 @@ export function PolymeterView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key, muted, sounds, ticks]);
 
+  const playerSetBpm = player.setBpm;
   useEffect(() => {
-    player.setBpm(bpm);
-  }, [bpm, player.setBpm]);
+    playerSetBpm(bpm);
+  }, [bpm, playerSetBpm]);
 
   useEffect(() => {
     if (!player.playing) {

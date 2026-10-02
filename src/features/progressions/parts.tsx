@@ -4,7 +4,7 @@
 import type { Key } from '../../theory/keys';
 import type { Pitch } from '../../theory/notes';
 import type { RomanChord } from '../../theory/roman';
-import { describeChord, FUNCTION_LABEL, type ChordDescription, type HarmonicFunction } from './harmony';
+import { describeChord, FUNCTION_LABEL, type ChordDescription, type HarmonicFunction } from '../../theory/harmony';
 import { chordLabel, tryParseNumeral, type ProgItem } from './model';
 import { cx, fnClass } from './classes';
 import s from './Progressions.module.css';

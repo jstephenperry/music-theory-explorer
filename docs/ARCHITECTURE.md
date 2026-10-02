@@ -7,9 +7,9 @@ everything, including audio synthesis and notation, runs in the browser.
 
 ```
 src/
-  theory/      Pure music-theory engine (no React, no DOM). Fully unit tested.
+  theory/      Pure music-theory engine (no React, no DOM), tests beside each module.
   audio/       Web Audio synthesis engine, lookahead sequencer, playback hooks.
-  components/  Shared UI: Piano, Staff (VexFlow), ui.tsx primitives, Icon, theme helpers.
+  components/  Shared UI: Piano (and pianoMarks helpers), Staff and ScoreView on the useVexFlow hook, ui.tsx primitives, Icon, theme.
   hooks/       usePersistentState, useUrlState (and useUrlParams), useMediaQuery, useMidiInput, useComputerKeyboard.
   lib/         Small shared helpers with no music in them: format.ts (formatCents, flat, cap, countWord).
   app/         App shell, routing (HashRouter), the registry of modes, sections and rooms, layout.
@@ -109,6 +109,12 @@ Import from `src/theory` (barrel) or from individual modules.
   returns issues (slots, error or warning, rule, message) for first and second species, judging
   intervals by spelling. `solveCounterpoint(ex, { fixed })` is a backtracking solver that writes
   backward from the cadence; it powers hints and model solutions. `CANTUS_FIRMI`, `RULES`.
+- `composition/phrase.ts`, `cadences.ts`, `textures.ts`, `variations.ts`: the generators behind
+  the phrase builder, cadence gallery, texture lab and variation workshop, each with tests.
+  `scoreUtils.ts` (spelling in a key, clef choice, segments to a bracketed score) and `random.ts`
+  serve the workshops and drills.
+- `harmony.ts`: harmonic function of a chord in a key (`describeChord`) and cadence detection
+  (`detectCadence`), used by the Progression Lab and the phrase builder.
 
 ## Audio (`src/audio`)
 
@@ -145,8 +151,15 @@ Import from `src/theory` (barrel) or from individual modules.
 - Composition rooms (`src/features/composition`): `useScorePlayer()` plays a `Score` and reports
   the sounding note ids; `ExcerptView` shows an `Excerpt` (from `src/repertoire`) with switchable
   highlight layers, brackets, commentary and its source; `Quiz` is the shared multiple-choice drill.
-  Generators with tests: `phrase.ts` (periods, sentences, cadence analysis), `cadences.ts`,
-  `textures.ts`, `variations.ts`.
+  The generators live in `src/theory/composition`.
+- `vexflow.ts`: `loadVexFlow()` (the module and its font, loaded once) and `useVexFlow()`, the
+  lifecycle every engraver shares: host ref, observed width, loaded module, error and theme version.
+  `Staff` and `ScoreView` keep only their layout code.
+- Modulation (`src/features/modulation`): `logic.ts` is a barrel over `keys.ts` (keys in the URL,
+  chord functions, the chords of a key), `relations.ts` (pivots, key relations), `techniques.ts`
+  (the nine techniques, candidate finders, availability, the map) and `examples.ts` (the example
+  model and builders). Scales: `parts.tsx` holds the room's stateless pieces (formula row, step bar,
+  forms, equivalents, legend, marking helpers).
 - Hooks: `useUrlState(key, default)` and `useUrlParams(defaults)` (in `hooks/useUrlState.ts`, the
   only URL hooks) keep shareable state in the URL;
   `usePersistentState` keeps preferences in localStorage; `useMediaQuery`; `useMidiInput`; `useComputerKeyboard`.
@@ -185,7 +198,8 @@ Headings and eyebrows name the subject; ledes say what the room does and what it
 
 ## Testing and deployment
 
-- `npm test` runs Vitest; `npm run typecheck`; `npm run build` produces `dist/`.
+- `npm test` runs Vitest (tests sit beside the modules they test); `npm run typecheck`;
+  `npm run lint` fails on any warning; `npm run build` produces `dist/`.
 - Excerpts were checked by hand-run comparison with Mutopia MIDI files; the `source` field of each
   excerpt records what was checked and how.
 - `.github/workflows/deploy.yml` builds, tests and publishes to GitHub Pages on pushes to `main`.

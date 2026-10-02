@@ -3,31 +3,11 @@ import { Button, Callout, PageHeader, Panel, PlayButton, Segmented, Slider, Stat
 import { usePlayer } from '../../audio/usePlayer';
 import { usePersistentState } from '../../hooks/usePersistentState';
 import { useUrlState } from '../../hooks/useUrlState';
-import {
-  analyzeBar,
-  buildTimeline,
-  defaultAccents,
-  defaultGroups,
-  indexAt,
-  makeBar,
-  METER_PRESETS,
-  nextAccent,
-  noteValue,
-  parseBars,
-  serializeBars,
-  tapTempo,
-  tempoMarking,
-  tempoUnit,
-  TEMPO_MARKINGS,
-  toggleBoundary,
-  type AccentLevel,
-  type Bar,
-  type MeterPreset,
-} from './meter';
+import { analyzeBar, buildTimeline, defaultAccents, defaultGroups, indexAt, makeBar, METER_PRESETS, nextAccent, noteValue, parseBars, serializeBars, tapTempo, tempoMarking, tempoUnit, TEMPO_MARKINGS, toggleBoundary, type AccentLevel, type Bar, type MeterPreset, countSyllables } from './meter';
 import { allocateMetronome, applyMetronome, type MetronomeSound } from './metronome';
 import { measuresFromBars } from './rhythmNotation';
 import { RhythmStaff, type RhythmStaffHandle } from './RhythmStaff';
-import { BeatGrid, countSyllables, type BeatGridHandle } from './BeatGrid';
+import { BeatGrid, type BeatGridHandle } from './BeatGrid';
 import { Pendulum, type PendulumHandle } from './Pendulum';
 import { Comparison } from './Comparison';
 import { StepSequencer } from './StepSequencer';
@@ -100,9 +80,10 @@ export default function MeterPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [barsKey]);
 
+  const playerSetBpm = player.setBpm;
   useEffect(() => {
-    player.setBpm(bpm);
-  }, [bpm, player.setBpm]);
+    playerSetBpm(bpm);
+  }, [bpm, playerSetBpm]);
 
   // ---------- Animation ----------
   const pendulum = useRef<PendulumHandle>(null);

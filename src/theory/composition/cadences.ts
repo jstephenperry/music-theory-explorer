@@ -2,10 +2,10 @@
  * The cadence gallery: each cadence type in four-part harmony, two examples apiece, written in C
  * major (the Phrygian half cadence in A minor) and transposable to any key for the drill.
  */
-import { pitchInterval, transposePitch, transposePitchDown } from '../../theory/intervals';
-import { makeKey, type Key } from '../../theory/keys';
-import { midi, mod, pc, type Pitch } from '../../theory/notes';
-import { buildScore, type Score } from '../../theory/score';
+import { pitchInterval, transposePitch, transposePitchDown } from '../intervals';
+import { makeKey, type Key } from '../keys';
+import { midi, mod, pc, type Pitch } from '../notes';
+import { buildScore, type Score } from '../score';
 
 export type CadenceId = 'pac' | 'iac' | 'half' | 'deceptive' | 'plagal' | 'phrygian';
 

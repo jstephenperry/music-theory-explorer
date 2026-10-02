@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Button, Segmented } from '../../components/ui';
 import type { Key } from '../../theory/keys';
 import { chordSymbol } from '../../theory/chords';
-import { describeChord } from './harmony';
+import { describeChord } from '../../theory/harmony';
 import { DEFAULT_BEATS, parseNumeralText, parseSymbolText, serializeItems, tryParseNumeral, type ProgItem } from './model';
 import { cx, fnClass } from './classes';
 import s from './Progressions.module.css';

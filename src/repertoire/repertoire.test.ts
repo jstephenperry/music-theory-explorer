@@ -3,9 +3,9 @@ import { REPERTOIRE, excerpt, fragment, motiveFragment, plainNumeral, quarterEnt
 import { noteById, selectNotes } from '../theory/score';
 import { pitch } from '../theory/notes';
 import { MOTIVE_PRESETS } from '../features/composition/motivePresets';
-import { BASIC_IDEAS } from '../features/composition/phrase';
-import { TEXTURE_PROGRESSIONS } from '../features/composition/textures';
-import { HARMONY_MAJOR, THEME, THEME_BASS, THEME_WORK } from '../features/composition/variations';
+import { BASIC_IDEAS } from '../theory/composition/phrase';
+import { TEXTURE_PROGRESSIONS } from '../theory/composition/textures';
+import { HARMONY_MAJOR, THEME, THEME_BASS, THEME_WORK } from '../theory/composition/variations';
 
 describe('repertoire registry', () => {
   it('has unique ids and builds every score', () => {

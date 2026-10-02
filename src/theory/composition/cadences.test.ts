@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { makeKey } from '../../theory/keys';
-import { pc, pitchName } from '../../theory/notes';
-import { parseRoman } from '../../theory/roman';
-import { analyzeTransition } from '../progressions/voiceLeading';
-import { detectCadence } from '../progressions/harmony';
+import { makeKey } from '../keys';
+import { pc, pitchName } from '../notes';
+import { parseRoman } from '../roman';
+import { analyzeTransition } from '../../features/progressions/voiceLeading';
+import { detectCadence } from '../harmony';
 import { CADENCE_TYPES, cadenceScore, transposeScore } from './cadences';
 
 const plainFigures = (s: string) => s.replace('⁶₄', '64').replace('⁶₅', '65').replace('⁷', '7').replace('⁶', '6');

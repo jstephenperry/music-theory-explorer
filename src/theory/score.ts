@@ -32,6 +32,18 @@ export type NoteValue = 1 | 2 | 4 | 8 | 16 | 32;
 export type Ornament = 'tr' | 'mordent' | 'prall' | 'turn' | 'trem8' | 'trem16' | 'trem32' | 'stacc' | 'fermata';
 export type Clef = 'treble' | 'bass';
 
+/** A labeled bracket over a passage, from one note id to another; `row` stacks brackets. */
+export interface ScoreBracket {
+  /** First and last note ids of the passage. */
+  first: string;
+  last: string;
+  label: string;
+  /** Color role ('root', 'alt', 'extra', 'other', 'tone') or CSS color. */
+  color?: string;
+  /** Stacking row above the staff, 0 nearest. */
+  row?: number;
+}
+
 export interface Tuplet {
   /** Notes written in the group. */
   actual: number;

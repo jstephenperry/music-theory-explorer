@@ -6,26 +6,18 @@
  *
  * Sounding notes are highlighted without re-engraving: each note's SVG group gets a class.
  */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { midi as toMidi, letterIndex, type Pitch } from '../theory/notes';
 import { keySignatureFifths, signatureAccidentalMap, vexKeySpec } from '../theory/keys';
 import { measureLen, measureStart, type Score, type ScoreNote } from '../theory/score';
-import { loadVexFlow } from './Staff';
-import { cssVar, resolveColor, useThemeVersion } from './theme';
+import { useVexFlow, type VexModule } from './vexflow';
+import type { ScoreBracket } from '../theory/score';
+
+export type { ScoreBracket };
+import { cssVar, resolveColor } from './theme';
 import s from './ScoreView.module.css';
 
-type VexModule = Awaited<ReturnType<typeof loadVexFlow>>;
 
-export interface ScoreBracket {
-  /** First and last note ids of the passage. */
-  first: string;
-  last: string;
-  label: string;
-  /** Color role ('root', 'alt', 'extra', 'other', 'tone') or CSS color. */
-  color?: string;
-  /** Stacking row above the staff, 0 nearest. */
-  row?: number;
-}
 
 export interface ScoreViewProps {
   score: Score;
@@ -45,35 +37,12 @@ export interface ScoreViewProps {
 }
 
 export function ScoreView(props: ScoreViewProps) {
-  const host = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState(0);
-  const [vf, setVf] = useState<VexModule | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const theme = useThemeVersion();
+  const { host, width, vf, error, setError, theme } = useVexFlow();
   const clickRef = useRef(props.onNoteClick);
-  clickRef.current = props.onNoteClick;
+  useEffect(() => {
+    clickRef.current = props.onNoteClick;
+  });
   const elements = useRef(new Map<string, SVGElement[]>());
-
-  useEffect(() => {
-    let alive = true;
-    loadVexFlow()
-      .then((m) => alive && setVf(m))
-      .catch((e) => alive && setError(String(e)));
-    return () => {
-      alive = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    const el = host.current;
-    if (!el) return;
-    const ro = new ResizeObserver((entries) => {
-      const w = Math.floor(entries[0].contentRect.width);
-      setWidth((prev) => (Math.abs(prev - w) > 2 ? w : prev));
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
 
   const key = JSON.stringify([props.score, props.colors, props.brackets, props.showTime, props.finalBarline, props.barsPerLine, !!props.onNoteClick]);
   useEffect(() => {

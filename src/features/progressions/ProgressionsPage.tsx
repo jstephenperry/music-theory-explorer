@@ -10,7 +10,7 @@ import { midi, pc, pitchName, type Pitch } from '../../theory/notes';
 import { initialVoicing, voiceLead, voiceProgression } from '../../theory/voicing';
 import { ACCOMP_STYLES, buildAccompaniment, type AccompStyle } from './accompaniment';
 import { ChordEditor } from './ChordEditor';
-import { describeChord, detectCadence } from './harmony';
+import { describeChord, detectCadence } from '../../theory/harmony';
 import { LibraryPanel } from './LibraryPanel';
 import { LIBRARY, type LibraryEntry } from './library';
 import { chordLabel, DEFAULT_BEATS, itemsFromUrl, keyFromParams, parseNumeral, parseNumeralText, serializeItems, tonicParam, tryParseNumeral, type ProgItem } from './model';

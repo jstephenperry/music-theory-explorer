@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Piano, type KeyMark } from '../../components/Piano';
 import { Staff } from '../../components/Staff';
 import { Button, Callout, Legend, Panel, PageHeader, RootPicker, Stat, Tag, Toggle } from '../../components/ui';
@@ -129,11 +129,8 @@ export default function IntervalsPage() {
     ...(showAltered ? [{ label: 'Augmented and diminished spellings', names: ALTERED_INTERVALS }] : []),
     ...(showCompound ? [{ label: 'Compound intervals', names: COMPOUND_INTERVALS }] : []),
   ];
-  const stairIntervals = useMemo(() => {
-    const names = [...PRIMARY_INTERVALS, ...(showAltered ? ALTERED_INTERVALS : []), ...(showCompound ? COMPOUND_INTERVALS : [])];
-    if (!names.includes(name)) names.push(name);
-    return names.map(interval).sort((a, b) => a.semis - b.semis || a.num - b.num);
-  }, [showAltered, showCompound, name]);
+  const shownNames = [...PRIMARY_INTERVALS, ...(showAltered ? ALTERED_INTERVALS : []), ...(showCompound ? COMPOUND_INTERVALS : [])];
+  const stairIntervals = (shownNames.includes(name) ? shownNames : [...shownNames, name]).map(interval).sort((a, b) => a.semis - b.semis || a.num - b.num);
 
   const consonance = classifyConsonance(iv);
   const inversion = inversionOf(iv);

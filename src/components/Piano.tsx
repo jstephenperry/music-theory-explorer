@@ -8,6 +8,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { audio } from '../audio/engine';
 import { noteFromPc, noteName, mod } from '../theory/notes';
+import { isBlackKey } from './pianoMarks';
 import s from './Piano.module.css';
 
 export type MarkRole = 'root' | 'tone' | 'alt' | 'extra' | 'other' | 'muted';
@@ -48,7 +49,6 @@ const WHITE_W = 24;
 const WHITE_H = 132;
 const BLACK_W = 14;
 const BLACK_H = 84;
-const WHITE_PCS = [0, 2, 4, 5, 7, 9, 11];
 /** Horizontal nudge of each black key relative to the white-key boundary. */
 const BLACK_OFFSET: Record<number, number> = { 1: -2, 3: 2, 6: -3, 8: 0, 10: 3 };
 
@@ -61,7 +61,6 @@ const ROLE_VAR: Record<MarkRole, string> = {
   muted: 'var(--ink-faint)',
 };
 
-export const isBlackKey = (m: number) => !WHITE_PCS.includes(mod(m, 12));
 
 interface KeyGeom {
   midi: number;
@@ -278,22 +277,4 @@ export function Piano({
   );
 }
 
-/** Build `pcMarks` from a list of pitch classes with optional labels; the first entry is marked as the root. */
-export function marksFromPcs(pcs: number[], labels?: string[], rootRole: MarkRole = 'root', toneRole: MarkRole = 'tone'): Record<number, KeyMark> {
-  const out: Record<number, KeyMark> = {};
-  pcs.forEach((p, i) => {
-    const k = mod(p, 12);
-    if (out[k]) return;
-    out[k] = { role: i === 0 ? rootRole : toneRole, label: labels?.[i] };
-  });
-  return out;
-}
 
-/** Build `marks` for specific MIDI notes. */
-export function marksFromMidi(notes: number[], labels?: string[], role: MarkRole = 'tone', rootRole?: MarkRole): Record<number, KeyMark> {
-  const out: Record<number, KeyMark> = {};
-  notes.forEach((m, i) => {
-    out[m] = { role: i === 0 && rootRole ? rootRole : role, label: labels?.[i] };
-  });
-  return out;
-}

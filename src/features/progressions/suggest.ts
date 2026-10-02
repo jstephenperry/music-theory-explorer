@@ -6,7 +6,7 @@ import { interval, transpose, transposeDown } from '../../theory/intervals';
 import type { Key } from '../../theory/keys';
 import { mod, pc, type Note } from '../../theory/notes';
 import { analyzeChord, parseRoman, tryParseRoman, type RomanChord } from '../../theory/roman';
-import { describeChord, isDiatonicIn, isDominantType } from './harmony';
+import { describeChord, isDiatonicIn, isDominantType } from '../../theory/harmony';
 import { normalizeNumeral } from './model';
 
 export interface Suggestion {
