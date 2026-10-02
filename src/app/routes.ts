@@ -60,6 +60,11 @@ export const ROUTES: RouteDef[] = [
     component: lazy(() => import('../features/composition/MotivePage')),
   },
   {
+    path: '/phrase', title: 'Phrase & Cadence', section: 'Composition',
+    blurb: 'Periods, sentences and cadences in Mozart and Beethoven; build eight-bar phrases.',
+    component: lazy(() => import('../features/composition/PhrasePage')),
+  },
+  {
     path: '/meter', title: 'Meter & Time', section: 'Rhythm',
     blurb: 'Simple, compound, irregular and additive meters with a programmable metronome.',
     component: lazy(() => import('../features/meter/MeterPage')),

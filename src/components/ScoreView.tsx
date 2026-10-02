@@ -40,6 +40,8 @@ export interface ScoreViewProps {
   showTime?: boolean;
   /** Draw a final double barline (default true). */
   finalBarline?: boolean;
+  /** Keep groups of this many bars on one line when they fit, e.g. 4 for four-bar phrases. */
+  barsPerLine?: number;
 }
 
 export function ScoreView(props: ScoreViewProps) {
@@ -73,7 +75,7 @@ export function ScoreView(props: ScoreViewProps) {
     return () => ro.disconnect();
   }, []);
 
-  const key = JSON.stringify([props.score, props.colors, props.brackets, props.showTime, props.finalBarline, !!props.onNoteClick]);
+  const key = JSON.stringify([props.score, props.colors, props.brackets, props.showTime, props.finalBarline, props.barsPerLine, !!props.onNoteClick]);
   useEffect(() => {
     const el = host.current;
     if (!vf || !el || width < 50) return;
@@ -124,8 +126,9 @@ const ORN: Record<string, { kind: 'orn' | 'art'; code: string }> = {
 const NOTE_W: Record<number, number> = { 1: 44, 2: 36, 4: 29, 8: 23, 16: 18, 32: 15 };
 /** Vertical space between the ink of consecutive systems. */
 const SYSTEM_GAP = 26;
-const LABEL_FONT = { family: 'Cormorant Garamond, Georgia, serif', size: 16, weight: 'bold' };
-const BRACKET_FONT = { family: 'Source Sans 3, Segoe UI, sans-serif', size: 12, weight: 'bold' };
+const LABEL_FONT = { family: '"Cormorant Garamond", Georgia, serif', size: 16, weight: 'bold' };
+// Family names are quoted: an unquoted name with a word starting with a digit ("Source Sans 3") is invalid CSS.
+const BRACKET_FONT = { family: '"Source Sans 3", "Segoe UI", sans-serif', size: 12, weight: 'bold' };
 
 const keyString = (p: Pitch) => `${p.letter.toLowerCase()}/${p.octave}`;
 const staffLine = (p: Pitch) => p.octave * 7 + letterIndex(p.letter);
@@ -177,16 +180,46 @@ function engrave(VF: VexModule, el: HTMLDivElement, props: ScoreViewProps, width
   const systems: number[][] = [];
   let line: number[] = [];
   let lineW = 0;
-  natural.forEach((w, i) => {
-    const add = w + (line.length === 0 ? headerW(systems.length === 0) : 0);
+  const place = (i: number) => {
+    const add = natural[i] + (line.length === 0 ? headerW(systems.length === 0) : 0);
     if (line.length > 0 && lineW + add > usable) {
       systems.push(line);
       line = [];
       lineW = 0;
     }
     line.push(i);
-    lineW += w + (line.length === 1 ? headerW(systems.length === 0) : 0);
-  });
+    lineW += natural[i] + (line.length === 1 ? headerW(systems.length === 0) : 0);
+  };
+  // Groups of bars kept on one line when they fit (whole phrases); a pickup joins the first group.
+  const per = props.barsPerLine ?? 1;
+  const groups: number[][] = [];
+  for (let i = 0; i < natural.length; ) {
+    const n = i === 0 && score.pickup > 0 ? per + 1 : per;
+    groups.push(natural.slice(i, i + n).map((_, j) => i + j));
+    i += n;
+  }
+  // A phrase may be squeezed a little to stay on one line; one that still does not fit is halved.
+  const SQUEEZE = 0.86;
+  const placeGroup = (g: number[]) => {
+    if (g.length === 1) return place(g[0]);
+    const gw = g.reduce((a, i) => a + natural[i], 0);
+    const room = usable / SQUEEZE;
+    if (line.length > 0 && lineW + gw <= room) {
+      g.forEach((i) => line.push(i));
+      lineW += gw;
+      return;
+    }
+    if (headerW(systems.length + (line.length ? 1 : 0) === 0) + gw <= room) {
+      if (line.length) systems.push(line);
+      line = [...g];
+      lineW = headerW(systems.length === 0) + gw;
+      return;
+    }
+    const half = Math.ceil(g.length / 2);
+    placeGroup(g.slice(0, half));
+    placeGroup(g.slice(half));
+  };
+  groups.forEach(placeGroup);
   if (line.length) systems.push(line);
 
   // Vertical layout: room for brackets above, labels between staves and below.
@@ -204,7 +237,7 @@ function engrave(VF: VexModule, el: HTMLDivElement, props: ScoreViewProps, width
     if (sIdx === systems.length - 1 && systems.length > 1) k = Math.min(k, 1.3);
     if (systems.length === 1) k = Math.min(k, 1.8);
     // A line holding a single bar may be squeezed a little on narrow screens before it has to scroll.
-    return Math.max(k, sys.length === 1 ? 0.82 : 1);
+    return Math.max(k, sys.length === 1 ? 0.82 : SQUEEZE);
   });
   const drawnWidth = Math.max(width, ...systems.map((sys, sIdx) => Math.ceil(leftMargin + (sys.reduce((a, i) => a + natural[i], 0) + headerW(sIdx === 0)) * scales[sIdx] + 8)));
 
@@ -283,6 +316,7 @@ function engrave(VF: VexModule, el: HTMLDivElement, props: ScoreViewProps, width
               const restKey = st.clef === 'bass' ? (multi ? (vi === 0 ? 'f/3' : 'f/2') : 'd/3') : multi ? (vi === 0 ? 'd/5' : 'f/4') : 'b/4';
               const r = new StaveNote({ keys: [restKey], duration: dur + 'r', dots: n.dots, clef: st.clef });
               if (n.dots) Dot.buildAndAttach([r], { all: true });
+              if (n.orn?.includes('fermata')) r.addModifier(new Articulation(ORN.fermata.code), 0);
               tickables.push(r);
               addBuilt({ note: n, vex: r, staff: si, system: sIdx });
               return;
@@ -395,10 +429,10 @@ function engrave(VF: VexModule, el: HTMLDivElement, props: ScoreViewProps, width
       let low = stave.getYForLine(4);
       let high = stave.getYForLine(0);
       for (const n of mine) {
-        const bb = n.vex.getBoundingBox();
+        const bb = inkBox(n);
         if (!bb) continue;
-        low = Math.max(low, bb.getY() + bb.getH());
-        high = Math.min(high, bb.getY());
+        low = Math.max(low, bb.bottom);
+        high = Math.min(high, bb.top);
       }
       for (const n of mine) {
         const cx = (n.vex.getNoteHeadBeginX() + n.vex.getNoteHeadEndX()) / 2;
@@ -416,8 +450,8 @@ function engrave(VF: VexModule, el: HTMLDivElement, props: ScoreViewProps, width
 
     if (firstStaves.length) extend(firstStaves[0].getYForLine(0) - 16, firstStaves[nStaves - 1].getYForLine(4) + 16);
     for (const n of sysNotes) {
-      const bb = n.vex.getBoundingBox();
-      if (bb) extend(bb.getY(), bb.getY() + bb.getH());
+      const bb = inkBox(n);
+      if (bb) extend(bb.top, bb.bottom);
     }
 
     if (nStaves > 1 && firstStaves.length) {
@@ -430,8 +464,8 @@ function engrave(VF: VexModule, el: HTMLDivElement, props: ScoreViewProps, width
     if (topStave) {
       let highest = topStave.getYForLine(0) - 6;
       for (const n of sysNotes.filter((x) => x.staff === 0)) {
-        const bb = n.vex.getBoundingBox();
-        if (bb) highest = Math.min(highest, bb.getY() - 4);
+        const bb = inkBox(n);
+        if (bb) highest = Math.min(highest, bb.top - 4);
       }
       if (hasAbove[0]) highest -= 20;
       for (const b of props.brackets ?? []) {
@@ -543,6 +577,28 @@ function previousNote(score: Score, n: ScoreNote): ScoreNote | undefined {
 
 type Ctx = { save: () => unknown; restore: () => unknown; setFont: (f: string, s: number, w: string) => unknown; setFillStyle: (c: string) => unknown; measureText: (t: string) => { width: number }; fillText: (t: string, x: number, y: number) => unknown };
 
+/**
+ * Vertical extent of a note's ink. VexFlow's bounding box is used, except for notes with grace notes,
+ * whose box wrongly reaches the top of the drawing: those are measured from note heads and stem.
+ */
+function inkBox(n: { note: ScoreNote; vex: { getBoundingBox(): { getY(): number; getH(): number } | undefined } }): { top: number; bottom: number } | null {
+  const v = n.vex as unknown as { getYs?: () => number[]; hasStem?: () => boolean; getStemExtents?: () => { topY: number; baseY: number } };
+  if (n.note.grace?.length && v.getYs) {
+    const ys = v.getYs();
+    let top = Math.min(...ys) - 6;
+    let bottom = Math.max(...ys) + 6;
+    if (v.hasStem?.() && v.getStemExtents) {
+      const e = v.getStemExtents();
+      top = Math.min(top, e.topY, e.baseY);
+      bottom = Math.max(bottom, e.topY, e.baseY);
+    }
+    // Room for an ornament or articulation above.
+    return { top: top - 14, bottom };
+  }
+  const bb = n.vex.getBoundingBox();
+  return bb ? { top: bb.getY(), bottom: bb.getY() + bb.getH() } : null;
+}
+
 function drawText(ctx: Ctx, text: string, x: number, y: number, font: { family: string; size: number; weight: string }, color: string, align: 'center' | 'start' = 'center') {
   ctx.save();
   ctx.setFont(font.family, font.size, font.weight);
@@ -560,8 +616,10 @@ function textWidth(text: string | undefined, font: { family: string; size: numbe
   const families = font.family
     .split(',')
     .map((f) => f.trim())
+    .map((f) => f.replace(/^"|"$/g, ''))
     .map((f) => (f === 'serif' || f === 'sans-serif' ? f : `"${f}"`))
     .join(', ');
-  measureCtx.font = `${font.weight} ${font.size}px ${families}`;
+  // VexFlow sets numeric font sizes in points.
+  measureCtx.font = `${font.weight} ${font.size}pt ${families}`;
   return measureCtx.measureText(text).width;
 }

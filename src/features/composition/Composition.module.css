@@ -293,3 +293,43 @@
   font-family: var(--font-serif);
   line-height: 1.5;
 }
+
+/* ---------- Cadences and phrases ---------- */
+.cadenceHead {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem 1rem;
+}
+.cadenceName {
+  margin: 0;
+  font-size: 1.3rem;
+}
+.controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+  gap: 0.9rem 1.25rem;
+  align-items: start;
+}
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+.analysis {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.cadenceChip {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: baseline;
+  padding: 0.25rem 0.7rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  background: var(--bg-elev);
+  font-size: 0.86rem;
+}

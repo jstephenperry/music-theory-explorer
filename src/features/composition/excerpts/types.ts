@@ -35,6 +35,8 @@ export interface Excerpt {
   source: string;
   layers?: Layer[];
   brackets?: ExcerptBracket[];
+  /** Bars to keep together on a line when they fit (a phrase length). */
+  barsPerLine?: number;
   /** Paragraphs explaining what to listen for. */
   commentary: string[];
 }

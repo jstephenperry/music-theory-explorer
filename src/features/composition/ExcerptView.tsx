@@ -69,7 +69,7 @@ export function ExcerptView({ excerpt, player, defaultLayers }: { excerpt: Excer
         </div>
       )}
 
-      <ScoreView score={score} colors={colors} brackets={brackets} active={playing ? player.active : undefined} ariaLabel={`${excerpt.composer}, ${excerpt.work}, ${excerpt.bars}`} />
+      <ScoreView score={score} colors={colors} brackets={brackets} barsPerLine={excerpt.barsPerLine} active={playing ? player.active : undefined} ariaLabel={`${excerpt.composer}, ${excerpt.work}, ${excerpt.bars}`} />
 
       <div className={s.commentary}>
         {excerpt.commentary.map((p, i) => (
