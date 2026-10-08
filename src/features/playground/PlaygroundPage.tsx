@@ -291,7 +291,7 @@ export default function PlaygroundPage() {
       <PageHeader
         eyebrow="Practice"
         title="Free Play"
-        lede="A five-octave keyboard with live chord naming. Play with the mouse, your computer keys or a MIDI keyboard, and watch every chord get its name, its notation and its function."
+        lede="A five-octave keyboard with live chord naming. Play with the mouse, your computer keys or a MIDI keyboard; each chord is shown with its name, notation and function."
       />
 
       <Panel sunk className={s.console}>
@@ -385,7 +385,7 @@ export default function PlaygroundPage() {
         />
         {keyCtx && (
           <p className={s.hint}>
-            Rings mark the notes of {keyName(keyCtx)}; the tonic ring is in velvet.
+            Rings mark the notes of {keyName(keyCtx)}; the tonic ring is red.
           </p>
         )}
       </Panel>
