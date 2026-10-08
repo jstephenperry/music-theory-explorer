@@ -39,7 +39,7 @@ export default function ChordsPage() {
       <PageHeader
         eyebrow="Harmony"
         title="Chords"
-        lede="Build any chord from triads to altered dominants, turn it over, revoice it and hear it. Or play some notes and the chord is named."
+        lede="Build any chord from triads to altered dominants, invert it, revoice it and hear it. Or play some notes and the chord is named."
       />
       <Tabs<Tab>
         ariaLabel="Chord tools"

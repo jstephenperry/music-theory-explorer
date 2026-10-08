@@ -11,7 +11,7 @@ import { stopAllPlayback } from '../../audio/usePlayer';
 export type Timbre = 'organ' | 'reed' | 'strings' | 'sine';
 
 export const TIMBRES: Array<{ value: Timbre; label: string; title: string }> = [
-  { value: 'organ', label: 'Organ', title: 'Rich in harmonics: beats between coinciding partials are easy to hear.' },
+  { value: 'organ', label: 'Organ', title: 'Harmonics 1 to 12: beats between coinciding partials are easy to hear.' },
   { value: 'reed', label: 'Reed', title: 'Odd harmonics dominate, like a clarinet.' },
   { value: 'strings', label: 'Strings', title: 'A bright sawtooth spectrum, gently filtered.' },
   { value: 'sine', label: 'Pure', title: 'Sine waves have no overtones, so mistuned thirds and sixths hardly beat.' },

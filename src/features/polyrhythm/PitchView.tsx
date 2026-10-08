@@ -211,7 +211,7 @@ export function PitchView() {
           />
         </div>
       </Panel>
-      <Callout title="Why it works">
+      <Callout title="Pulse rate and pitch">
         <p>
           A pitch is a pulse that repeats fast enough (above about 20 times per second) for the ear to fuse it into a tone. Two pulse trains in a 3:2 ratio
           therefore become two frequencies in a 3:2 ratio: a just perfect fifth. The rhythm you could tap at the start is the same pattern as the

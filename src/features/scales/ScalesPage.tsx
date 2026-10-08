@@ -416,8 +416,8 @@ export default function ScalesPage() {
           {characteristic.length > 0 && (
             <p className={s.note}>
               <span className={s.charDot} aria-hidden="true" /> Characteristic {characteristic.length === 1 ? 'note' : 'notes'}:{' '}
-              {characteristic.map((t) => `${t.degree} (${t.name})`).join(', ')}. {characteristic.length === 1 ? 'It gives' : 'These give'} the scale its color
-              {tradition.harmonic ? ' compared with plain major or minor' : ''}.
+              {characteristic.map((t) => `${t.degree} (${t.name})`).join(', ')}. {characteristic.length === 1 ? 'It sets' : 'These set'} the scale apart
+              {tradition.harmonic ? ' from plain major or minor' : ''}.
             </p>
           )}
         </div>

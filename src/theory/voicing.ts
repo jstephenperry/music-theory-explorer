@@ -7,11 +7,11 @@ export type VoicingStyle = 'close' | 'open' | 'drop2' | 'drop3' | 'drop24' | 'sh
 
 export const VOICING_STYLES: Array<{ id: VoicingStyle; name: string; description: string }> = [
   { id: 'close', name: 'Close', description: 'All notes within an octave, stacked as tightly as possible.' },
-  { id: 'open', name: 'Open', description: 'Every other note raised an octave; a wide, orchestral sound.' },
+  { id: 'open', name: 'Open', description: 'Every other note raised an octave, giving wider spacing.' },
   { id: 'drop2', name: 'Drop 2', description: 'The second-highest note of a close voicing dropped an octave. A staple of jazz guitar and piano.' },
   { id: 'drop3', name: 'Drop 3', description: 'The third-highest note of a close voicing dropped an octave.' },
   { id: 'drop24', name: 'Drop 2 & 4', description: 'The second and fourth notes from the top dropped an octave.' },
-  { id: 'shell', name: 'Shell', description: 'Root, third and seventh only: the essential identity of the chord.' },
+  { id: 'shell', name: 'Shell', description: 'Root, third and seventh only: the tones that define the chord quality.' },
   { id: 'spread', name: 'Spread (bass + close)', description: 'Bass note low, remaining notes in close position an octave or more above.' },
   { id: 'rootless', name: 'Rootless', description: 'Root omitted (a bassist plays it); color tones stacked in close position.' },
 ];

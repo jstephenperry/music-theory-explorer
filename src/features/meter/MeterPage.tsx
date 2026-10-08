@@ -467,8 +467,8 @@ export default function MeterPage() {
 
       <Callout title="Listening ideas">
         <p>
-          Play 6/8 and 3/4 at the same eighth-note speed: the notes are identical, only the accents move. Then try 7/8 as 2+2+3 and 3+2+2,
-          and notice how each grouping changes the dance. Set ÷2 subdivision in 4/4 and slide the swing from straight to triplet.
+          Play 6/8 and 3/4 at the same eighth-note speed: the notes are identical, only the accents move. Then compare 7/8 as 2+2+3 and 3+2+2:
+          the long beat moves from the end of the bar to the start. Set ÷2 subdivision in 4/4 and slide the swing from straight to triplet.
         </p>
       </Callout>
     </div>

@@ -24,7 +24,7 @@ export default function VariationsPage() {
       <Panel title="Variation workshop" eyebrow="Change one thing at a time">
         <VariationWorkshop player={player} />
       </Panel>
-      <Panel title="What changed?" eyebrow="Drill">
+      <Panel title="Name the change" eyebrow="Drill">
         <VariationQuiz player={player} />
       </Panel>
     </div>

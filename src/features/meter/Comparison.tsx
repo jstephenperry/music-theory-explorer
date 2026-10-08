@@ -49,7 +49,7 @@ const EXAMPLES: Example[] = [
       groups: [2, 2, 2],
     },
     insight:
-      'Six identical eighth notes. 6/8 groups them 3+3 (compound duple), 3/4 groups them 2+2+2 (simple triple). Alternate the two and you hear the cross-accent of Bernstein’s “America” and many Latin American dances.',
+      'Six identical eighth notes. 6/8 groups them 3+3 (compound duple), 3/4 groups them 2+2+2 (simple triple). Alternating the two gives the cross-accent of Bernstein’s “America” and many Latin American dances.',
   },
   {
     id: '128-44',

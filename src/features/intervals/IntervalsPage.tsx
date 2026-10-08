@@ -334,7 +334,7 @@ export default function IntervalsPage() {
           <div className="stack">
             <p className={s.lead}>
               {pitchName(lower)} and the key {iv.semis} semitone{iv.semis === 1 ? '' : 's'} above it can be spelled {spellings.length} ways. The sound is identical on a piano;
-              the spelling tells you where the notes come from and where they want to go.
+              the spelling tells you where the notes come from and where they tend to resolve.
             </p>
             <div className={s.spellings}>
               {spellings.map((sp) => {
@@ -369,7 +369,7 @@ export default function IntervalsPage() {
                 );
               })}
             </div>
-            <Callout title="Why spelling matters">
+            <Callout title="Spelling and resolution">
               Interval names count letters, not keys. An augmented interval usually expands outward when it resolves and a diminished one contracts inward, so {noteName(root)} to{' '}
               {noteName(transposePitch(lower, spellings[0]))} and {noteName(root)} to {noteName(transposePitch(lower, spellings[spellings.length - 1]))} lead to different places
               even though your fingers press the same keys.
@@ -404,7 +404,7 @@ function RefList({ title, items, onPlay }: { title: string; items: Array<{ title
         <Button size="sm" variant="ghost" icon="play" aria-label={`Play ${title}`} onClick={onPlay} />
       </div>
       {items.length === 0 ? (
-        <p className={s.refNone}>No universally known tune; try singing the inversion instead.</p>
+        <p className={s.refNone}>No widely known tune; try singing the inversion instead.</p>
       ) : (
         <ul className={s.refList}>
           {items.map((r) => (

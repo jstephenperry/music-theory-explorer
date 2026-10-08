@@ -375,7 +375,7 @@ export default function CirclePage() {
             })}
           </div>
           <p className={s.note}>
-            Click a chord to hear it and see where it lives on the circle. The six consonant triads of {keyName(parentMajor)} and its relative fill the framed wedge;
+            Click a chord to hear it and see its place on the circle. The six consonant triads of {keyName(parentMajor)} and its relative fill the framed wedge;
             the diminished triad sits just outside it.
           </p>
         </Panel>

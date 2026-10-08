@@ -132,7 +132,7 @@ export function CounterpointExercise({ player }: { player: ReturnType<typeof use
     const sol = solveCounterpoint(ex) ?? solveCounterpoint(ex, { allowWarnings: true, budget: 200000 });
     if (sol) {
       write(sol);
-      setMessage('One correct solution among many. Change any note and the checker will follow you.');
+      setMessage('One correct solution among many. Change any note and the line is checked again.');
     }
   };
   const onKey = (e: KeyboardEvent) => {

@@ -168,8 +168,8 @@ export function HemiolaView() {
 
       <Callout title="Where to hear it">
         <p>
-          Baroque dances and cadences (Handel, Bach courantes) often turn the last two bars of 3/4 into one bar of 3/2. Brahms and Schumann blur
-          the barline with it constantly, and Bernstein’s “America” alternates 6/8 and 3/4, the same idea a level down: 3+3 versus 2+2+2 eighths.
+          Baroque dances and cadences (Handel, Bach courantes) often turn the last two bars of 3/4 into one bar of 3/2. Brahms and Schumann use it to blur
+          the barline, and Bernstein’s “America” alternates 6/8 and 3/4, the same idea a level down: 3+3 versus 2+2+2 eighths.
         </p>
       </Callout>
     </div>

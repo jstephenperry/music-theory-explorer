@@ -21,7 +21,7 @@ export function useDrone(enabled: boolean, rootMidi: number, withFifth: boolean,
     filter.connect(out);
     out.connect(ctx.destination);
 
-    // Slow breathing on the filter keeps the drone alive without drawing attention.
+    // A slow LFO moves the filter cutoff slightly, so the drone does not sound static.
     const lfo = ctx.createOscillator();
     lfo.frequency.value = 0.13;
     const lfoGain = ctx.createGain();

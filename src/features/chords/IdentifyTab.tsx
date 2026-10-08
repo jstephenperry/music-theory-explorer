@@ -139,7 +139,7 @@ export function IdentifyTab({ notes: initial, setNotes, onOpen }: { notes: numbe
         </div>
         <Piano from={pianoFrom} to={pianoTo} marks={marks} onKeyClick={toggle} ariaLabel="Piano: click keys to add or remove notes" />
         <div className={s.examples}>
-          <span className={s.controlLabel}>Try</span>
+          <span className={s.controlLabel}>Examples</span>
           {EXAMPLES.map((ex) => (
             <button
               key={ex.label}

@@ -24,13 +24,13 @@ export const K545_OPENING: Excerpt = {
   },
   analysis: {
     layers: [
-      { id: 'melody', label: 'Melody', color: 'root', select: '0.0.0-16', description: 'A singing right-hand melody in long notes, ornamented at the cadence with a trill.' },
+      { id: 'melody', label: 'Melody', color: 'root', select: '0.0.0-16', description: 'A right-hand melody in long notes, ornamented at the cadence with a trill.' },
       { id: 'alberti', label: 'Alberti bass', color: 'alt', select: '1.0.0-31', description: 'The left hand breaks each chord into the pattern low, high, middle, high in steady eighth notes.' },
     ],
     brackets: [{ first: '1.0.0', last: '1.0.3', label: 'Low, high, middle, high', color: 'alt', layer: 'alberti' }],
     commentary: [
-      'Melody and accompaniment: the right hand sings, the left hand keeps the harmony moving underneath. The left-hand pattern is called the Alberti bass, after Domenico Alberti, who used it constantly; Classical composers made it the standard accompaniment for keyboard music.',
-      'The bass note of each chord comes first in the pattern, so the harmony is always clear, and the moving eighth notes keep the sound alive on the piano, whose notes fade quickly. Notice that the lowest note changes even when the chord does not: C, D, C, C, C, B, C outlines its own simple bass line.',
+      'Melody and accompaniment: the right hand has the tune and the left hand keeps the harmony moving underneath. The left-hand pattern is called the Alberti bass, after Domenico Alberti, who used it constantly; Classical composers made it the standard accompaniment for keyboard music.',
+      'The bass note of each chord comes first in the pattern, so the harmony is always clear, and the moving eighth notes keep the sound going on the piano, whose notes fade quickly. The inversions keep the lowest note close to C: C, D, C, C, C, B, C, upper and lower neighbors around the tonic.',
     ],
   },
 };

@@ -245,7 +245,7 @@ const CONTEXTS: Record<string, ContextDef> = {
     scale: 'hungarian-minor', from: 6, to: 4, mode: 'minor',
     text: 'From the lowered 6th {a} up to the raised 4th {b} of {key}: the augmented sixth chord, which expands outward to an octave on the dominant.',
   },
-  M7: { scale: 'ionian', from: 1, to: 7, mode: 'major', text: 'Tonic to leading tone of {key}: the major seventh chord stretches across it.' },
+  M7: { scale: 'ionian', from: 1, to: 7, mode: 'major', text: 'Tonic to leading tone of {key}: the outer notes of the major seventh chord.' },
 };
 
 const GENERIC_CONTEXTS: Record<string, string> = {

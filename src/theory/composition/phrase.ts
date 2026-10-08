@@ -47,7 +47,7 @@ export const BASIC_IDEAS: BasicIdea[] = [
   },
   {
     id: 'lilting',
-    name: 'Lilting neighbor',
+    name: 'Dotted neighbor',
     after: 'the opening of Mozart’s K. 331: a neighbor-note figure, then the same a step lower',
     workId: 'k331',
     tonic: { melody: 'E5/4. F5/8 E5/4 G5/4 | D5/4. E5/8 D5/4 F5/4', harmony: 'I:4 V7:4' },
