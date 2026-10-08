@@ -124,10 +124,6 @@ export function Layout() {
         <div className={s.sidebarFoot}>
           Free and open source.
           <br />
-          <a href="https://github.com/jstephenperry/music-theory-explorer" target="_blank" rel="noreferrer">
-            Source on GitHub
-          </a>
-          <br />
           <a href="samples/CREDITS.md" target="_blank" rel="noreferrer">
             Instrument recordings
           </a>{' '}

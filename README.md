@@ -1,16 +1,12 @@
 # Music Theory Explorer
 
-An interactive music theory reference that runs in the browser. Each topic has a playable piano,
-notation that updates as you change things, and audio. It is free, has no accounts, and needs no
-server.
-
-Live site: https://jstephenperry.github.io/music-theory-explorer/ (available once GitHub Pages is
-enabled; see [Deploying](#deploying)).
+A music theory reference that runs in the browser. Every page has a playable piano, notation that
+updates as you change things, and audio. It is a static site with no accounts and no server.
 
 ## What is in it
 
 The site has two modes, each with its own navigation. Theory mode has twelve rooms; Composition mode
-has five. Every room has a playable piano, notation that follows your choices, and audio.
+has five.
 
 ### Theory mode
 
