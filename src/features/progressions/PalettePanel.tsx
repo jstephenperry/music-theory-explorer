@@ -42,7 +42,7 @@ export function PalettePanel({
         <div style={{ marginTop: '1rem' }}>
           <Callout title="Modal interchange">
             {noteName(keyObj.tonic)} {keyObj.mode} and {noteName(keyObj.tonic)} {parallel} share a tonic, so their chords can be mixed freely. A borrowed chord keeps the
-            sense of home while changing the light: ♭VI and iv darken a major key; IV and the Picardy I brighten a minor one.
+            tonic and brings in degrees of the parallel mode: ♭VI and iv darken a major key; IV and the Picardy I brighten a minor one.
           </Callout>
         </div>
       )}

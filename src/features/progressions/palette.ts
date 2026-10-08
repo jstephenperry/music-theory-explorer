@@ -54,7 +54,7 @@ export function buildPalette(key: Key): PaletteGroup[] {
     id: 'borrowed',
     title: 'Borrowed',
     tooltip:
-      'Modal interchange: chords taken from a mode that shares the same tonic (the parallel minor or major, Dorian, Phrygian, Lydian, Mixolydian). The home note stays put while the color changes.',
+      'Modal interchange: chords taken from a mode that shares the same tonic (the parallel minor or major, Dorian, Phrygian, Lydian, Mixolydian). The tonic stays put; only some scale degrees change.',
     sections: major
       ? [
           {
@@ -105,7 +105,7 @@ export function buildPalette(key: Key): PaletteGroup[] {
         ? { title: 'Backdoor and minor plagal', chords: [c('bVII7', 'backdoor'), c('iv7', 'backdoor ii'), c('ivadd6', 'minor plagal'), c('bVImaj7', 'Aeolian')] }
         : { title: 'Subtonic and plagal', chords: [c('VII7', 'backdoor'), c('iv7'), c('ivadd6', 'Dorian ♮6'), c('IV7', 'Dorian')] },
       {
-        title: 'Dominant colors',
+        title: 'Dominant variants',
         chords: [c('V7sus4'), c('V9'), c('V13'), c('V7b9'), c('V7#9'), c('V7alt'), c('V+7')],
       },
     ],

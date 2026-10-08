@@ -37,7 +37,7 @@ export const OP_INFO: Record<Op, { name: string; desc: string }> = {
   L: { name: 'Leading-tone exchange', desc: 'Keeps the major third; the remaining note moves a semitone (C ↔ Em).' },
   R: { name: 'Relative', desc: 'Keeps the minor third; the remaining note moves a whole step (C ↔ Am).' },
   N: { name: 'Nebenverwandt (RLP)', desc: 'Major to the minor a fourth above: C ↔ Fm. Two voices move by semitone.' },
-  S: { name: 'Slide (LPR)', desc: 'Keeps the third, root and fifth slide a semitone: C ↔ C♯m.' },
+  S: { name: 'Slide (LPR)', desc: 'Keeps the third; root and fifth slide a semitone: C ↔ C♯m.' },
   H: { name: 'Hexatonic pole (LPL)', desc: 'The most distant triad in the hexatonic cycle: C ↔ G♯m (A♭m). Every voice moves by semitone.' },
 };
 
@@ -288,7 +288,7 @@ export const PRESETS: Preset[] = [
   {
     id: 'lr',
     name: 'LR chain',
-    desc: 'L and R alternate: a diatonic chain of thirds (C Em G Bm D ...) drifting along the circle of fifths.',
+    desc: 'L and R alternate: a diatonic chain of thirds (C Em G Bm D ...) moving along the circle of fifths.',
     steps: repeat<Op[]>([['L'], ['R']], 6),
   },
   {

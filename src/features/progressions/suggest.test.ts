@@ -49,7 +49,7 @@ describe('suggestNext', () => {
   it('offers chromatic mediants outside the key', () => {
     const med = nums('I', 'mediant').map((n) => parseRoman(n, C).symbol);
     expect(med.sort()).toEqual(['A', 'E']);
-    // ♭VI and ♭III also qualify but are listed once, under borrowed color.
+    // ♭VI and ♭III also qualify but are listed once, under borrowed chord.
     expect(all('I')).toEqual(expect.arrayContaining(['bVI', 'bIII']));
   });
   it('offers secondary dominants of plausible next chords', () => {

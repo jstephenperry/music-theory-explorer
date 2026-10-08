@@ -154,8 +154,8 @@ export function describeChord(rc: RomanChord, key: Key): ChordDescription {
       2: 'Predominant: leads to V.',
       3: key.mode === 'major' ? 'Weak tonic substitute that shares two tones with I; often leads to vi or IV.' : 'The relative major. A tonic-family chord that often moves to iv or VI.',
       4: 'Predominant: moves to V, or straight home to I in a plagal cadence.',
-      5: key.mode === 'major' || quality === 'major' ? 'Dominant: its leading tone and tritone pull to the tonic.' : 'Minor v has no leading tone, so its pull home is gentle and modal.',
-      6: key.mode === 'major' ? 'Tonic substitute and the classic deceptive-cadence target; also leads to ii or IV.' : 'Submediant: a soft predominant that often moves to ii° or V.',
+      5: key.mode === 'major' || quality === 'major' ? 'Dominant: its leading tone and tritone pull to the tonic.' : 'Minor v has no leading tone, so its pull to the tonic is weaker.',
+      6: key.mode === 'major' ? 'Tonic substitute and the classic deceptive-cadence target; also leads to ii or IV.' : 'Submediant: a predominant that often moves to ii° or V.',
       7: quality === 'diminished' ? 'Leading-tone chord: dominant function without the root.' : 'Subtonic: acts like the dominant of III, or a modal dominant.',
     };
     const inv64 = rc.inversion === 2 && degree === 1;
@@ -172,7 +172,7 @@ export function describeChord(rc: RomanChord, key: Key): ChordDescription {
 
   // Backdoor dominant (♭VII7) and tritone substitute of V (♭II7).
   if (dominantType && rootFromTonic === 10 && degree === 7) {
-    return { fn: 'chromatic', tendency: 'dominant', role: 'Backdoor dominant', detail: `♭VII⁷ resolves up a whole step to ${tonicName}: a softer dominant borrowed from the parallel minor.` };
+    return { fn: 'chromatic', tendency: 'dominant', role: 'Backdoor dominant', detail: `♭VII⁷ resolves up a whole step to ${tonicName}: a dominant without the leading tone, borrowed from the parallel minor.` };
   }
   if (dominantType && rootFromTonic === 1 && degree === 2) {
     return { fn: 'chromatic', tendency: 'dominant', role: 'Tritone substitute', detail: 'Shares the tritone of V⁷ (with the roles of its third and seventh swapped) and slides down a half step to I.' };
@@ -190,13 +190,13 @@ export function describeChord(rc: RomanChord, key: Key): ChordDescription {
         tendency: chromaticTendency,
         role: picardy ? 'Picardy third' : 'Borrowed',
         source: src,
-        detail: picardy ? 'A major tonic at the end of a minor piece: borrowed from the parallel major.' : `Modal interchange: borrowed from ${src}, same tonic, different color.`,
+        detail: picardy ? 'A major tonic at the end of a minor piece: borrowed from the parallel major.' : `Modal interchange: borrowed from ${src}, same tonic, different mode.`,
       };
     }
   }
   if (dominantType) {
     if (rootFromTonic === 5 && degree === 4) {
-      return { fn: 'chromatic', tendency: 'predominant', role: 'Blues subdominant', detail: 'IV⁷: a dominant-quality subdominant, the color of the blues (from the Mixolydian ♭7 of IV).' };
+      return { fn: 'chromatic', tendency: 'predominant', role: 'Blues subdominant', detail: 'IV⁷: a dominant-quality subdominant, standard in the blues (from the Mixolydian ♭7 of IV).' };
     }
     const resolvesTo = mod(pc(rc.root) + 5, 12);
     if (diatonicTargetAt(resolvesTo, key)) {
@@ -213,7 +213,7 @@ export function describeChord(rc: RomanChord, key: Key): ChordDescription {
   for (const m of MODES) {
     if (pcsIn(rc.notes, scaleSet(key.tonic, m.id))) {
       const src = `${tonicName} ${m.name}`;
-      return { fn: 'chromatic', tendency: chromaticTendency, role: 'Modal interchange', source: src, detail: `Borrowed from ${src}: the characteristic color of that mode over the same tonic.` };
+      return { fn: 'chromatic', tendency: chromaticTendency, role: 'Modal interchange', source: src, detail: `Borrowed from ${src}: it adds that mode's characteristic degree over the same tonic.` };
     }
   }
 
@@ -294,10 +294,10 @@ export function detectCadence(chords: RomanChord[], key: Key, sopranoPc?: number
     if (key.mode === 'minor' && fromTonic(prev) === 5 && prev.inversion === 1 && chordQualityClass(prev.chordId) === 'minor') {
       return { id: 'phrygian', label: 'Phrygian half cadence', detail: 'iv⁶ to V in minor: the bass falls a half step (♭6 to 5), a Baroque signature.' };
     }
-    return { id: 'half', label: 'Half cadence', detail: 'The phrase pauses on V: a question waiting for an answer.' };
+    return { id: 'half', label: 'Half cadence', detail: 'The phrase pauses on V and stays open.' };
   }
   if (isDominantOfKey(prev, key) && !last.tonicized && [8, 9].includes(fromTonic(last)) && prevIn !== 'Cad64') {
-    return { id: 'deceptive', label: 'Deceptive cadence', detail: 'V moves to vi (or ♭VI) instead of I: the bass rises a step and the ear is surprised.' };
+    return { id: 'deceptive', label: 'Deceptive cadence', detail: 'V moves to vi (or ♭VI) instead of I: the bass rises a step and the phrase is extended.' };
   }
   return { id: 'none', label: 'Open ending', detail: 'The progression does not end on a standard cadence. Loop it, or end on I, V or vi to hear one.' };
 }

@@ -55,7 +55,7 @@ export const LIBRARY: LibraryEntry[] = [
   },
   {
     id: 'french6', name: 'French augmented sixth', group: 'Cadences and schemata', era: 'Classical, Romantic',
-    description: 'The bass slides from IV⁶ down to ♭6; the French sixth adds 2, a whole-tone tinge.',
+    description: 'The bass slides from IV⁶ down to ♭6; the French sixth adds 2, so its notes fit one whole-tone scale.',
     progression: 'I IV6 Fr+6 V7 I', mode: 'major', bpm: 76,
   },
   {
@@ -124,7 +124,7 @@ export const LIBRARY: LibraryEntry[] = [
   // ---------- Jazz ----------
   {
     id: 'two-five-one', name: 'Major ii–V–I', group: 'Jazz', era: 'Jazz standards',
-    description: 'The backbone of jazz harmony: guide tones (thirds and sevenths) move by half step.',
+    description: 'The standard jazz cadence: guide tones (thirds and sevenths) move by half step.',
     progression: 'ii7 V7 Imaj7:8', mode: 'major', style: 'comp', bpm: 120,
   },
   {
@@ -169,7 +169,7 @@ export const LIBRARY: LibraryEntry[] = [
   },
   {
     id: 'lady-bird', name: 'Lady Bird turnaround', group: 'Jazz', era: 'Bebop (Tadd Dameron)',
-    description: 'Major sevenths on I, ♭III, ♭VI and ♭II: a borrowed, planed turnaround that glides home by half step.',
+    description: 'Major sevenths on I, ♭III, ♭VI and ♭II: a borrowed, planed turnaround that falls back to I by half step.',
     progression: 'Imaj7:2 bIIImaj7:2 bVImaj7:2 bIImaj7:2', mode: 'major', style: 'comp', bpm: 132,
   },
   {
@@ -223,7 +223,7 @@ export const LIBRARY: LibraryEntry[] = [
   },
   {
     id: 'lydian', name: 'Lydian vamp', group: 'Modal and rock', era: 'Film, fusion',
-    description: 'I to a major II: the ♯4 in II gives the Lydian color.',
+    description: 'I to a major II: the ♯4 in II is the Lydian signature.',
     progression: 'Imaj7 II', mode: 'major', style: 'arpeggio', bpm: 92,
   },
   {
@@ -250,12 +250,12 @@ export const LIBRARY: LibraryEntry[] = [
   // ---------- Pop ----------
   {
     id: 'axis', name: 'Axis progression', group: 'Pop', era: 'Contemporary pop',
-    description: 'I, V, vi, IV. Included for contrast: a fully diatonic loop with no chromatic tones at all.',
+    description: 'I, V, vi, IV. Included for contrast: a diatonic loop with no chromatic tones.',
     progression: 'I V vi IV', mode: 'major', style: 'strum', bpm: 100,
   },
   {
     id: 'royal-road', name: 'Royal Road', group: 'Pop', era: 'J-pop, anime',
-    description: 'IVmaj7, V⁷, iii⁷, vi: starts on the predominant and ends on the relative minor, never quite home.',
+    description: 'IVmaj7, V⁷, iii⁷, vi: starts on the predominant and ends on the relative minor, never reaching I.',
     progression: 'IVmaj7 V7 iii7 vi', mode: 'major', style: 'arpeggio', bpm: 96,
   },
   {
@@ -271,7 +271,7 @@ export const LIBRARY: LibraryEntry[] = [
     progression: 'I bVI I III', mode: 'major', style: 'block', bpm: 72,
   },
   {
-    id: 'dark-mediants', name: 'Minor mediant shadows', group: 'Chromatic and cinematic', era: 'Film scores',
+    id: 'dark-mediants', name: 'Minor chromatic mediants', group: 'Chromatic and cinematic', era: 'Film scores',
     description: 'Minor triads a third apart, each keeping one common tone with i.',
     progression: 'i bvi i biii', mode: 'minor', style: 'block', bpm: 66,
   },
