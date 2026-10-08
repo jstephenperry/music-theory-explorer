@@ -244,7 +244,7 @@ export default function ProgressionsPage() {
       <PageHeader
         eyebrow="Harmony"
         title="Progression Lab"
-        lede="Build chord progressions with roman numerals, from the diatonic basics to borrowed chords, applied dominants, tritone substitutes, augmented sixths and chromatic mediants. Hear them voiced in four parts, see every voice move, and get suggestions for the next chord."
+        lede="Build chord progressions with roman numerals: diatonic chords, borrowed chords, applied dominants, tritone substitutes, augmented sixths and chromatic mediants. Hear them voiced in four parts, see every voice move, and get suggestions for the next chord."
       />
 
       <Panel>
@@ -360,9 +360,9 @@ export default function ProgressionsPage() {
               <dt>Tonic</dt>
               <dd>Rest and arrival: I, and its substitutes vi and iii (i, III and VI in minor).</dd>
               <dt>Predominant</dt>
-              <dd>Motion away from home that prepares the dominant: ii, IV, and their chromatic cousins iv, N⁶ and the augmented sixths.</dd>
+              <dd>Motion away from the tonic that prepares the dominant: ii, IV, and the chromatic predominants iv, N⁶ and the augmented sixths.</dd>
               <dt>Dominant</dt>
-              <dd>Tension that seeks the tonic: V, V⁷, vii°, Cad⁶₄. A secondary dominant lends that pull to another chord.</dd>
+              <dd>Tension that pulls toward the tonic: V, V⁷, vii°, Cad⁶₄. A secondary dominant lends that pull to another chord.</dd>
               <dt>Authentic</dt>
               <dd>V to I. Perfect when both are in root position with the tonic on top; otherwise imperfect.</dd>
               <dt>Half</dt>
@@ -416,7 +416,7 @@ export default function ProgressionsPage() {
             <Empty>Select a chord to insert its secondary dominant or a ii–V, substitute a tritone, borrow from another mode, or swap in a chromatic mediant.</Empty>
           )}
         </Panel>
-        <Panel title="What could come next?" eyebrow={suggestFrom !== null ? `After ${chords[suggestFrom].rc.display} (${chordLabel(chords[suggestFrom].rc)})` : 'Starting from the tonic'}>
+        <Panel title="Next-chord suggestions" eyebrow={suggestFrom !== null ? `After ${chords[suggestFrom].rc.display} (${chordLabel(chords[suggestFrom].rc)})` : 'Starting from the tonic'}>
           <SuggestionsPanel groups={suggestions} keyObj={key} onPick={insertAfterSelection} />
           <div style={{ marginTop: '0.75rem' }}>
             <Callout tone="verdigris">Suggestions follow common-practice and jazz habits, not rules. Click one to insert it and hear it in context.</Callout>

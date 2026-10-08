@@ -39,7 +39,7 @@ export const TECHNIQUES: TechniqueInfo[] = [
     name: 'Direct (phrase)',
     short: 'The new key begins with the next phrase.',
     explanation:
-      'No shared chord at all: one phrase closes with a cadence in the old key and the next phrase starts in the new key. It relies on the phrase break and a strong new tonic, so it is natural between related keys and a deliberate jolt between distant ones.',
+      'No shared chord: one phrase closes with a cadence in the old key and the next phrase starts in the new key. It relies on the phrase break and a strong new tonic, so it sounds natural between related keys and abrupt between distant ones.',
     bestFor: 'Phrase boundaries, any key',
   },
   {
@@ -87,7 +87,7 @@ export const TECHNIQUES: TechniqueInfo[] = [
     name: 'Modal interchange pivot',
     short: 'A borrowed chord is diatonic in the target.',
     explanation:
-      'A chord borrowed from the parallel key (♭VI, iv or ♭III in major; IV or the Picardy I in minor) colors the old key and is also diatonic in the target, so it works as a pivot to keys that share no ordinary common chord.',
+      'A chord borrowed from the parallel key (♭VI, iv or ♭III in major; IV or the Picardy I in minor) is chromatic in the old key but diatonic in the target, so it works as a pivot to keys that share no ordinary common chord.',
     bestFor: 'Flat-side mediants and parallel keys',
   },
   {
@@ -395,7 +395,7 @@ export function techniqueStatus(id: TechniqueId, from: Key, to: Key): TechniqueS
         available: true,
         reason: `Up a ${diff === 1 ? 'semitone' : 'whole step'}${from.mode !== to.mode ? ' (and a change of mode, which is unusual)' : ''}.`,
         options: [
-          { id: 'plain', label: 'Abrupt', detail: 'No preparation at all' },
+          { id: 'plain', label: 'Abrupt', detail: 'No preparation' },
           { id: 'v7', label: 'With new V⁷', detail: 'One dominant chord as a ramp' },
         ],
         optionsLabel: 'Approach',

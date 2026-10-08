@@ -51,7 +51,7 @@ export function ChordChip({
 const LEGEND: Array<{ fn: HarmonicFunction; tip: string }> = [
   { fn: 'tonic', tip: 'Tonic function (I, vi, iii): stability, home.' },
   { fn: 'predominant', tip: 'Predominant function (ii, IV): moving away, preparing the dominant.' },
-  { fn: 'dominant', tip: 'Dominant function (V, vii°): tension that wants to resolve to the tonic.' },
+  { fn: 'dominant', tip: 'Dominant function (V, vii°): tension that resolves to the tonic.' },
   { fn: 'chromatic', tip: 'Chromatic or borrowed: secondary dominants, modal interchange, substitutes, Neapolitan, augmented sixths, mediants.' },
 ];
 

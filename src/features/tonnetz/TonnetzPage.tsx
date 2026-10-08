@@ -256,7 +256,7 @@ export default function TonnetzPage() {
       <PageHeader
         eyebrow="Harmony"
         title="Tonnetz"
-        lede="Euler's table of tones (1739), taken up by Riemann and by neo-Riemannian theory: every triangle is a triad, and neighbors differ by a single note. Walk the lattice with P, L and R and hear how few notes move."
+        lede="Euler's table of tones (1739), taken up by Riemann and by neo-Riemannian theory: every triangle is a triad, and neighbors differ by a single note. Walk the lattice with P, L and R and listen for the one voice that moves."
       />
 
       <Panel>
@@ -397,8 +397,8 @@ export default function TonnetzPage() {
               <li>The lattice repeats in every direction (it is a torus), so each triad appears many times; the trail shows the path you took.</li>
             </ul>
             <Callout title="Chains of moves reach distant triads">
-              Late Romantic and film composers chain these moves to reach distant triads with almost no motion in the voices, which is why C major to G♯ minor
-              (H) can sound inevitable rather than random.
+              Late Romantic and film composers chain these moves to reach distant triads by small steps in each voice: C major to G♯ minor (H) moves
+              every voice a semitone.
             </Callout>
           </div>
           <table className={s.opTable}>

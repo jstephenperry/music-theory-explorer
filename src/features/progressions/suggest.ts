@@ -1,5 +1,5 @@
 /**
- * "What could come next?" Rule-based suggestions grouped by harmonic relationship.
+ * Next-chord suggestions: rule-based, grouped by harmonic relationship.
  */
 import { chordQualityClass } from '../../theory/chords';
 import { interval, transpose, transposeDown } from '../../theory/intervals';
@@ -186,12 +186,12 @@ export function suggestNext(current: string, key: Key): SuggestionGroup[] {
     }
   }
 
-  // 4. Borrowed color.
+  // 4. Borrowed chords.
   const borrowedByTendency: Record<string, Array<[string, string]>> = major
     ? {
-        tonic: [['bVI', 'Borrowed ♭VI: warm, cinematic'], ['bVII', 'Mixolydian ♭VII'], ['iv', 'Minor iv: wistful'], ['bIII', 'Borrowed ♭III: bluesy'], ['bVImaj7', 'Borrowed ♭VImaj7']],
+        tonic: [['bVI', 'Borrowed ♭VI: adds ♭3 and ♭6'], ['bVII', 'Mixolydian ♭VII'], ['iv', 'Minor iv: adds ♭6'], ['bIII', 'Borrowed ♭III: adds ♭3 and ♭7'], ['bVImaj7', 'Borrowed ♭VImaj7']],
         predominant: [['iv', 'Turn IV minor: borrowed iv'], ['iiø7', 'Half-diminished ii from minor'], ['iv7', 'Backdoor ii: iv⁷'], ['bVI', 'Borrowed ♭VI as a predominant']],
-        dominant: [['bVI', 'Borrowed deceptive resolution'], ['bVII7', 'Backdoor dominant'], ['i', 'Parallel minor tonic: a shadow']],
+        dominant: [['bVI', 'Borrowed deceptive resolution'], ['bVII7', 'Backdoor dominant'], ['i', 'Parallel minor tonic: i in place of I']],
       }
     : {
         tonic: [['IV', 'Dorian IV: raised 6th'], ['bII', 'Phrygian ♭II'], ['ii', 'Major-mode ii'], ['I', 'Parallel major tonic']],
@@ -200,7 +200,7 @@ export function suggestNext(current: string, key: Key): SuggestionGroup[] {
       };
   groups.push({
     id: 'borrowed',
-    title: 'Borrowed color',
+    title: 'Borrowed chord',
     blurb: 'Modal interchange from the parallel key or a mode.',
     items: (borrowedByTendency[desc.tendency] ?? []).map(([numeral, reason]) => ({ numeral, reason })),
   });
