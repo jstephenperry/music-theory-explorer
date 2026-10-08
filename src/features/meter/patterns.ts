@@ -113,7 +113,7 @@ export const PATTERNS: RhythmPattern[] = [
     id: 'rumba-32',
     name: 'Rumba clave 3-2',
     origin: 'Cuba',
-    blurb: 'Like son clave, but the third stroke is delayed by one sixteenth, giving a more unsettled pull.',
+    blurb: 'Like son clave, but the third stroke is delayed by one sixteenth, to just before beat 3.',
     steps: 16,
     stepsPerBeat: 4,
     groups: [4, 4, 4, 4],

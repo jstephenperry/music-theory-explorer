@@ -172,7 +172,7 @@ export function SynthSection({ a4 }: { a4: number }) {
           </div>
         </div>
       </Panel>
-      <Callout title="Shape is not sound">
+      <Callout title="Phase and timbre">
         <p>
           Hold a tone and randomize the phases: the waveform changes completely, yet the timbre barely changes. The ear
           listens to which partials are present and how strong they are, not to the shape of the wave. The triangle preset

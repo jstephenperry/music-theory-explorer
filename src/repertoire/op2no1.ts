@@ -46,7 +46,7 @@ export const OP2_NO1: Excerpt = {
   analysis: {
     layers: [
       { id: 'bi', label: 'Basic idea', color: 'root', select: '0.0.0-9', description: 'Two bars that state the tonic: an arpeggio rising from the upbeat (a Mannheim rocket) and a turn figure that settles on F.' },
-      { id: 'rep', label: 'Repetition', color: 'alt', select: '0.0.11-19', description: 'The basic idea again, on the dominant seventh: a statement and response, like a question and its echo.' },
+      { id: 'rep', label: 'Repetition', color: 'alt', select: '0.0.11-19', description: 'The basic idea again, on the dominant seventh: a statement and response.' },
       { id: 'frag', label: 'Fragmentation', color: 'extra', select: '0.0.21-25, 0.0.27-31', description: 'Only the second bar of the idea, now in one-bar units that alternate tonic and dominant: the music speeds up.' },
       { id: 'cad', label: 'Cadence', color: 'other', select: '0.0.33-39', description: 'A loud chord, a run down and a turn on to C: a half cadence on V, the phrase ends open.' },
     ],
@@ -61,7 +61,7 @@ export const OP2_NO1: Excerpt = {
     ],
     commentary: [
       'A sentence states an idea, repeats it, then breaks it into smaller pieces that drive to a cadence. Here the two-bar basic idea is stated on the tonic and answered on the dominant. The continuation keeps only the second bar of the idea, so the units shrink from two bars to one, the harmony changes twice as fast, and the phrase gathers speed into the half cadence in bar 8.',
-      'Proportions of 2 + 2 + 4 bars, with the last four bars breaking up and accelerating, are the signature of the sentence. Listen for the same plan in the openings of many Classical sonatas.',
+      'Proportions of 2 + 2 + 4 bars, with the last four bars breaking up and accelerating, are characteristic of the sentence. Listen for the same plan in the openings of many Classical sonatas.',
     ],
   },
 };

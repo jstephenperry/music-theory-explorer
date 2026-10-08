@@ -24,13 +24,13 @@ export const K265_THEME: Excerpt = {
     },
   },
   analysis: {
-    layers: [{ id: 'melody', label: 'Theme', color: 'root', select: '0.0.0-14', description: 'The French song known in English as “Twinkle, Twinkle, Little Star”: steady quarter notes, a leap up a fifth, then a stepwise descent home.' }],
+    layers: [{ id: 'melody', label: 'Theme', color: 'root', select: '0.0.0-14', description: 'The French song known in English as “Twinkle, Twinkle, Little Star”: steady quarter notes, a leap up a fifth, then a stepwise descent back to C.' }],
     brackets: [
       { first: '0.0.0', last: '0.0.7', label: 'Rising to G' },
       { first: '0.0.8', last: '0.0.14', label: 'Stepping down to C' },
     ],
     commentary: [
-      'A theme for variations should be simple and well known, so that the listener can follow it through every disguise. Mozart chose a French popular song: eight bars of quarter notes over a bass that moves note against note with the melody.',
+      'A theme for variations should be simple and well known, so that the listener can recognize it in every variation. Mozart chose a French popular song: eight bars of quarter notes over a bass that moves note against note with the melody.',
       'What stays the same through the variations is the plan: the eight-bar phrase, the harmony bar by bar, and the cadence. What changes is the surface: rhythm, figuration, register, mode and texture.',
     ],
   },

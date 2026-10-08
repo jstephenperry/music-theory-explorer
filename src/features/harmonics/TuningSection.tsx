@@ -276,7 +276,7 @@ export function TuningSection({ a4 }: { a4: number }) {
           <div className={s.demo}>
             <p className={s.prose}>
               Eleven meantone fifths of {MEANTONE_FIFTH.toFixed(2)}¢ leave the twelfth, from {noteName(wolf.from)} to {noteName(wolf.to)}, at{' '}
-              {wolfFifth(MEANTONE_FIFTH).toFixed(2)}¢: {(wolfFifth(MEANTONE_FIFTH) - PURE_FIFTH).toFixed(1)} cents wider than pure. It howls.
+              {wolfFifth(MEANTONE_FIFTH).toFixed(2)}¢: {(wolfFifth(MEANTONE_FIFTH) - PURE_FIFTH).toFixed(1)} cents wider than pure.
             </p>
             <dl className={s.numbers}>
               <dt>Meantone fifth</dt>
@@ -316,7 +316,7 @@ export function TuningSection({ a4 }: { a4: number }) {
         <Panel eyebrow="Twelve fifths versus seven octaves" title="The Pythagorean comma">
           <div className={s.demo}>
             <p className={s.prose}>
-              Stack twelve pure fifths and you should arrive back home, seven octaves up. You overshoot by (3/2)¹² ÷ 2⁷, about {PYTHAGOREAN_COMMA.toFixed(2)} cents:{' '}
+              Twelve pure fifths should equal seven octaves, but they overshoot by (3/2)¹² ÷ 2⁷, about {PYTHAGOREAN_COMMA.toFixed(2)} cents:{' '}
               {circleNames[12]} is not {circleNames[0]}.
             </p>
             <CommaSpiral circle={circle} names={circleNames} active={activeId} />
@@ -327,13 +327,13 @@ export function TuningSection({ a4 }: { a4: number }) {
               <Button size="sm" variant="ghost" icon="stop" onClick={tl.stop} aria-label="Stop" />
             </div>
             <p className="note flush">
-              Each new note sounds with the previous one (a pure fifth or fourth), then {circleNames[12]} is played against {circleNames[0]}. The syntonic comma (81:80, {SYNTONIC_COMMA.toFixed(2)}¢) is its slightly smaller cousin.
+              Each new note sounds with the previous one (a pure fifth or fourth), then {circleNames[12]} is played against {circleNames[0]}. The syntonic comma (81:80, {SYNTONIC_COMMA.toFixed(2)}¢) is slightly smaller.
             </p>
           </div>
         </Panel>
       </div>
 
-      <Callout title="Why temper at all?">
+      <Callout title="Commas and temperament">
         <p>
           Pure fifths and pure thirds cannot coexist in a 12-note octave: four pure fifths overshoot a pure third by the syntonic comma, and twelve overshoot seven octaves by the
           Pythagorean comma. Every system on this page decides where to hide those commas: in one wolf (Pythagorean, meantone), spread unevenly (Werckmeister), or evenly

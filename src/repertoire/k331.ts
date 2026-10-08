@@ -40,7 +40,7 @@ export const K331_THEME: Excerpt = {
   },
   analysis: {
     layers: [
-      { id: 'bi', label: 'Basic idea', color: 'root', select: '0.0.0-9, 0.0.19-28', description: 'Two bars: a lilting figure on C sharp, repeated a step lower on B. The consequent begins with exactly the same two bars.' },
+      { id: 'bi', label: 'Basic idea', color: 'root', select: '0.0.0-9, 0.0.19-28', description: 'Two bars: a dotted neighbor-note figure on C sharp, repeated a step lower on B. The consequent begins with exactly the same two bars.' },
       { id: 'ci', label: 'Contrasting idea', color: 'alt', select: '0.0.10-13, 0.0.29-32', description: 'Different material that leads each phrase to its cadence.' },
       { id: 'hc', label: 'Half cadence', color: 'extra', select: '0.0.14-18, 0.1.4-6', description: 'The antecedent stops on V (E major) in bar 4: an open, questioning close.' },
       { id: 'pac', label: 'Authentic cadence', color: 'other', select: '0.0.33-35', description: 'The consequent closes on I with the tonic on top, a perfect authentic cadence: the answer.' },

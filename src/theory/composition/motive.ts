@@ -141,8 +141,8 @@ export const DEV_OPS: Array<{ id: DevOp; name: string; short: string; descriptio
   { id: 'invert', name: 'Inversion (in the key)', short: 'Invert', description: 'Turned upside down around its first note: each step up becomes a step down in the key.' },
   { id: 'invert-chromatic', name: 'Inversion (exact)', short: 'Invert exact', description: 'Turned upside down with every interval kept exactly: a major third up becomes a major third down.' },
   { id: 'retrograde', name: 'Retrograde', short: 'Retrograde', description: 'Played backwards, rhythm included.' },
-  { id: 'augment', name: 'Augmentation', short: 'Augment', description: 'Every note twice as long: the same idea, slower and weightier.' },
-  { id: 'diminish', name: 'Diminution', short: 'Diminish', description: 'Every note half as long: the same idea, faster and lighter.' },
+  { id: 'augment', name: 'Augmentation', short: 'Augment', description: 'Every note twice as long: the same idea at half the speed.' },
+  { id: 'diminish', name: 'Diminution', short: 'Diminish', description: 'Every note half as long: the same idea at twice the speed.' },
   { id: 'head', name: 'Fragment: the head', short: 'Head', description: 'Only the first half of the previous segment. Repeating ever smaller fragments (liquidation) builds momentum toward a cadence.' },
   { id: 'tail', name: 'Fragment: the tail', short: 'Tail', description: 'Only the second half of the previous segment.' },
 ];

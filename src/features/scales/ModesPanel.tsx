@@ -58,7 +58,7 @@ export function ModesPanel({
           {mode === 'relative'
             ? 'Same notes, a different home note. Each mode starts on another degree of the parent scale.'
             : scale.modeOf
-              ? 'Same home note, different notes. Hear how each mode recolors the same tonic.'
+              ? 'Same home note, different notes. Each mode alters some degrees above the tonic.'
               : `The other members of the ${scale.family} on the same tonic.`}
         </span>
       </div>

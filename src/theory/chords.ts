@@ -50,7 +50,7 @@ export const CHORDS: ChordDef[] = [
   { id: 'majb5', name: 'Major flat five', symbol: '(♭5)', aliases: ['b5', '(b5)', 'majb5'], intervals: ['P1', 'M3', 'd5'], category: 'Triads', description: 'Major third with a diminished fifth; the top of a French augmented sixth.' },
 
   // Suspended & power
-  { id: 'sus2', name: 'Suspended second', symbol: 'sus2', aliases: ['sus2'], intervals: ['P1', 'M2', 'P5'], category: 'Suspended & power', description: 'The third is replaced by a major second: open and ambiguous.' },
+  { id: 'sus2', name: 'Suspended second', symbol: 'sus2', aliases: ['sus2'], intervals: ['P1', 'M2', 'P5'], category: 'Suspended & power', description: 'The third is replaced by a major second; neither major nor minor.' },
   { id: 'sus4', name: 'Suspended fourth', symbol: 'sus4', aliases: ['sus4', 'sus'], intervals: ['P1', 'P4', 'P5'], category: 'Suspended & power', description: 'The third is replaced by a fourth, which traditionally resolves down to the third.' },
   { id: '5', name: 'Power chord', symbol: '5', aliases: ['5', '(no3)'], intervals: ['P1', 'P5'], category: 'Suspended & power', description: 'Root and fifth only. Neither major nor minor; the staple of distorted guitar.' },
 
@@ -62,7 +62,7 @@ export const CHORDS: ChordDef[] = [
 
   // Sevenths
   { id: 'maj7', name: 'Major seventh', symbol: 'maj7', aliases: ['maj7', 'M7', 'Δ7', 'Δ', 'ma7', 'j7'], intervals: ['P1', 'M3', 'P5', 'M7'], category: 'Sevenths', description: 'Major triad plus major seventh. A tonic chord in jazz and bossa nova.' },
-  { id: '7', name: 'Dominant seventh', symbol: '7', aliases: ['7', 'dom7', 'dom'], intervals: ['P1', 'M3', 'P5', 'm7'], category: 'Sevenths', description: 'Major triad plus minor seventh. The tritone between 3 and ♭7 wants to resolve.' },
+  { id: '7', name: 'Dominant seventh', symbol: '7', aliases: ['7', 'dom7', 'dom'], intervals: ['P1', 'M3', 'P5', 'm7'], category: 'Sevenths', description: 'Major triad plus minor seventh. The tritone between 3 and ♭7 pulls toward resolution.' },
   { id: 'm7', name: 'Minor seventh', symbol: 'm7', aliases: ['m7', 'min7', '-7', 'mi7'], intervals: ['P1', 'm3', 'P5', 'm7'], category: 'Sevenths', description: 'Minor triad plus minor seventh. The ii chord of a major key.' },
   { id: 'mMaj7', name: 'Minor major seventh', symbol: 'm(maj7)', aliases: ['mMaj7', 'm(maj7)', 'mM7', 'm(M7)', '-maj7', 'minmaj7', 'mmaj7'], intervals: ['P1', 'm3', 'P5', 'M7'], category: 'Sevenths', description: 'Minor triad plus major seventh. Used for suspense in film and television scores.' },
   { id: 'm7b5', name: 'Half-diminished seventh', symbol: 'ø7', aliases: ['m7b5', 'ø7', 'ø', 'min7b5', '-7b5', 'm7(b5)'], intervals: ['P1', 'm3', 'd5', 'm7'], category: 'Sevenths', description: 'Diminished triad plus minor seventh. The ii chord of a minor key.' },
@@ -70,7 +70,7 @@ export const CHORDS: ChordDef[] = [
   { id: '7#5', name: 'Augmented seventh', symbol: '7♯5', aliases: ['7#5', 'aug7', '+7', '7+', '7(#5)'], intervals: ['P1', 'M3', 'A5', 'm7'], category: 'Sevenths', description: 'Dominant seventh with a raised fifth that leads up chromatically.' },
   { id: 'maj7#5', name: 'Augmented major seventh', symbol: 'maj7♯5', aliases: ['maj7#5', '+maj7', 'augmaj7', 'maj7+', '+M7', 'Δ7#5', 'maj7(#5)'], intervals: ['P1', 'M3', 'A5', 'M7'], category: 'Sevenths', description: 'Augmented triad with a major seventh.' },
   { id: '7b5', name: 'Dominant seventh flat five', symbol: '7♭5', aliases: ['7b5', '7(b5)'], intervals: ['P1', 'M3', 'd5', 'm7'], category: 'Sevenths', description: 'Contains two tritones; identical to its own tritone substitution.' },
-  { id: '7sus4', name: 'Dominant seventh suspended', symbol: '7sus4', aliases: ['7sus4', '7sus'], intervals: ['P1', 'P4', 'P5', 'm7'], category: 'Sevenths', description: 'A dominant without the tension of the tritone. Modal and open.' },
+  { id: '7sus4', name: 'Dominant seventh suspended', symbol: '7sus4', aliases: ['7sus4', '7sus'], intervals: ['P1', 'P4', 'P5', 'm7'], category: 'Sevenths', description: 'A dominant without the tension of the tritone; common in modal jazz.' },
   { id: 'maj7b5', name: 'Major seventh flat five', symbol: 'maj7♭5', aliases: ['maj7b5', 'maj7(b5)'], intervals: ['P1', 'M3', 'd5', 'M7'], category: 'Sevenths' },
   { id: 'dimMaj7', name: 'Diminished major seventh', symbol: '°(maj7)', aliases: ['dimmaj7', 'o(maj7)', 'dim(maj7)', 'oM7'], intervals: ['P1', 'm3', 'd5', 'M7'], category: 'Sevenths' },
 
@@ -95,7 +95,7 @@ export const CHORDS: ChordDef[] = [
   { id: 'addSharp11', name: 'Added sharp eleventh', symbol: 'add♯11', aliases: ['add#11', '(add#11)'], intervals: ['P1', 'M3', 'P5', 'A11'], category: 'Added tone', description: 'A major triad with the Lydian raised fourth.' },
 
   // Altered dominants
-  { id: '7b9', name: 'Dominant seventh flat nine', symbol: '7♭9', aliases: ['7b9', '7(b9)'], intervals: ['P1', 'M3', 'P5', 'm7', 'm9'], category: 'Altered dominants', description: 'Classic minor-key dominant; the top four notes form a diminished seventh chord.' },
+  { id: '7b9', name: 'Dominant seventh flat nine', symbol: '7♭9', aliases: ['7b9', '7(b9)'], intervals: ['P1', 'M3', 'P5', 'm7', 'm9'], category: 'Altered dominants', description: 'Common minor-key dominant; the top four notes form a diminished seventh chord.' },
   { id: '7#9', name: 'Dominant seventh sharp nine', symbol: '7♯9', aliases: ['7#9', '7(#9)'], intervals: ['P1', 'M3', 'P5', 'm7', 'A9'], category: 'Altered dominants', description: 'The Hendrix chord, from Purple Haze: major and minor third at once.' },
   { id: '7#11', name: 'Dominant seventh sharp eleven', symbol: '7♯11', aliases: ['7#11', '7(#11)'], intervals: ['P1', 'M3', 'P5', 'm7', 'A11'], category: 'Altered dominants', description: 'The Lydian dominant sound.' },
   { id: '7b13', name: 'Dominant seventh flat thirteen', symbol: '7♭13', aliases: ['7b13', '7(b13)'], intervals: ['P1', 'M3', 'P5', 'm7', 'm13'], category: 'Altered dominants' },
@@ -115,7 +115,7 @@ export const CHORDS: ChordDef[] = [
 
   // Augmented sixths (root = bass note on lowered 6th degree)
   { id: 'it6', name: 'Italian augmented sixth', symbol: ' It⁺⁶', aliases: ['It+6', 'It6'], intervals: ['P1', 'M3', 'A6'], category: 'Augmented sixths', noIdentify: true, description: '♭6, 1, ♯4 of the key. The augmented sixth expands outward to the octave on the dominant.' },
-  { id: 'fr6', name: 'French augmented sixth', symbol: ' Fr⁺⁶', aliases: ['Fr+6', 'Fr6', 'Fr43'], intervals: ['P1', 'M3', 'A4', 'A6'], category: 'Augmented sixths', noIdentify: true, description: '♭6, 1, 2, ♯4 of the key. Whole-tone flavored.' },
+  { id: 'fr6', name: 'French augmented sixth', symbol: ' Fr⁺⁶', aliases: ['Fr+6', 'Fr6', 'Fr43'], intervals: ['P1', 'M3', 'A4', 'A6'], category: 'Augmented sixths', noIdentify: true, description: '♭6, 1, 2, ♯4 of the key; a subset of the whole-tone scale.' },
   { id: 'ger6', name: 'German augmented sixth', symbol: ' Ger⁺⁶', aliases: ['Ger+6', 'Ger6', 'Ger65'], intervals: ['P1', 'M3', 'P5', 'A6'], category: 'Augmented sixths', noIdentify: true, description: '♭6, 1, ♭3, ♯4 of the key. Sounds identical to a dominant seventh, which makes it an enharmonic pivot.' },
 ];
 

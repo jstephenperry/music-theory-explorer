@@ -50,8 +50,8 @@ export const CADENCE_TYPES: CadenceType[] = [
     name: 'Half cadence',
     short: 'HC',
     mode: 'major',
-    description: 'The phrase stops on V. It is a comma, not a period: the music asks a question that the next phrase answers.',
-    listenFor: 'The last chord is stable but leans toward home; the melody often stops on the second or seventh degree.',
+    description: 'The phrase stops on V and is left open, like a question that the next phrase answers.',
+    listenFor: 'The last chord is stable but pulls toward the tonic; the melody often stops on the second or seventh degree.',
     examples: [
       ['E5/2 F5/2 | D5/1', 'G4/2 A4/2 | G4/1', 'E4/2 D4/2 | B3/1', 'C3/2 _"I" F3/2 _"ii⁶" | G3/1 _"V"'],
       ['C5/2 C5/2 | B4/1', 'G4/2 A4/2 | G4/1', 'E4/2 F4/2 | D4/1', 'C3/2 _"I" F3/2 _"IV" | G3/1 _"V"'],
@@ -86,7 +86,7 @@ export const CADENCE_TYPES: CadenceType[] = [
     name: 'Phrygian half cadence',
     short: 'Phrygian',
     mode: 'minor',
-    description: 'In minor, iv⁶ to V: the bass falls a half step from the sixth degree to the fifth while the soprano rises a step. A Baroque favorite, often ending a slow movement before the next begins.',
+    description: 'In minor, iv⁶ to V: the bass falls a half step from the sixth degree to the fifth while the soprano rises a step. Common in Baroque music, often ending a slow movement before the next begins.',
     listenFor: 'The outer voices move in contrary motion to an octave on the dominant, with a half step in the bass.',
     examples: [
       ['C5/2 D5/2 | E5/1', 'A4/2 A4/2 | G#4/1', 'E4/2 D4/2 | B3/1', 'A3/2 _"i" F3/2 _"iv⁶" | E3/1 _"V"'],

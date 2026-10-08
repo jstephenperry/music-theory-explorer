@@ -93,7 +93,7 @@ export function HarmonyPanel({
         ariaLabel={`Diatonic ${sevenths ? 'seventh chords' : 'triads'} of ${noteName(root)} ${scale.name}: ${harmony.map((c) => c.symbol).join(', ')}`}
       />
       <Legend
-        items={[{ color: 'var(--hl-alt)', label: "Contains a characteristic note: these chords carry the scale's color.", dot: true }]}
+        items={[{ color: 'var(--hl-alt)', label: 'Contains a characteristic note: these chords set the scale apart.', dot: true }]}
         note={harmony.some((c) => !c.chordId) && <Tag tone="plum">≈ marks stacks with no standard name; the nearest enharmonic chord is shown</Tag>}
       />
       <Callout title="Numerals from the scale's own tonic">

@@ -21,7 +21,7 @@ export const MELODY_TECHNIQUES: Array<{ id: MelodyTechnique; name: string; descr
   { id: 'neighbor', name: 'Neighbor-note figuration', description: 'Each quarter note becomes four sixteenths circling it: upper neighbor, note, lower neighbor (a half step below), note. Mozart’s first variation works this way.' },
   { id: 'runs', name: 'Passing-note runs', description: 'Sixteenth-note scales fill the space between the theme’s notes, so the line flows from one to the next.' },
   { id: 'triplets', name: 'Triplet arpeggios', description: 'Each note is followed by two chord tones below it in triplet eighths: the melody is broken into the harmony.' },
-  { id: 'dotted', name: 'Dotted rhythm', description: 'Every quarter note becomes a dotted eighth and a sixteenth, which gives the theme a march-like snap.' },
+  { id: 'dotted', name: 'Dotted rhythm', description: 'Every quarter note becomes a dotted eighth and a sixteenth, which makes the theme sound like a march.' },
   { id: 'syncopated', name: 'Syncopation', description: 'The second note of each bar arrives half a beat early and is held across the beat, against the steady bass.' },
   { id: 'triple', name: 'Triple meter', description: 'The theme is recast in 3/4: the first note of each bar is lengthened, as in Mozart’s last variation.' },
 ];

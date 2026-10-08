@@ -47,8 +47,8 @@ export function CandidateList({
               </Button>
             )}
             {onOpen && (
-              <Button size="sm" variant="ghost" iconRight="arrow-right" onClick={() => onOpen(top)}>
-                Explore
+              <Button size="sm" variant="ghost" iconRight="arrow-right" onClick={() => onOpen(top)} title="Open in the chord builder">
+                Open
               </Button>
             )}
           </div>
@@ -70,7 +70,7 @@ export function CandidateList({
                   {(onOpen || onHear) && (
                     <div className={s.altActions}>
                       {onHear && <Button size="sm" variant="ghost" icon="play" aria-label={`Hear as ${c.symbol} with its root in the bass`} title="Hear with this root in the bass" onClick={() => onHear(c)} />}
-                      {onOpen && <Button size="sm" variant="ghost" icon="arrow-right" aria-label={`Explore ${c.symbol}`} title="Open in the chord builder" onClick={() => onOpen(c)} />}
+                      {onOpen && <Button size="sm" variant="ghost" icon="arrow-right" aria-label={`Open ${c.symbol} in the chord builder`} title="Open in the chord builder" onClick={() => onOpen(c)} />}
                     </div>
                   )}
                 </li>

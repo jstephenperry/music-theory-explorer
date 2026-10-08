@@ -111,7 +111,7 @@ export const JUST_INTERVALS: JustInterval[] = [
   { id: 'M3', name: 'Major third', short: 'M3', ratio: [5, 4], semis: 4, note: 'Equal temperament is 13.7 cents wide: the most audible compromise.' },
   { id: 'P4', name: 'Perfect fourth', short: 'P4', ratio: [4, 3], semis: 5 },
   { id: 'A4', name: 'Tritone', short: 'A4', ratio: [45, 32], semis: 6 },
-  { id: 'P5', name: 'Perfect fifth', short: 'P5', ratio: [3, 2], semis: 7, note: 'Equal temperament is only 2 cents narrow: a slow, gentle beat.' },
+  { id: 'P5', name: 'Perfect fifth', short: 'P5', ratio: [3, 2], semis: 7, note: 'Equal temperament is only 2 cents narrow, so it beats slowly.' },
   { id: 'm6', name: 'Minor sixth', short: 'm6', ratio: [8, 5], semis: 8 },
   { id: 'M6', name: 'Major sixth', short: 'M6', ratio: [5, 3], semis: 9 },
   { id: 'h7', name: 'Harmonic seventh', short: '7/4', ratio: [7, 4], semis: 10, note: 'The 7th partial: 31 cents below the tempered minor seventh.' },
@@ -159,8 +159,8 @@ export const TUNING_SYSTEMS: TuningSystem[] = [
   { id: 'et12', name: '12-tone equal temperament', short: '12-TET', fifth: 700, description: 'Every semitone is exactly 100 cents. All keys sound alike; no interval except the octave is pure.' },
   { id: 'pythagorean', name: 'Pythagorean', short: 'Pythagorean', fifth: PURE_FIFTH, description: 'A chain of pure 3:2 fifths. Fifths and fourths are perfect, but major thirds are 22 cents wide and the fifth that closes the chain is a wolf, 23.5 cents narrow.' },
   { id: 'meantone', name: 'Quarter-comma meantone', short: '¼-comma meantone', fifth: MEANTONE_FIFTH, description: 'Fifths narrowed by ¼ of the syntonic comma so that four of them make a pure 5:4 major third. Pure thirds in common keys; the fifth that closes the chain (G♯ to E♭ on C) is a wolf.' },
-  { id: 'just', name: '5-limit just intonation', short: 'Just (5-limit)', description: 'Ratios of small whole numbers built on the tonic (5:4 thirds, 3:2 fifths). I, IV and V are perfectly pure, but ii is out of tune and other keys fall apart.' },
-  { id: 'werckmeister3', name: 'Werckmeister III', short: 'Werckmeister III', description: 'A 1691 well temperament: four fifths (C to G, G to D, D to A and B to F♯) narrowed by ¼ Pythagorean comma, the rest pure. Every key is playable, each with its own color.' },
+  { id: 'just', name: '5-limit just intonation', short: 'Just (5-limit)', description: 'Ratios of small whole numbers built on the tonic (5:4 thirds, 3:2 fifths). I, IV and V are pure, but the fifth of ii is 21.5 cents narrow (40:27) and other keys have wolf intervals.' },
+  { id: 'werckmeister3', name: 'Werckmeister III', short: 'Werckmeister III', description: 'A 1691 well temperament: four fifths (C to G, G to D, D to A and B to F♯) narrowed by ¼ Pythagorean comma, the rest pure. Every key is playable; major thirds range from 390 to 408 cents.' },
   { id: 'et19', name: '19-tone equal temperament', short: '19-TET', fifth: ET19_FIFTH, description: 'Divides the octave into 19 steps. Its 11-step fifth (694.7 cents) behaves like a meantone; mapped here to the 12 nearest keys.' },
   { id: 'et31', name: '31-tone equal temperament', short: '31-TET', fifth: ET31_FIFTH, description: 'Divides the octave into 31 steps. Its fifth (696.8 cents) is almost exactly quarter-comma meantone; mapped here to 12 keys.' },
 ];
@@ -306,7 +306,7 @@ export const SYNTH_PRESETS: Array<{ id: PresetId; name: string; hint: string }> 
   { id: 'clarinet', name: 'Clarinet', hint: 'Strong odd partials, weak even ones in the low register: a cylindrical pipe closed at one end.' },
   { id: 'organ', name: 'Organ', hint: 'Drawbars at 8′, 4′, 2⅔′, 2′ and 1′ (partials 1, 2, 3, 4, 8).' },
   { id: 'oboe', name: 'Oboe', hint: 'Weak fundamental with strong 2nd to 5th partials: nasal and penetrating.' },
-  { id: 'hollow', name: 'Octaves only', hint: 'Only partials 1, 2, 4, 8 and 16: every one an octave of the fundamental, so the tone is pure yet bright.' },
+  { id: 'hollow', name: 'Octaves only', hint: 'Only partials 1, 2, 4, 8 and 16: every one an octave of the fundamental, so the spectrum has no fifths or thirds.' },
 ];
 
 export function presetSpectrum(id: PresetId, count = PARTIAL_COUNT): Spectrum {

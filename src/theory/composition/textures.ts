@@ -34,8 +34,8 @@ export const TEXTURES: TextureDef[] = [
     id: 'repeated',
     name: 'Melody over repeated chords',
     short: 'Repeated chords',
-    description: 'The left hand repeats each chord on every beat while the right hand sings above it. The pulse is always audible, and the harmony is fully stated.',
-    examples: 'Beethoven’s “Pathétique” sonata (slow movement, accompaniment figures) and countless Schubert songs.',
+    description: 'The left hand repeats each chord on every beat while the right hand plays the melody above it. The pulse is always audible, and the harmony is fully stated.',
+    examples: 'Beethoven’s “Pathétique” sonata (slow movement, accompaniment figures) and many Schubert songs.',
   },
   {
     id: 'alberti',
