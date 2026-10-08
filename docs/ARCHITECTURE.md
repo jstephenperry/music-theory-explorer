@@ -172,8 +172,8 @@ Import from `src/theory` (barrel) or from individual modules.
 
 ## Design language
 
-"Elegant functionalism" in a concert hall: ivory score paper, walnut and ebony, burgundy velvet,
-aged brass. Use the tokens in `styles/global.css` (`--bg`, `--bg-elev`, `--bg-sunk`, `--ink`,
+The palette is taken from a concert hall: ivory paper, walnut and near-black wood, a burgundy
+accent and brass rules. Use the tokens in `styles/global.css` (`--bg`, `--bg-elev`, `--bg-sunk`, `--ink`,
 `--ink-muted`, `--rule`, `--rule-strong`, `--accent`, `--brass`, `--verdigris`, `--royal`, `--plum` and
 their `-soft` variants). Headings use `--font-display` (Cormorant Garamond), UI text `--font-ui`
 (Source Sans 3), prose `--font-serif` (Source Serif 4). Soft radii, thin rules, no neon, no heavy shadows.
@@ -194,6 +194,8 @@ Writing style: American English, concise, no emoji, no em or en dashes used as p
 User-facing text follows the No AI Slop rules (github.com/realrossmanngroup/no_ai_slop_writing_rules):
 no intensifiers or filler, no hollow claims, no dramatic or vague headings, no scare quotes, and
 every number checked against the data (the route test enforces the counts in room descriptions).
+In prose, describe a sound by a property the reader can check (intervals, scale degrees, partials,
+usage, repertoire) rather than by a mood adjective or a metaphor such as "color" or "sings".
 Headings and eyebrows name the subject; ledes say what the room does and what it contains.
 
 ## Testing and deployment
