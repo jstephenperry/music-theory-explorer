@@ -9,7 +9,7 @@ function liveParams(): URLSearchParams {
 }
 
 /**
- * State stored in the URL query string so explorations can be bookmarked and shared.
+ * State stored in the URL query string so a page's settings can be bookmarked and shared.
  * Values are strings; parse them at the call site. Several setters may be called in the same event.
  */
 export function useUrlState(key: string, initial: string): [string, (v: string) => void] {

@@ -195,7 +195,7 @@ export default function EarTrainingPage() {
               </button>
               <div className={s.prompt}>
                 <div className="eyebrow">{question ? `${exercise.label} · question ${count}` : exercise.label}</div>
-                <h2 className={s.promptTitle}>{question ? PROMPTS[type] : `Ready when you are`}</h2>
+                <h2 className={s.promptTitle}>{question ? PROMPTS[type] : `Ready`}</h2>
                 <p className={s.promptSub}>{question ? contextLine : `${exercise.blurb} Press Start or Enter.`}</p>
               </div>
             </div>
@@ -312,7 +312,7 @@ export default function EarTrainingPage() {
       <Callout title="How to practice">
         <p>
           Short, frequent sessions work best. Start with a few contrasting items, add more once you pass about 85 percent, and sing the answer before you click.
-          After each answer, audition the other buttons to hear how they differ from the same root.
+          After each answer, audition the other buttons to compare them on the same root.
         </p>
       </Callout>
     </div>
@@ -343,7 +343,7 @@ function Reveal({ r, active, playing, beam }: { r: Rendered; active: number | nu
       />
       <Piano from={from} to={to} marks={marks} pressed={pressed} labels="c" ariaLabel={`Keyboard showing ${r.description}`} />
       <p className="faint" style={{ margin: 0, fontSize: '0.85rem' }}>
-        {r.description.charAt(0).toUpperCase() + r.description.slice(1)}. Play the keys to explore.
+        {r.description.charAt(0).toUpperCase() + r.description.slice(1)}. Click a key to hear it.
       </p>
     </div>
   );

@@ -87,7 +87,7 @@ function findOnset(buf: AudioBuffer): number {
 /**
  * Prepare a sustain loop. The loop length is a whole number of periods of the note, and the last
  * part of the loop is crossfaded with the audio just before the loop start, so the jump from the
- * loop end back to the loop start is seamless.
+ * loop end back to the loop start does not click.
  */
 function makeLoop(buf: AudioBuffer, onset: number, freq: number): { loopStart: number; loopEnd: number } | null {
   const sr = buf.sampleRate;
