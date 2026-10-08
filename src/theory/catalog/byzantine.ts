@@ -32,7 +32,7 @@ export const BYZANTINE = [
       id: 'echos-1', name: 'First mode (Echos Protos)', tonic: 'D',
       intervals: fromAbsolute([PA, VOU, GA, DI, KE, ZO, up(NI)]),
       facts: [['Genus', 'Diatonic'], ['Base', 'Pa'], ['Steps (moria)', '10 8 12 12 10 8 12']],
-      description: 'Diatonic, based on Pa. Its second and sixth degrees (Vou, Zo) are lower than in Western tuning, giving a soft minor color.',
+      description: 'Diatonic, based on Pa: a minor-type scale whose second and sixth degrees (Vou, Zo) are lower than in Western tuning.',
       degreeNames: ['Pa', 'Vou', 'Ga', 'Di', 'Ke', 'Zo', 'Ni'],
     },
     {

@@ -110,7 +110,7 @@ export const CARNATIC = [
       id: 'raga-revagupti', name: 'Revagupti', description: 'A pentatonic raga with the lower half of Mayamalavagowla, sung in the morning.',
     }),
     janya(29, 'P1 M2 M3 P4 P5 M6 M7', 'P1 M2 M3 P5 M6 P8', 'P8 M7 M6 P5 P4 M3 M2 P1', {
-      id: 'raga-bilahari', name: 'Bilahari', description: 'Pentatonic going up, all seven svaras coming down. Bright and energetic.', mood: ['bright'],
+      id: 'raga-bilahari', name: 'Bilahari', description: 'Pentatonic going up, all seven svaras coming down.', mood: ['bright'],
     }),
     janya(29, 'P1 M2 M3 P4 P5 M6 M7', 'P1 M2 P4 P5 M6 P8', 'P8 M7 M6 P5 P4 M3 M2 P1', {
       id: 'raga-arabhi', name: 'Arabhi', description: 'Ascends like Shuddha Saveri and descends through all seven svaras of Shankarabharanam.',

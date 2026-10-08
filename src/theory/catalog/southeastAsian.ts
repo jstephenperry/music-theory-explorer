@@ -24,7 +24,7 @@ export const SOUTHEAST_ASIAN = [
       degreeNames: ['1 (barang)', '2 (gulu)', '3 (dada)', '5 (lima)', '6 (nem)'],
       facts: [['Steps', 'Five nearly equal steps of about 240 cents']],
       description: 'The five-tone gamelan tuning, with steps close to a fifth of an octave. Real gamelans deviate from equal steps, and each ensemble has its own tuning; this is the idealized form.',
-      mood: ['gamelan', 'floating'],
+      mood: ['gamelan'],
     },
     {
       id: 'pelog', name: 'Pelog (seven tones)',

@@ -56,42 +56,42 @@ export const EAST_ASIAN = [
     {
       id: 'japanese-miyako-bushi', name: 'Miyako-bushi (In)', intervals: ['P1', 'm2', 'P4', 'P5', 'm6'],
       description: 'The urban scale of koto and shamisen music: each fourth is filled with a half step at the bottom. Called the in scale by Uehara Rokushirō; heard in Sakura Sakura.',
-      aliases: ['In scale', 'Sakura scale'], mood: ['japanese', 'melancholic'],
+      aliases: ['In scale', 'Sakura scale'], mood: ['Japanese', 'melancholic'],
     },
     {
       id: 'japanese-ritsu', name: 'Ritsu (Yo)', intervals: ['P1', 'M2', 'P4', 'P5', 'M6'],
       description: 'Koizumi\'s ritsu scale: each fourth filled with a major second. Called the yo scale by Uehara and used in gagaku, shōmyō and folk song.',
-      aliases: ['Yo scale'], mood: ['japanese', 'bright'],
+      aliases: ['Yo scale'], mood: ['Japanese', 'bright'],
     },
     {
       id: 'japanese-ryukyu', name: 'Ryūkyū', intervals: ['P1', 'M3', 'P4', 'P5', 'M7'],
       description: 'The scale of Okinawan folk music: each fourth is filled with a major third, leaving a half step at the top.',
-      aliases: ['Okinawan scale'], mood: ['bright', 'island'],
+      aliases: ['Okinawan scale'], mood: ['bright', 'Okinawan'],
     },
 
   {
     id: 'hirajoshi', name: 'Hirajōshi',
     intervals: ['P1', 'M2', 'm3', 'P5', 'm6'],
     description: 'A Japanese pentatonic scale used in koto music, containing half steps.',
-    mood: ['japanese', 'melancholic'],
+    mood: ['Japanese', 'melancholic'],
   },
   {
     id: 'in-sen', name: 'In sen',
     intervals: ['P1', 'm2', 'P4', 'P5', 'm7'],
     description: 'A Japanese pentatonic scale associated with the shakuhachi.',
-    mood: ['japanese', 'stark'],
+    mood: ['Japanese', 'shakuhachi'],
   },
   {
     id: 'iwato', name: 'Iwato',
     intervals: ['P1', 'm2', 'P4', 'd5', 'm7'],
-    description: 'A Japanese pentatonic with a diminished fifth: very dark.',
-    mood: ['japanese', 'dark'],
+    description: 'A dark Japanese pentatonic with a minor second and a diminished fifth.',
+    mood: ['Japanese', 'dark'],
   },
   {
     id: 'kumoi', name: 'Kumoi',
     intervals: ['P1', 'M2', 'm3', 'P5', 'M6'],
     description: 'A Japanese pentatonic resembling melodic minor with notes removed.',
-    mood: ['japanese', 'gentle'],
+    mood: ['Japanese'],
   },
     {
       id: 'gagaku-ryo', name: 'Ryo (gagaku)', intervals: ['P1', 'M2', 'M3', 'A4', 'P5', 'M6', 'M7'],
@@ -106,7 +106,8 @@ export const EAST_ASIAN = [
   ...define('east-asian', 'Korean modes', [
     {
       id: 'korean-pyeongjo', name: 'Pyeongjo', intervals: ['P1', 'M2', 'P4', 'P5', 'M6'],
-      description: 'The "plain" mode of Korean court music, a pentatonic mode with a bright, stately character.',
+      description: 'The "plain" mode of Korean court music, a pentatonic mode with no third.',
+      mood: ['bright'],
     },
     {
       id: 'korean-gyemyeonjo', name: 'Gyemyeonjo', intervals: ['P1', 'm3', 'P4', 'P5', 'm7'],

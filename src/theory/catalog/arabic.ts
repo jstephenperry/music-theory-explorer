@@ -23,7 +23,7 @@ export const ARABIC = [
       ],
       facts: [['Lower jins', 'Rast on C'], ['Upper jins', 'Rast on G ascending, Nahawand on G descending'], ['Ghammaz (pivot)', 'G']],
       description: 'The principal maqam of the Rast family and one of the most common in Arabic music. Its half-flat third and seventh sit between major and minor. The seventh is usually B half-flat going up and B♭ coming down.',
-      mood: ['noble', 'proud', 'warm'], characteristic: [2, 6],
+      mood: ['noble', 'proud'], characteristic: [2, 6],
     },
     {
       id: 'mahur', name: 'Mahur', tonic: 'C',
@@ -43,7 +43,7 @@ export const ARABIC = [
       intervals: fromAbsolute([C, D, ['E', 355], ['F', 498], ['G', 702], ['Ab', 838], ['B', 1100]]),
       facts: [['Lower jins', 'Rast on C'], ['Upper jins', 'Hijaz on G']],
       description: 'Rast below and Hijaz above: the augmented second between A♭ and B gives the upper half a strong pull toward the octave.',
-      mood: ['yearning'], characteristic: [2, 5],
+      characteristic: [2, 5],
     },
     {
       id: 'nairuz', name: 'Nairuz', tonic: 'C',
@@ -59,9 +59,9 @@ export const ARABIC = [
       id: 'bayati', name: 'Bayati', tonic: 'D',
       intervals: fromAbsolute([D, ['E', 355], ['F', 485], ['G', 702], ['A', 906], ['Bb', 996], C8]),
       facts: [['Lower jins', 'Bayati on D'], ['Upper jins', 'Nahawand on G (also Rast on G)'], ['Ghammaz (pivot)', 'G']],
-      description: 'The most common maqam of everyday Arabic music. The half-flat second makes a three-quarter-tone step from the tonic, giving its typical gentle, plaintive sound. Muhayyar is Bayati developed from the upper octave.',
+      description: 'The most common maqam of everyday Arabic music. The half-flat second, a three-quarter tone above the tonic, gives it a plaintive sound. Muhayyar is Bayati developed from the upper octave.',
       aliases: ['Muhayyar (from the upper octave)'],
-      mood: ['plaintive', 'earthy', 'warm'], characteristic: [1],
+      mood: ['plaintive'], characteristic: [1],
     },
     {
       id: 'bayati-shuri', name: 'Bayati Shuri', tonic: 'D',
@@ -85,7 +85,7 @@ export const ARABIC = [
       intervals: fromAbsolute([D, ['Eb', 328], ['F#', 629], ['G', 702], ['A', 906], ['Bb', 996], C8]),
       facts: [['Lower jins', 'Hijaz on D'], ['Upper jins', 'Nahawand on G (also Rast on G)'], ['Ghammaz (pivot)', 'G']],
       description: 'Named after the Hijaz region of Arabia. The augmented second between E♭ and F♯ gives it the sound most outsiders associate with Middle Eastern music. In 12-tone tuning it equals Phrygian dominant, but the E♭ is sung slightly high and the F♯ slightly low.',
-      mood: ['dramatic', 'longing'], characteristic: [1, 2],
+      mood: ['dramatic'], characteristic: [1, 2],
     },
     {
       id: 'hijazkar', name: 'Hijazkar', tonic: 'C',
@@ -93,7 +93,7 @@ export const ARABIC = [
       facts: [['Lower jins', 'Hijaz on C'], ['Upper jins', 'Hijaz on G']],
       description: 'Two Hijaz tetrachords a fifth apart: the double harmonic scale. Shahnaz is the same maqam on D.',
       aliases: ['Shahnaz (on D)'],
-      mood: ['dramatic', 'exotic'], characteristic: [1, 5],
+      mood: ['dramatic'], characteristic: [1, 5],
     },
     {
       id: 'zanjaran', name: 'Zanjaran', tonic: 'C',
@@ -110,7 +110,7 @@ export const ARABIC = [
       intervals: fromAbsolute([D, ['Eb', 290], ['F', 498], ['G', 702], ['A', 906], ['Bb', 996], C8]),
       facts: [['Lower jins', 'Kurd on D'], ['Upper jins', 'Nahawand on G']],
       description: 'The Arabic counterpart of the Phrygian mode, with a narrow half step above the tonic.',
-      mood: ['dark', 'tender'], characteristic: [1],
+      mood: ['dark'], characteristic: [1],
     },
     {
       id: 'hijazkar-kurd', name: 'Hijazkar Kurd', tonic: 'C',
@@ -144,7 +144,7 @@ export const ARABIC = [
     {
       id: 'nahawand-murassa', name: 'Nahawand Murassaʿ', tonic: 'C',
       intervals: fromAbsolute([C, D, ['Eb', 290], ['F', 498], ['Gb', 597], ['A', 894], ['Bb', 996]]),
-      description: 'Nahawand with a diminished fifth and a major sixth: a minor scale whose upper half is bent by a tritone.',
+      description: 'Nahawand with a diminished fifth (a tritone above the tonic) and a major sixth.',
       characteristic: [4, 5],
     },
     {
@@ -206,7 +206,7 @@ export const ARABIC = [
       id: 'jiharkah', name: 'Jiharkah', tonic: 'F',
       intervals: fromAbsolute([['F', 498], ['G', 702], ['A', 878], ['Bb', 960], ['C', 1200], ['D', 1404], ['E', 1562]]),
       facts: [['Lower jins', 'Jiharkah on F']],
-      description: 'A major-type maqam on F whose third and fourth are lowered by a small amount, and whose seventh is E half-flat. The flattened fourth is its signature.',
+      description: 'A major-type maqam on F whose third and fourth are lowered by a small amount, and whose seventh is E half-flat. The flattened fourth is its characteristic note.',
       characteristic: [2, 3, 6],
     },
   ]),
@@ -218,7 +218,7 @@ export const ARABIC = [
       facts: [['Tonic', 'E half-flat'], ['Lower jins', 'Sikah on E half-flat (a three-note jins)'], ['Upper jins', 'Rast on G']],
       description: 'Built on the third degree of Rast, so its tonic is itself a half-flat note and its first step is a three-quarter tone. Sephardic and Syrian Jewish communities chant the Torah in Sikah.',
       aliases: ['Sigah', 'Segah'],
-      mood: ['mystical', 'devotional'], characteristic: [0, 4],
+      mood: ['devotional'], characteristic: [0, 4],
     },
     {
       id: 'huzam', name: 'Huzam', tonic: 'E',
@@ -226,7 +226,7 @@ export const ARABIC = [
       facts: [['Tonic', 'E half-flat'], ['Lower jins', 'Sikah on E half-flat'], ['Upper jins', 'Hijaz on G']],
       description: 'Sikah with Hijaz on its third degree. Rahat al-Arwah is the same maqam on B half-flat.',
       aliases: ['Rahat al-Arwah (on B half-flat)'],
-      mood: ['intense', 'devotional'], characteristic: [0, 3],
+      mood: ['devotional'], characteristic: [0, 3],
     },
     {
       id: 'iraq', name: 'ʿIraq', tonic: 'B',
@@ -250,7 +250,7 @@ export const ARABIC = [
       intervals: fromAbsolute([D, ['E', 355], ['F', 498], ['Gb', 597], ['A', 894], ['Bb', 996], C8]),
       forms: [{ label: 'Ascending (the octave is D♭)', notes: absForm(D, [D, ['E', 355], ['F', 498], ['Gb', 597], ['A', 894], ['Bb', 996], C8, ['Db', 1286]]) }],
       facts: [['Lower jins', 'Saba on D'], ['Upper jins', 'Hijaz on F']],
-      description: 'Deeply sorrowful. The fourth is lowered to G♭, and the scale does not repeat at the octave: the note an octave above the tonic is D♭, not D.',
+      description: 'Associated with sorrow. The fourth is lowered to G♭, and the scale does not repeat at the octave: the note an octave above the tonic is D♭, not D.',
       mood: ['sorrowful', 'grieving'], characteristic: [1, 3],
     },
     {
