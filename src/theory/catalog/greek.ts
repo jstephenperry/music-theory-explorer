@@ -1,6 +1,6 @@
 /**
  * Ancient Greek harmoniai. The seven octave species are the white-key octaves of the Greater
- * Perfect System; note that the Greek names do not match the later church modes (the Greek Dorian
+ * Perfect System; the Greek names do not match the later church modes (the Greek Dorian
  * runs from E to e). Tetrachords were divided in three genera; the step sizes follow Aristoxenus,
  * whose diatonic genus matches equal temperament.
  */

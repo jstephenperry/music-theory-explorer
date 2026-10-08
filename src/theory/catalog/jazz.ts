@@ -6,7 +6,7 @@ export const JAZZ = [
   {
     id: 'major-pentatonic', name: 'Major pentatonic',
     intervals: ['P1', 'M2', 'M3', 'P5', 'M6'],
-    description: 'Five notes with no half steps: impossible to play a harsh clash. Found in folk music worldwide, country, pop and rock.',
+    description: 'Five notes with no half steps, so no two notes clash sharply. Found in folk music worldwide, country, pop and rock.',
     mood: ['open', 'happy', 'folk'], modeOf: { parent: 'major-pentatonic', degree: 1 }, chordId: '6',
   },
   {
@@ -25,13 +25,13 @@ export const JAZZ = [
     id: 'ritusen', name: 'Ritusen (Blues major pentatonic)',
     intervals: ['P1', 'M2', 'P4', 'P5', 'M6'],
     description: 'Fourth mode of the major pentatonic, used in Japanese court music (gagaku).',
-    mood: ['open', 'gentle'], modeOf: { parent: 'major-pentatonic', degree: 4 }, chordId: 'sus2',
+    mood: ['open', 'Japanese'], modeOf: { parent: 'major-pentatonic', degree: 4 }, chordId: 'sus2',
   },
   {
     id: 'minor-pentatonic', name: 'Minor pentatonic',
     intervals: ['P1', 'm3', 'P4', 'P5', 'm7'],
-    description: 'Fifth mode of the major pentatonic. The backbone of blues and rock soloing.',
-    mood: ['bluesy', 'rock', 'gritty'], modeOf: { parent: 'major-pentatonic', degree: 5 }, chordId: 'm7',
+    description: 'Fifth mode of the major pentatonic. The basic scale of blues and rock soloing.',
+    mood: ['bluesy', 'rock'], modeOf: { parent: 'major-pentatonic', degree: 5 }, chordId: 'm7',
   },
     {
       id: 'dominant-pentatonic', name: 'Dominant pentatonic',
@@ -42,8 +42,8 @@ export const JAZZ = [
     {
       id: 'minor-6-pentatonic', name: 'Minor 6 pentatonic',
       intervals: ['P1', 'm3', 'P4', 'P5', 'M6'],
-      description: 'Minor pentatonic with a major 6th instead of the minor 7th: a Dorian color in five notes.',
-      mood: ['cool', 'minor'], chordId: 'm6',
+      description: 'Minor pentatonic with a major 6th, the characteristic note of Dorian, instead of the minor 7th.',
+      mood: ['minor'], chordId: 'm6',
     },
   ]),
 
@@ -52,13 +52,13 @@ export const JAZZ = [
     id: 'blues', name: 'Blues (minor blues)',
     intervals: ['P1', 'm3', 'P4', 'd5', 'P5', 'm7'],
     description: 'Minor pentatonic plus the flat 5th "blue note" that slides between the 4th and 5th.',
-    mood: ['bluesy', 'gritty'], characteristic: [3], chordId: '7',
+    mood: ['bluesy'], characteristic: [3], chordId: '7',
   },
   {
     id: 'major-blues', name: 'Major blues',
     intervals: ['P1', 'M2', 'm3', 'M3', 'P5', 'M6'],
     description: 'Major pentatonic plus the minor 3rd, used to slide into the major 3rd. Common in country and gospel.',
-    mood: ['sweet', 'country', 'gospel'], characteristic: [2], chordId: '6',
+    mood: ['country', 'gospel'], characteristic: [2], chordId: '6',
   },
   ]),
 
